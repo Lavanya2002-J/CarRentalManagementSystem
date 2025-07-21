@@ -3,6 +3,50 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">
+        @model IEnumerable<CarRentalManagementSystem.Models.Car>    
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h2 class="text-center mt-4 mb-4">Available Cars for Rent</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var car in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <!-- Car Logo -->
+                    @if (!string.IsNullOrEmpty(car.LogoFileName))
+                    {
+                        <img src="~/uploads/@car.LogoFileName" class="card-img-top p-2" alt="Logo" style="height: 60px; width: auto; object-fit: contain;" />
+                    }
+
+                    <!-- Car Image -->
+                    @if (!string.IsNullOrEmpty(car.CarImageFileName))
+                    {
+                        <img src="~/uploads/@car.CarImageFileName" class="card-img-top" alt="Car Image" style="height: 200px; object-fit: cover;" />
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@car.CarName (@car.CarModel)</h5>
+                        <p class="card-text">
+                            <strong>Fuel Type:</strong> @car.FuelType <br />
+                            <strong>Transmission:</strong> @car.Transmission <br />
+                            <strong>Seats:</strong> @car.Seats <br />
+                            <strong>Color:</strong> @car.Color <br />
+                            <strong>Rate:</strong> Rs. @car.DailyRate.ToString("N2") /day
+                        </p>
+
+                        <a href="#" class="btn btn-primary w-100">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+    </h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

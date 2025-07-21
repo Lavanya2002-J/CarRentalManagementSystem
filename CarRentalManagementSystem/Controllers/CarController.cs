@@ -248,13 +248,29 @@ namespace CarRentalManagementSystem.Controllers
             return View(car);
         }
 
-        // POST: Car/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
             var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
             if (car == null) return NotFound();
+
+            // Delete image files
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+
+            if (!string.IsNullOrEmpty(car.LogoFileName))
+            {
+                string logoPath = Path.Combine(uploadsFolder, car.LogoFileName);
+                if (System.IO.File.Exists(logoPath))
+                    System.IO.File.Delete(logoPath);
+            }
+
+            if (!string.IsNullOrEmpty(car.CarImageFileName))
+            {
+                string imagePath = Path.Combine(uploadsFolder, car.CarImageFileName);
+                if (System.IO.File.Exists(imagePath))
+                    System.IO.File.Delete(imagePath);
+            }
 
             _context.Cars.Remove(car);
             _context.SaveChanges();
@@ -263,13 +279,32 @@ namespace CarRentalManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Car/Details/{id}
         public IActionResult Details(Guid id)
         {
             var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
             if (car == null) return NotFound();
 
-            return View(car);
+            // Map to ViewModel
+            var model = new CarViewModel
+            {
+                CarId = car.CarId,
+                CarName = car.CarName,
+                CarModel = car.CarModel,
+                FuelType = car.FuelType,
+                Transmission = car.Transmission,
+                Seats = car.Seats,
+                DailyRate = car.DailyRate,
+                IsAvailable = car.IsAvailable,
+                Branch = car.Branch,
+                Description = car.Description,
+                Color = car.Color,
+                RegistrationNumber = car.RegistrationNumber,
+                ExistingLogoPath = car.LogoFileName,
+                ExistingCarImagePath = car.CarImageFileName
+            };
+
+            return View(model);
         }
+
     }
 }
