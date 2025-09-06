@@ -9,15 +9,8 @@ namespace CarRentalManagementSystem.Data
             : base(options)
         {
         }
-        public DbSet<Models.Car> Cars { get; set; }
+        public DbSet<Car> Cars { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Car>()
-                .Property(c => c.DailyRate)
-                .HasPrecision(18, 2); // 18 total digits, 2 decimal places
-        }
+       
     }
 }

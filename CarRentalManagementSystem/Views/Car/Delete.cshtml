@@ -1,66 +1,84 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model CarRentalManagementSystem.Models.Car
+﻿@model CarRentalManagementSystem.Models.Car
 
 @{
     ViewData["Title"] = "Delete Car";
 }
 
-<div class="container mt-5">
+<div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h2 class="text-danger text-uppercase fw-bold text-center mb-4">Delete Car</h2>
+        <div class="col-lg-8">
 
-            <div class="alert alert-warning">
-                <strong>Are you sure you want to delete this car?</strong>
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <i class="bi bi-exclamation-circle-fill text-danger display-3 mb-3"></i>
+                <h1 class="fw-bold text-danger text-uppercase">Confirm Deletion</h1>
+                <p class="fs-5 text-muted">You are about to delete this car. This action cannot be undone!</p>
             </div>
 
-            <dl class="row">
-                <dt class="col-sm-4">Car Name</dt>
-                <dd class="col-sm-8">@Model.CarName</dd>
+            <!-- Car Details Panel -->
+            <div class="border-start border-5 border-danger rounded-4 shadow-lg p-4 mb-4 bg-white">
 
-                <dt class="col-sm-4">Model</dt>
-                <dd class="col-sm-8">@Model.CarModel</dd>
+                <div class="d-flex align-items-center mb-3">
+                    @if (!string.IsNullOrEmpty(Model.CarImageFileName))
+                    {
+                        <img src="~/uploads/@Model.CarImageFileName" class="img-fluid rounded shadow-sm me-4" style="width:150px; height:100px; object-fit:cover;" />
+                    }
+                    <div>
+                        <h2 class="fw-bold text-primary">@Model.CarName</h2>
+                        <h5 class="text-secondary">@Model.CarModel</h5>
+                        <span class="badge bg-success fs-6">@Model.IsAvailable</span>
+                    </div>
+                </div>
 
-                <dt class="col-sm-4">Fuel Type</dt>
-                <dd class="col-sm-8">@Model.FuelType</dd>
+                <hr />
 
-                <dt class="col-sm-4">Transmission</dt>
-                <dd class="col-sm-8">@Model.Transmission</dd>
+                <div class="row text-dark">
+                    <div class="col-md-6 mb-2">
+                        <p class="mb-1 fw-bold text-primary"><i class="bi bi-fuel-pump-fill me-1"></i> Fuel Type:</p>
+                        <p>@Model.FuelType</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <p class="mb-1 fw-bold text-primary"><i class="bi bi-gear-fill me-1"></i> Transmission:</p>
+                        <p>@Model.Transmission</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <p class="mb-1 fw-bold text-primary"><i class="bi bi-people-fill me-1"></i> Seats:</p>
+                        <p>@Model.Seats</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <p class="mb-1 fw-bold text-primary"><i class="bi bi-currency-dollar me-1"></i> Daily Rate:</p>
+                        <p class="text-success fw-bold">Rs. @Model.DailyRate</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <p class="mb-1 fw-bold text-primary"><i class="bi bi-building me-1"></i> Branch:</p>
+                        <p>@Model.Branch</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <p class="mb-1 fw-bold text-primary"><i class="bi bi-palette-fill me-1"></i> Color:</p>
+                        <p>@Model.Color</p>
+                    </div>
+                </div>
+            </div>
 
-                <dt class="col-sm-4">Daily Rate</dt>
-                <dd class="col-sm-8">@Model.DailyRate</dd>
+           
 
-                <dt class="col-sm-4">Branch</dt>
-                <dd class="col-sm-8">@Model.Branch</dd>
-
-                @* Show car image if available *@
-                @if (!string.IsNullOrEmpty(Model.CarImageFileName))
-                {
-                    <dt class="col-sm-4">Car Image</dt>
-                    <dd class="col-sm-8">
-                        <img src="~/uploads/@Model.CarImageFileName" style="max-height: 100px;" />
-                    </dd>
-                }
-            </dl>
-
-            <form asp-action="Delete" method="post">
+            <!-- Actions -->
+            <form asp-action="Delete" method="post" onsubmit="return confirmDelete();">
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="CarId" />
-               
 
-
-                <div class="d-flex justify-content-between mt-4">
-                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-danger">
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 shadow-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger px-4 py-2 shadow-sm fw-bold">
                         <i class="bi bi-trash3-fill me-1"></i> Delete
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
 
+            <script>
+                function confirmDelete() {
+                    return confirm("Are you sure you want to delete this car?\nPress OK to delete, Cancel to go back.");
+                }
+            </script>

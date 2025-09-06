@@ -5,7 +5,7 @@
 }
 
 
-
+@* 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -161,8 +161,165 @@
                         <i class="bi bi-plus-circle me-1"></i> Add
                     </button>
                 </div>
+                
 
             </form>
+        </div>
+    </div>
+</div> *@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h4 class="mb-0 fw-bold text-uppercase">
+                        <i class="bi bi-car-front-fill me-2"></i> Add New Car
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+                        <!-- Validation Summary -->
+                        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+                        {
+                            <div class="alert alert-danger mb-3">
+                                <ul class="mb-0">
+                                    @foreach (var entry in ViewData.ModelState.Values)
+                                    {
+                                        foreach (var error in entry.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <!-- Car Details -->
+                        <h5 class="fw-bold text-secondary mb-3">Car Details</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="CarName" class="form-label"></label>
+                                <input asp-for="CarName" class="form-control" placeholder="Enter car name" />
+                                <span asp-validation-for="CarName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CarModel" class="form-label"></label>
+                                <input asp-for="CarModel" class="form-control" placeholder="Enter car model" />
+                                <span asp-validation-for="CarModel" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="FuelType" class="form-label"></label>
+                                <select asp-for="FuelType" class="form-select">
+                                    <option value="">-- Select Fuel Type --</option>
+                                    <option>Petrol</option>
+                                    <option>Diesel</option>
+                                    <option>Hybrid</option>
+                                    <option>Electric</option>
+                                </select>
+                                <span asp-validation-for="FuelType" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Transmission" class="form-label"></label>
+                                <select asp-for="Transmission" class="form-select">
+                                    <option value="">-- Select Transmission --</option>
+                                    <option>Manual</option>
+                                    <option>Automatic</option>
+                                </select>
+                                <span asp-validation-for="Transmission" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Seats" class="form-label"></label>
+                                <input asp-for="Seats" type="number" class="form-control" placeholder="e.g. 4" />
+                                <span asp-validation-for="Seats" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="DailyRate" class="form-label"></label>
+                                <input asp-for="DailyRate" type="number" step="0.01" class="form-control" placeholder="e.g. 50.00" />
+                                <span asp-validation-for="DailyRate" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="IsAvailable" class="form-label">Availability</label>
+                                <select asp-for="IsAvailable" class="form-select">
+                                    <option value="">-- Select --</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <span asp-validation-for="IsAvailable" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Extra Info -->
+                        <h5 class="fw-bold text-secondary mt-4 mb-3">Additional Info</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Branch" class="form-label"></label>
+                                <select asp-for="Branch" class="form-select">
+                                    <option value="">-- Select Branch --</option>
+                                    <option>Colombo</option>
+                                    <option>Jaffna</option>
+                                    <option>Kandy</option>
+                                    <option>Galle</option>
+                                </select>
+                                <span asp-validation-for="Branch" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Color" class="form-label">Choose Color</label>
+                                <select asp-for="Color" class="form-select">
+                                    <option value="">-- Select Color --</option>
+                                    <option>Red</option>
+                                    <option>Blue</option>
+                                    <option>Black</option>
+                                    <option>White</option>
+                                    <option>Silver</option>
+                                    <option>Gray</option>
+                                    <option>Green</option>
+                                    <option>Yellow</option>
+                                    <option>Orange</option>
+                                </select>
+                                <span asp-validation-for="Color" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="RegistrationNumber" class="form-label"></label>
+                                <input asp-for="RegistrationNumber" class="form-control" placeholder="Enter registration number" />
+                                <span asp-validation-for="RegistrationNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label"></label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter description..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Upload Section -->
+                        <h5 class="fw-bold text-secondary mt-4 mb-3">Uploads</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="LogoFile" class="form-label">Upload Logo</label>
+                                <input asp-for="LogoFile" type="file" class="form-control" />
+                                <span asp-validation-for="LogoFile" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CarImageFile" class="form-label">Upload Car Image</label>
+                                <input asp-for="CarImageFile" type="file" class="form-control" />
+                                <span asp-validation-for="CarImageFile" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left-circle me-1"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-success px-5">
+                                <i class="bi bi-plus-circle me-1"></i> Add Car
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

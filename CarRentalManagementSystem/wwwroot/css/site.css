@@ -17,6 +17,56 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+
 }
+body, html {
+    height: 100%;
+    margin-bottom: 60px;
+}
+}
+
+.main-content {
+    min-height: calc(100vh - 100px); /* 100px = footer height */
+    padding-bottom: 20px; /* Optional extra space */
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.car-card {
+    transition: all 0.3s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.car-img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.car-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border-radius: 8px;
+}
+.text-gradient {
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.text-gradient {
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+

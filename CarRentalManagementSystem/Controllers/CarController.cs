@@ -139,7 +139,8 @@ namespace CarRentalManagementSystem.Controllers
                 Color = car.Color,
                 RegistrationNumber = car.RegistrationNumber
                 // Existing file paths for display
-                , ExistingLogoPath = car.LogoFileName,
+                ,
+                ExistingLogoPath = car.LogoFileName,
                 ExistingCarImagePath = car.CarImageFileName
 
             };
