@@ -1,65 +1,10 @@
-﻿@model CarRentalManagementSystem.Models.ViewModels.CarViewModel
+﻿@model CarRentalManagementSystem.ViewModels.CarViewModel
 
 @{
     ViewData["Title"] = "Car Details";
 }
 
-@* <h2 class="text-center mb-4">Car Details</h2>
 
-<div class="card mx-auto" style="max-width: 700px;">
-    <div class="card-body">
-
-        <h3 class="card-title">@Model.CarName (@Model.CarModel)</h3>
-
-        <dl class="row">
-            <dt class="col-sm-3">Fuel Type</dt>
-            <dd class="col-sm-9">@Model.FuelType</dd>
-
-            <dt class="col-sm-3">Transmission</dt>
-            <dd class="col-sm-9">@Model.Transmission</dd>
-
-            <dt class="col-sm-3">Seats</dt>
-            <dd class="col-sm-9">@Model.Seats</dd>
-
-            <dt class="col-sm-3">Daily Rate</dt>
-            <dd class="col-sm-9">@Model.DailyRate.ToString("C")</dd>
-
-            <dt class="col-sm-3">Availability</dt>
-            <dd class="col-sm-9">@Model.IsAvailable</dd>
-
-            <dt class="col-sm-3">Branch</dt>
-            <dd class="col-sm-9">@Model.Branch</dd>
-
-            <dt class="col-sm-3">Color</dt>
-            <dd class="col-sm-9">@Model.Color</dd>
-
-            <dt class="col-sm-3">Registration Number</dt>
-            <dd class="col-sm-9">@Model.RegistrationNumber</dd>
-
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">@Model.Description</dd>
-
-            @if (!string.IsNullOrEmpty(Model.ExistingLogoPath))
-            {
-                <dt class="col-sm-3">Logo</dt>
-                <dd class="col-sm-9">
-                    <img src="~/uploads/@Model.ExistingLogoPath" alt="Logo" style="max-height: 100px;" />
-                </dd>
-            }
-
-            @if (!string.IsNullOrEmpty(Model.ExistingCarImagePath))
-            {
-                <dt class="col-sm-3">Car Image</dt>
-                <dd class="col-sm-9">
-                    <img src="~/uploads/@Model.ExistingCarImagePath" alt="Car Image" style="max-width: 100%; height: auto;" />
-                </dd>
-            }
-        </dl>
-        <div class="mt-4">
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-        </div>
-    </div>
-</div> *@
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 <div class="container mt-5">
@@ -149,10 +94,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .btn-gradient-primary:hover {
-        background: linear-gradient(45deg, #0056b3, #00aaff) !important;
-        color: #fff;
-    }
-</style>

@@ -1,6 +1,6 @@
 ﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
-using CarRentalManagementSystem.Models.ViewModels;
+using CarRentalManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;

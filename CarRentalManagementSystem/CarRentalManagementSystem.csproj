@@ -12,10 +12,6 @@
     <Content Include="bin\Debug\net8.0\CarRentalManagementSystem.deps.json" />
     <Content Include="bin\Debug\net8.0\CarRentalManagementSystem.runtimeconfig.json" />
     <Content Include="bin\Debug\net8.0\CarRentalManagementSystem.staticwebassets.runtime.json" />
-    <Content Include="Views\Car\New folder\2018_porsche_macan_angularrear.jpg" />
-    <Content Include="Views\Car\New folder\Audi A7.png" />
-    <Content Include="Views\Car\New folder\audi-logo.png" />
-    <Content Include="Views\Car\New folder\Porsche-Macan-Transparent-PNG.png" />
   </ItemGroup>
 
   <ItemGroup>
