@@ -9,9 +9,9 @@ namespace CarRentalManagementSystem.Data
             : base(options)
         {
         }
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Car> Cars { get; set; }  
         public DbSet<Booking> Bookings { get; set; }
+
     }
 
 

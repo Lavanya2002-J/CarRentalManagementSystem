@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRentalManagementSystem.Models
 {
@@ -8,18 +9,23 @@ namespace CarRentalManagementSystem.Models
         public int BookingID { get; set; }
 
         [Required]
+        [ForeignKey("Customer")]
         public int CustomerID { get; set; }
 
         [Required]
+        [ForeignKey("Car")]
         public int CarID { get; set; }
 
-        [Required(ErrorMessage = "Pickup date is required")]
+        [Required]
         [DataType(DataType.Date)]
         public DateTime PickupDate { get; set; }
 
-        [Required(ErrorMessage = "Return date is required")]
+        [Required]
         [DataType(DataType.Date)]
         public DateTime ReturnDate { get; set; }
+
+         [Required]
+         public string Status { get; set; }
 
         [Required]
         public decimal TotalCost { get; set; }
