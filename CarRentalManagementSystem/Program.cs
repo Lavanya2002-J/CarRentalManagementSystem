@@ -13,6 +13,9 @@ namespace CarRentalManagementSystem
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalContext")));
 
+
+
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
