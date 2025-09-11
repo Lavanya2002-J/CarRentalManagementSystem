@@ -11,6 +11,32 @@ namespace CarRentalManagementSystem.Data
         }
         public DbSet<Car> Cars { get; set; }  
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Payment> payments { get; set; }
+
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Admin>().HasData(
+                new Admin
+                {
+                    
+                    AdminID = new Guid("E82B713C-997C-4E9A-B71C-289A4281AE80"), //  Guid
+                    Username = "admin",
+                    Password = "admin123",
+                    Name = "Administrator",
+                    Email = "admin@carental.com"
+                }
+            );
+        }
+
+
+
+
+
+
 
     }
 
