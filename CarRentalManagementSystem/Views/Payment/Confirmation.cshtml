@@ -1,0 +1,15 @@
+﻿@model CarRentalManagementSystem.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Confirmation";
+}
+
+<div class="card p-4 shadow-sm">
+    <h2 class="text-success">  Payment Successful!</h2>
+    <p><strong>Transaction ID:</strong> @Model.TransactionID</p>
+    <p><strong>Amount:</strong> @Model.Amount.ToString("C")</p>
+    <p><strong>Date:</strong> @Model.PaymentDate.ToString("g")</p>
+    <p><strong>Method:</strong> @Model.PaymentMethod</p>
+
+    <a asp-controller="Booking" asp-action="Details" asp-route-id="@Model.BookingID" class="btn btn-primary">Back to Booking</a>
+</div>

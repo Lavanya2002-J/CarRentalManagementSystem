@@ -1,12 +1,78 @@
-﻿@* In Views/Admin/Dashboard.cshtml *@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout"; // make sure you use your main layout
+}
 
-<h3 class="mt-4">Management Links</h3>
-<div class="list-group mt-3">
-    <a asp-controller="Car" asp-action="Index" class="list-group-item list-group-item-action">
-        🚗 Manage Cars
-    </a>
-    <a asp-controller="Booking" asp-action="Index" class="list-group-item list-group-item-action">
-        📋 View All Bookings
-    </a>
-    @*<a href="#" class="list-group-item list-group-item-action">Manage Users</a>*@
+<div class="container-fluid mt-4">
+    <h2 class="mb-4 text-primary">👨‍💼 Admin Dashboard</h2>
+
+    <div class="row">
+        <!-- Manage Cars -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">🚗 Manage Cars</h5>
+                    <p class="card-text text-muted">Add, edit, or remove cars from the system.</p>
+                    <a asp-controller="Car" asp-action="Index" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Bookings -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📋 View All Bookings</h5>
+                    <p class="card-text text-muted">Check and manage all customer bookings.</p>
+                    <a asp-controller="Booking" asp-action="Index" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Payments -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">💳 Payments</h5>
+                    <p class="card-text text-muted">View and monitor all payments.</p>
+                    <a asp-controller="Payment" asp-action="Index" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Reports -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📊 Reports</h5>
+                    <p class="card-text text-muted">Generate sales and usage reports.</p>
+                    <a asp-controller="Report" asp-action="Index" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Users -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">👥 Manage Users</h5>
+                    <p class="card-text text-muted">Manage admins, staff, and customers.</p>
+                    <a asp-controller="User" asp-action="Index" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">⚙️ Settings</h5>
+                    <p class="card-text text-muted">Update system settings and preferences.</p>
+                    <a asp-controller="Admin" asp-action="Settings" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

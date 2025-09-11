@@ -81,25 +81,26 @@ namespace CarRentalManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                // Calculate the total cost based on the number of days
+                // Calculate total cost
                 var rentalDays = (model.ReturnDate - model.PickupDate).TotalDays;
                 model.TotalCost = (decimal)rentalDays * car.DailyRate;
 
-                // Get CustomerID from session
+                // Customer ID
                 model.CustomerID = HttpContext.Session.GetInt32("UserID").Value;
-                model.Status = "Pending"; // Set initial status
+                model.Status = "Pending"; // Booking created but payment pending
 
                 _context.Bookings.Add(model);
 
-                // Update car availability to "No"
+                // Update car availability
                 car.IsAvailable = "No";
                 _context.Cars.Update(car);
 
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Your booking has been created successfully!";
-                return RedirectToAction("History");
+                // Redirect to PaymentController/Create with bookingId and amount
+                return RedirectToAction("Create", "Payment", new { bookingId = model.BookingID, amount = model.TotalCost });
             }
+
 
             // If model state is not valid, return to the form with errors
             ViewBag.Car = car;

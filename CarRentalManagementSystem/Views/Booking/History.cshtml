@@ -28,7 +28,15 @@
                 <td>@booking.PickupDate.ToShortDateString()</td>
                 <td>@booking.ReturnDate.ToShortDateString()</td>
                 <td>$@booking.TotalCost</td>
-                <td>@booking.Status</td>
+                <td>
+                    @if (booking.Status == "Pending")
+                    {
+                        <a asp-controller="Payment" asp-action="Create"
+                           asp-route-bookingId="@booking.BookingID"
+                           asp-route-amount="@booking.TotalCost"
+                           class="btn btn-success btn-sm">Pay Now</a>
+                    }
+                </td>
             </tr>
         }
     </tbody>
