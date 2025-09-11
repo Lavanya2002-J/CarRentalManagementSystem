@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
+@{
+    ViewData["Title"] = "My Booking History";
+}
+
+<h2>My Booking History</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Car Name</th>
+            <th>Pickup Date</th>
+            <th>Return Date</th>
+            <th>Total Cost</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Car.CarName</td>
+                <td>@booking.PickupDate.ToShortDateString()</td>
+                <td>@booking.ReturnDate.ToShortDateString()</td>
+                <td>$@booking.TotalCost</td>
+                <td>@booking.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
