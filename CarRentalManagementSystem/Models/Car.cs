@@ -22,6 +22,9 @@ using System.ComponentModel.DataAnnotations;
         public string Description { get; set; }
         public string Color { get; set; }
         public string RegistrationNumber { get; set; }
+
+        
+        public ICollection<Booking> Bookings { get; set; }
     }
 
     

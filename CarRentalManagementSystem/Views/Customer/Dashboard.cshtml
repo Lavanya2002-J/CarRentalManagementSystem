@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Customer Dashboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome, @ViewBag.Username!</h1>
+    <p>This is your personalized dashboard where you can manage your car rentals.</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Browse Cars</h5>
+                <p class="card-text">View our full list of available cars and find your perfect ride.</p>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Browse Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">My Bookings</h5>
+                <p class="card-text">See your past and current booking history.</p>
+                <a asp-controller="Booking" asp-action="History" class="btn btn-info">View History</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">New Booking</h5>
+                <p class="card-text">Ready to rent? Start a new car booking now.</p>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-success">Book a Car</a>
+            </div>
+        </div>
+    </div>
+</div>
