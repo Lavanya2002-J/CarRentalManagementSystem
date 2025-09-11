@@ -52,7 +52,7 @@
                         <div class="mt-auto">
                             <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted">/ day</small></h5>
                             <a href="/Booking/Create/@car.CarId" class="btn btn-primary w-100 fw-bold shadow-sm">
-                                <i class="bi bi-calendar-check"></i> Book Now
+                            <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarId" class="btn btn-primary">Book Now</a>
                             </a>
                         </div>
                     </div>
