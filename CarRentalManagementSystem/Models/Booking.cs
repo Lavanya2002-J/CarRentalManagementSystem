@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System; // <-- Make sure System is included
 
 namespace CarRentalManagementSystem.Models
 {
@@ -14,7 +15,7 @@ namespace CarRentalManagementSystem.Models
 
         [Required]
         [ForeignKey("Car")]
-        public int CarID { get; set; }
+        public Guid CarID { get; set; } 
 
         [Required]
         [DataType(DataType.Date)]
@@ -24,10 +25,14 @@ namespace CarRentalManagementSystem.Models
         [DataType(DataType.Date)]
         public DateTime ReturnDate { get; set; }
 
-         [Required]
-         public string Status { get; set; }
+        [Required]
+        public string Status { get; set; }
 
         [Required]
         public decimal TotalCost { get; set; }
+
+        // Add navigation properties
+        public virtual Customer Customer { get; set; }
+        public virtual Car Car { get; set; }
     }
 }
