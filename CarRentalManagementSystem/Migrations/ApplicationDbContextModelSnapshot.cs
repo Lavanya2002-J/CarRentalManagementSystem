@@ -41,9 +41,23 @@ namespace CarRentalManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("AdminID");
 
                     b.ToTable("Admins");
+
+                    b.HasData(
+                        new
+                        {
+                            AdminID = new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"),
+                            Email = "admin@carental.com",
+                            Name = "Administrator",
+                            Password = "admin123",
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Booking", b =>
@@ -170,6 +184,11 @@ namespace CarRentalManagementSystem.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("CustomerID");
 
