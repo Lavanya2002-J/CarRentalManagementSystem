@@ -10,13 +10,14 @@ namespace CarRentalManagementSystem.Models
 
         [Required]
         [StringLength(100)]
-
         public string CustomerName { get; set; }
 
         [Required]
-       
         public string Email { get; set; }
 
+        [Required]
+        [StringLength(50)]
+        public string Username { get; set; }
         [Required]
         [StringLength(50)]
         public string Password { get; set; }
