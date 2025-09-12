@@ -13,6 +13,21 @@ namespace CarRentalManagementSystem
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalContext")));
 
+
+            // Add Session support
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            builder.Services.AddHttpContextAccessor();
+
+
+
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -29,6 +44,9 @@ namespace CarRentalManagementSystem
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
+
 
             app.UseAuthorization();
 

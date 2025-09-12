@@ -1,0 +1,60 @@
+﻿@model Customer
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                <h3>Customer Registration</h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Register" method="post">
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Username" class="form-control" placeholder="Username" />
+                        <label asp-for="Username"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                        <label asp-for="Password"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
+                        <label asp-for="CustomerName">Full Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="Email" />
+                        <label asp-for="Email"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+                        <label asp-for="PhoneNumber"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Address" class="form-control" placeholder="Address" />
+                        <label asp-for="Address"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="NIC" class="form-control" placeholder="NIC" />
+                        <label asp-for="NIC"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="LicenseNo" class="form-control" placeholder="License No" />
+                        <label asp-for="LicenseNo"></label>
+                    </div>
+
+                    <div class="d-grid">
+                        <input type="submit" value="Register" class="btn btn-success" />
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-action="Login">Already have an account? Log in.</a>
+            </div>
+        </div>
+    </div>
+</div>

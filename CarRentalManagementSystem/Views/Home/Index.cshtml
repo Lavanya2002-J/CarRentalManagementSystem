@@ -2,69 +2,7 @@
 @{
     ViewData["Title"] = "Home";
 }
-@* 
-<div class="container mt-4">
-    <!-- Page Title -->
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-primary"> Available Cars for Rent</h2>
-        <p class="text-muted">Choose your perfect ride from our premium collection</p>
-    </div>
 
-    <!-- Cars Grid -->
-    <div class="row">
-        @foreach (var car in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100 border-0 rounded-3 car-card">
-
-                    <!-- Car Logo -->
-                    @if (!string.IsNullOrEmpty(car.LogoFileName))
-                    {
-                        <img src="~/uploads/@car.LogoFileName"
-                             class="position-absolute p-2"
-                             alt="Logo"
-                             style="height: 50px; width: auto;" />
-                    }
-
-                    <!-- Car Image -->
-                    @if (!string.IsNullOrEmpty(car.CarImageFileName))
-                    {
-                        <img src="~/uploads/@car.CarImageFileName"
-                             class="card-img-top rounded-top"
-                             alt="Car Image"
-                             style="height: 200px; object-fit: cover;" />
-                    }
-
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-dark fw-bold">@car.CarName (@car.CarModel)</h5>
-                        <p class="card-text small text-muted mb-3">
-                            <i class="bi bi-fuel-pump"></i> @car.FuelType <br />
-                            <i class="bi bi-gear"></i> @car.Transmission <br />
-                            <i class="bi bi-people"></i> Seats: @car.Seats <br />
-                            <i class="bi bi-palette"></i> Color: @car.Color
-                        </p>
-
-                        <div class="mt-auto">
-                            <h6 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") /day</h6>
-                            <a href="/Booking/Create/@car.CarId" class="btn btn-primary w-100 shadow-sm">
-                                <i class="bi bi-calendar-check"></i> Book Now
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-<!-- Custom Styling -->
-<style>
-    .car-card:hover {
-        transform: translateY(-5px);
-        transition: 0.3s;
-        box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
-    }
-</style> *@
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 <div class="container mt-5 mb-5">
@@ -114,7 +52,7 @@
                         <div class="mt-auto">
                             <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted">/ day</small></h5>
                             <a href="/Booking/Create/@car.CarId" class="btn btn-primary w-100 fw-bold shadow-sm">
-                                <i class="bi bi-calendar-check"></i> Book Now
+                            <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarId" class="btn btn-primary">Book Now</a>
                             </a>
                         </div>
                     </div>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
+@{
+    ViewData["Title"] = "My Booking History";
+}
+
+<h2>My Booking History</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Car Name</th>
+            <th>Pickup Date</th>
+            <th>Return Date</th>
+            <th>Total Cost</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Car.CarName</td>
+                <td>@booking.PickupDate.ToShortDateString()</td>
+                <td>@booking.ReturnDate.ToShortDateString()</td>
+                <td>$@booking.TotalCost</td>
+                <td>
+                    @if (booking.Status == "Pending")
+                    {
+                        <a asp-controller="Payment" asp-action="Create"
+                           asp-route-bookingId="@booking.BookingID"
+                           asp-route-amount="@booking.TotalCost"
+                           class="btn btn-success btn-sm">Pay Now</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -69,4 +69,41 @@ footer {
     background: linear-gradient(90deg, #007bff, #6610f2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+table.compact-table td,
+table.compact-table th {
+    padding: 6px 10px !important;
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+.compact-table .btn-sm {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+}
+
+.compact-table img {
+    max-height: 40px;
+    max-width: 60px;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+
+.car-color-box {
+    width: 18px;
+    height: 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+}
+
+
+
+.btn-gradient-primary:hover {
+    background: linear-gradient(45deg, #0056b3, #00aaff) !important;
+    color: #fff;
+}
 
