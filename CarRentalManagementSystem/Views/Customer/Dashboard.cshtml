@@ -1,38 +1,83 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Customer Dashboard";
+    // Dummy data for demonstration. You would pass this from your controller.
+    ViewBag.ActiveBookingsCount = 2;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome, @ViewBag.Username!</h1>
-    <p>This is your personalized dashboard where you can manage your car rentals.</p>
+<style>
+    /* A simple hover effect for the cards */
+    .dashboard-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        }
+
+    .card-icon {
+        font-size: 3rem;
+        color: #0d6efd; /* Bootstrap primary color */
+    }
+</style>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold">Welcome back, @ViewBag.Username!</h1>
+        <p class="col-md-8 fs-4">This is your personal space to manage rentals, view your history, and find your next ride.</p>
+    </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Browse Cars</h5>
-                <p class="card-text">View our full list of available cars and find your perfect ride.</p>
-                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Browse Now</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+    <div class="col">
+        <div class="card h-100 text-center shadow-sm dashboard-card">
+            <div class="card-body d-flex flex-column">
+                <div class="mb-3">
+                    <i class="fas fa-calendar-check card-icon"></i>
+                </div>
                 <h5 class="card-title">My Bookings</h5>
-                <p class="card-text">See your past and current booking history.</p>
-                <a asp-controller="Booking" asp-action="History" class="btn btn-info">View History</a>
+                <p class="card-text text-muted">Review your active and past rental agreements.</p>
+                @if (ViewBag.ActiveBookingsCount > 0)
+                {
+                    <p><span class="badge bg-primary rounded-pill">@ViewBag.ActiveBookingsCount Active Rentals</span></p>
+                }
+                <div class="mt-auto">
+                    <a asp-controller="Booking" asp-action="History" class="btn btn-primary">View History</a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">New Booking</h5>
-                <p class="card-text">Ready to rent? Start a new car booking now.</p>
-                <a asp-controller="Home" asp-action="Index" class="btn btn-success">Book a Car</a>
+
+    <div class="col">
+        <div class="card h-100 text-center shadow-sm dashboard-card">
+            <div class="card-body d-flex flex-column">
+                <div class="mb-3">
+                    <i class="fas fa-car card-icon" style="color: #198754;"></i>
+                </div>
+                <h5 class="card-title">Find a Car</h5>
+                <p class="card-text text-muted">Explore our collection and book your next vehicle with ease.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-success">Browse & Book Now</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="col">
+        <div class="card h-100 text-center shadow-sm dashboard-card">
+            <div class="card-body d-flex flex-column">
+                <div class="mb-3">
+                    <i class="fas fa-user-cog card-icon" style="color: #6c757d;"></i>
+                </div>
+                <h5 class="card-title">Manage Profile</h5>
+                <p class="card-text text-muted">Update your personal information and preferences.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Account" asp-action="Profile" class="btn btn-secondary">Update Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
