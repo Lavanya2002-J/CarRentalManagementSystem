@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace CarRentalManagementSystem.Attributes
 {
-    public class CustomPassword : ValidationAttribute
+    public class CustomPasswordAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
