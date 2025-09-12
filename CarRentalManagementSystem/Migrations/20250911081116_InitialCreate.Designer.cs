@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250910160150_InitialCreate")]
+    [Migration("20250911081116_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -71,8 +71,8 @@ namespace CarRentalManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingID"));
 
-                    b.Property<int>("CarID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CarID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CustomerID")
                         .HasColumnType("int");
@@ -91,6 +91,8 @@ namespace CarRentalManagementSystem.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("BookingID");
+
+                    b.HasIndex("CarID");
 
                     b.HasIndex("CustomerID");
 
@@ -225,18 +227,37 @@ namespace CarRentalManagementSystem.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("TransactionID")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("PaymentID");
 
-                    b.ToTable("payments");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Booking", b =>
                 {
-                    b.HasOne("CarRentalManagementSystem.Models.Customer", null)
+                    b.HasOne("CarRentalManagementSystem.Models.Car", "Car")
+                        .WithMany("Bookings")
+                        .HasForeignKey("CarID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarRentalManagementSystem.Models.Customer", "Customer")
                         .WithMany("Bookings")
                         .HasForeignKey("CustomerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CarRentalManagementSystem.Models.Car", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Customer", b =>

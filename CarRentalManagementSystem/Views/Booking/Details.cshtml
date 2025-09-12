@@ -1,0 +1,48 @@
+﻿@model CarRentalManagementSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Booking Details</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Booking ID: @Model.BookingID</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Car Information</h5>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">Car Name</dt>
+                        <dd class="col-sm-8">@Model.Car.CarName</dd>
+                        <dt class="col-sm-4">Model</dt>
+                        <dd class="col-sm-8">@Model.Car.CarModel</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <h5>Booking Information</h5>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">Customer</dt>
+                        <dd class="col-sm-8">@Model.Customer.CustomerName</dd>
+                        <dt class="col-sm-4">Pickup Date</dt>
+                        <dd class="col-sm-8">@Model.PickupDate.ToString("yyyy-MM-dd")</dd>
+                        <dt class="col-sm-4">Return Date</dt>
+                        <dd class="col-sm-8">@Model.ReturnDate.ToString("yyyy-MM-dd")</dd>
+                        <dt class="col-sm-4">Total Cost</dt>
+                        <dd class="col-sm-8">$@Model.TotalCost.ToString("N2")</dd>
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8"><span class="badge bg-success">@Model.Status</span></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="History" class="btn btn-secondary">Back to History</a>
+        </div>
+    </div>
+</div>
