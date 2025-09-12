@@ -13,6 +13,7 @@ namespace CarRentalManagementSystem.Models
         public string CustomerName { get; set; }
 
         [Required]
+        [CustomEmail]
         public string Email { get; set; }
 
         [Required]
@@ -20,6 +21,7 @@ namespace CarRentalManagementSystem.Models
         public string Username { get; set; }
         [Required]
         [StringLength(50)]
+        [CustomPasswordAttribute]
         public string Password { get; set; }
         [Required]
         [Phone]
