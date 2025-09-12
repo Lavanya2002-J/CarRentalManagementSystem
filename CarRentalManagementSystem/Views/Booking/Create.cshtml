@@ -4,36 +4,147 @@
     var car = ViewBag.Car as CarRentalManagementSystem.Models.Car;
 }
 
-<h2>Book @car.CarName</h2>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <img src="@Url.Content("~/uploads/" + car.CarImageFileName)" class="card-img-top" alt="@car.CarName">
-                <h5 class="card-title mt-3">@car.CarName - @car.CarModel</h5>
-                <p><strong>Daily Rate:</strong> $@car.DailyRate</p>
-                <p><strong>Description:</strong> @car.Description</p>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Complete Your Booking</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <h4 class="mb-3">You are booking: @car.CarName</h4>
+                            <img src="@Url.Content("~/uploads/" + car.CarImageFileName)" class="img-fluid rounded mb-3" alt="@car.CarName">
+
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Model:</strong> <span>@car.CarModel</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Transmission:</strong> <span>@car.Transmission</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Fuel Type:</strong> <span>@car.FuelType</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Daily Rate:</strong>
+                                    <span id="dailyRate" data-rate="@car.DailyRate">LKR @car.DailyRate.ToString("N2")</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4 class="mb-3">Select Your Dates</h4>
+                            <form asp-action="Create" method="post">
+                                @Html.AntiForgeryToken()
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                <input type="hidden" asp-for="CarID" value="@car.CarId" />
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="PickupDate" class="form-label fw-bold"></label>
+                                    <input asp-for="PickupDate" id="pickupDate" class="form-control" placeholder="Select pickup date..." />
+                                    <span asp-validation-for="PickupDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="ReturnDate" class="form-label fw-bold"></label>
+                                    <input asp-for="ReturnDate" id="returnDate" class="form-control" placeholder="Select return date..." disabled />
+                                    <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                                </div>
+
+                                <hr />
+
+                                <div class="text-center my-3">
+                                    <h4 class="fw-bold">Estimated Total</h4>
+                                    <h2 id="totalCost" class="text-success fw-bolder">LKR 0.00</h2>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Confirm & Proceed to Payment</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <form asp-action="Create" method="post">
-            <input type="hidden" asp-for="CarID" value="@car.CarId" />
-
-            <div class="form-group">
-                <label asp-for="PickupDate"></label>
-                <input asp-for="PickupDate" type="date" class="form-control" />
-                <span asp-validation-for="PickupDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ReturnDate"></label>
-                <input asp-for="ReturnDate" type="date" class="form-control" />
-                <span asp-validation-for="ReturnDate" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary mt-3">Confirm Booking</button>
-        </form>
-    </div>
 </div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get references to elements
+            const pickupDateInput = document.getElementById('pickupDate');
+            const returnDateInput = document.getElementById('returnDate');
+            const dailyRateElement = document.getElementById('dailyRate');
+            const totalCostElement = document.getElementById('totalCost');
+
+            // Get the daily rate from the data attribute
+            const dailyRate = parseFloat(dailyRateElement.getAttribute('data-rate'));
+            let returnDatePicker = null;
+
+            // Function to calculate and display the total cost
+            function calculateTotal() {
+                const pickupDate = pickupDateInput._flatpickr.selectedDates[0];
+                const returnDate = returnDateInput._flatpickr.selectedDates[0];
+
+                if (pickupDate && returnDate) {
+                    const timeDiff = returnDate.getTime() - pickupDate.getTime();
+                    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                    if (dayDiff > 0) {
+                        const total = dayDiff * dailyRate;
+                        totalCostElement.textContent = 'LKR ' + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    } else {
+                        totalCostElement.textContent = 'LKR 0.00';
+                    }
+                } else {
+                    totalCostElement.textContent = 'LKR 0.00';
+                }
+            }
+
+            // Initialize Flatpickr for the pickup date
+            flatpickr(pickupDateInput, {
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                onChange: function(selectedDates) {
+                    const pickupDate = selectedDates[0];
+                    if (pickupDate) {
+                        // Enable and configure the return date picker
+                        returnDateInput.disabled = false;
+
+                        if (returnDatePicker) {
+                            returnDatePicker.destroy(); // Destroy previous instance
+                        }
+
+                        returnDatePicker = flatpickr(returnDateInput, {
+                            altInput: true,
+                            altFormat: "F j, Y",
+                            dateFormat: "Y-m-d",
+                            minDate: new Date(pickupDate.fp_incr(1)), // Set min return date to day after pickup
+                            onChange: calculateTotal
+                        });
+                    } else {
+                        // Disable return date if pickup is cleared
+                        returnDateInput.disabled = true;
+                        if(returnDatePicker) returnDatePicker.clear();
+                    }
+                    calculateTotal();
+                }
+            });
+        });
+    </script>
+}
