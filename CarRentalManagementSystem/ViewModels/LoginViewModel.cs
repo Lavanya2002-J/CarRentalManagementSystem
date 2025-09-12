@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarRentalManagementSystem.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRentalManagementSystem.ViewModels
 {
@@ -9,6 +10,7 @@ namespace CarRentalManagementSystem.ViewModels
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
+        [CustomPassword]
         public string Password { get; set; }
     }
 }

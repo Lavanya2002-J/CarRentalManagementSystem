@@ -14,6 +14,19 @@
 
     <!-- Cars Grid -->
     <div class="row g-4">
+    @* @foreach (var huhu in Model)
+    {
+        @if (!string.IsNullOrEmpty(huhu.LogoFileName))
+        {
+            <div class="modal-dialog modal-fullscreen-sm-down">
+                <img src="~/uploads/@huhu.LogoFileName"
+                     class="car-logo"
+                     alt="Logo" />
+            </div>
+
+        }
+    } *@
+                            
         @foreach (var car in Model)
         {
             <div class="col-md-4">
@@ -51,9 +64,8 @@
 
                         <div class="mt-auto">
                             <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted">/ day</small></h5>
-                            <a href="/Booking/Create/@car.CarId" class="btn btn-primary w-100 fw-bold shadow-sm">
                             <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarId" class="btn btn-primary">Book Now</a>
-                            </a>
+                            
                         </div>
                     </div>
                 </div>
