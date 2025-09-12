@@ -15,6 +15,7 @@ namespace CarRentalManagementSystem.Models
 
         [Required]
         [EmailAddress]
+        
         public string Email { get; set; }
 
         [Required]
