@@ -1,4 +1,7 @@
-﻿@model IEnumerable<CarRentalManagementSystem.Models.Car>
+﻿@* 
+
+ *@
+@model IEnumerable<CarRentalManagementSystem.Models.Car>
 @{
     ViewData["Title"] = "Home";
 }
@@ -7,59 +10,102 @@
 
 <div class="container mt-5 mb-5">
     <!-- Page Title -->
-    
     <h2 class="fw-bold text-gradient">Discover Your Perfect Drive</h2>
     <p class="text-muted fs-5">Handpicked cars tailored for comfort, style, and unforgettable journeys</p>
-</div>
+
+    <!-- Search and Filter Form -->
+    <div class="card p-3 my-4 border-0 shadow-sm">
+        <form asp-controller="Home" asp-action="Index" method="get">
+            <div class="row align-items-end g-3">
+                <div class="col-lg-3 col-md-6">
+                    <label for="searchString" class="form-label fw-bold">Search by Name/Model</label>
+                    <input type="text" name="searchString" class="form-control" value="@ViewData["CurrentSearch"]" />
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="fuelType" class="form-label fw-bold">Fuel Type</label>
+                    <select name="fuelType" class="form-select">
+                        <option value="">All</option>
+                        <option value="Petrol" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Petrol")">Petrol</option>
+                        <option value="Diesel" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Diesel")">Diesel</option>
+                        <option value="Electric" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Electric")">Electric</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="transmission" class="form-label fw-bold">Transmission</label>
+                    <select name="transmission" class="form-select">
+                        <option value="">All</option>
+                        <option value="Automatic" selected="@(ViewData["CurrentTransmission"]?.ToString() == "Automatic")">Automatic</option>
+                        <option value="Manual" selected="@(ViewData["CurrentTransmission"]?.ToString() == "Manual")">Manual</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="seats" class="form-label fw-bold">Seats</label>
+                    <input type="number" name="seats" class="form-control" min="1" step="1" value="@ViewData["CurrentSeats"]" />
+                </div>
+                <div class="col-lg-3 col-md-12 d-grid">
+                    <button type="submit" class="btn btn-primary fw-bold">Find Car</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <!-- Cars Grid -->
     <div class="row g-4">
-        @foreach (var car in Model)
+        @if (Model.Any())
         {
-            <div class="col-md-4">
-                <div class="card car-card border-0 shadow-lg rounded-4 h-100 overflow-hidden">
+            @foreach (var car in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card car-card border-0 shadow-lg rounded-4 h-100 overflow-hidden">
 
-                    <!-- Car Image -->
-                    <div class="position-relative">
-                        @if (!string.IsNullOrEmpty(car.CarImageFileName))
-                        {
-                            <img src="~/uploads/@car.CarImageFileName"
-                                 class="card-img-top car-img"
-                                 alt="Car Image" />
-                        }
+                        <!-- Car Image -->
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(car.CarImageFileName))
+                            {
+                                <img src="~/uploads/@car.CarImageFileName"
+                                     class="card-img-top car-img"
+                                     alt="Car Image" />
+                            }
 
-                        <!-- Logo Badge -->
-                        @if (!string.IsNullOrEmpty(car.LogoFileName))
-                        {
-                            <img src="~/uploads/@car.LogoFileName"
-                                 class="car-logo"
-                                 alt="Logo" />
-                        }
-                    </div>
-
-                    <!-- Card Body -->
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="fw-bold text-dark">@car.CarName <span class="text-muted">(@car.CarModel)</span></h5>
-
-                        <!-- Car Specs as badges -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1"><i class="bi bi-fuel-pump"></i> @car.FuelType</span>
-                            <span class="badge bg-light text-dark me-1"><i class="bi bi-gear"></i> @car.Transmission</span>
-                            <span class="badge bg-light text-dark me-1"><i class="bi bi-people"></i> @car.Seats Seats</span>
-                            <span class="badge bg-light text-dark"><i class="bi bi-palette"></i> @car.Color</span>
+                            <!-- Logo Badge -->
+                            @if (!string.IsNullOrEmpty(car.LogoFileName))
+                            {
+                                <img src="~/uploads/@car.LogoFileName"
+                                     class="car-logo"
+                                     alt="Logo" />
+                            }
                         </div>
 
-                        <div class="mt-auto">
-                            <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted">/ day</small></h5>
-                            <a href="/Booking/Create/@car.CarId" class="btn btn-primary w-100 fw-bold shadow-sm">
-                            <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarId" class="btn btn-primary">Book Now</a>
-                            </a>
+                        <!-- Card Body -->
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="fw-bold text-dark">@car.CarName <span class="text-muted">(@car.CarModel)</span></h5>
+
+                            <!-- Car Specs as badges -->
+                            <div class="mb-3">
+                                <span class="badge bg-light text-dark me-1"><i class="bi bi-fuel-pump"></i> @car.FuelType</span>
+                                <span class="badge bg-light text-dark me-1"><i class="bi bi-gear"></i> @car.Transmission</span>
+                                <span class="badge bg-light text-dark me-1"><i class="bi bi-people"></i> @car.Seats Seats</span>
+                                <span class="badge bg-light text-dark"><i class="bi bi-palette"></i> @car.Color</span>
+                            </div>
+
+                            <div class="mt-auto">
+                                <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted">/ day</small></h5>
+                                <!-- Corrected Book Now Button -->
+                                <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarId" class="btn btn-primary w-100 fw-bold shadow-sm">Book Now</a>
+                            </div>
                         </div>
                     </div>
+                </div>
+            }
+        }
+        else if ((bool?)ViewData["SearchAttempted"] == true)
+        {
+            <div class="col-12 text-center">
+                <div class="alert alert-info mt-4">
+                    <h4>No Cars Found</h4>
+                    <p>We couldn't find any cars that match your search criteria. Please try different filters.</p>
                 </div>
             </div>
         }
     </div>
 </div>
-
-

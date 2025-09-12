@@ -81,7 +81,7 @@ namespace CarRentalManagementSystem.Controllers
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 var rentalDays = (model.ReturnDate - model.PickupDate).TotalDays;
                 if (rentalDays <= 0) rentalDays = 1; // Ensure at least one day is charged
