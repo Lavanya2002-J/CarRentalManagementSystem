@@ -11,7 +11,7 @@ namespace CarRentalManagementSystem.Models
         [Required]
         [ForeignKey("Booking")]
         public int BookingID { get; set; }
-        
+
         [Required]
         public decimal Amount { get; set; }
 
@@ -25,5 +25,9 @@ namespace CarRentalManagementSystem.Models
         [Required]
         [StringLength(20)]
         public string PaymentStatus { get; set; }
+
+        // Add this new property
+        [StringLength(50)]
+        public string TransactionID { get; set; }
     }
 }

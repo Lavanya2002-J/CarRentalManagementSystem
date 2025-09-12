@@ -71,7 +71,7 @@ namespace CarRentalManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "payments",
+                name: "Payments",
                 columns: table => new
                 {
                     PaymentID = table.Column<int>(type: "int", nullable: false)
@@ -80,11 +80,12 @@ namespace CarRentalManagementSystem.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    PaymentStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    TransactionID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_payments", x => x.PaymentID);
+                    table.PrimaryKey("PK_Payments", x => x.PaymentID);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,7 +95,7 @@ namespace CarRentalManagementSystem.Migrations
                     BookingID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
-                    CarID = table.Column<int>(type: "int", nullable: false),
+                    CarID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PickupDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -103,6 +104,12 @@ namespace CarRentalManagementSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bookings", x => x.BookingID);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Cars_CarID",
+                        column: x => x.CarID,
+                        principalTable: "Cars",
+                        principalColumn: "CarId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookings_Customers_CustomerID",
                         column: x => x.CustomerID,
@@ -115,6 +122,11 @@ namespace CarRentalManagementSystem.Migrations
                 table: "Admins",
                 columns: new[] { "AdminID", "Email", "Name", "Password", "Username" },
                 values: new object[] { new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"), "admin@carental.com", "Administrator", "admin123", "admin" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CarID",
+                table: "Bookings",
+                column: "CarID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CustomerID",
@@ -132,10 +144,10 @@ namespace CarRentalManagementSystem.Migrations
                 name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "Cars");
+                name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "payments");
+                name: "Cars");
 
             migrationBuilder.DropTable(
                 name: "Customers");
