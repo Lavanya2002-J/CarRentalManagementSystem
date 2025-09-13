@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
-using CarRentalManagementSystem.Data; // Make sure this matches your DbContext namespace
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CarRentalManagementSystem.Controllers
 {
@@ -17,14 +19,48 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-        // Home page - shows list of available cars
-        public async Task<IActionResult> Index()
-        {
-            var availableCars = await _context.Cars
-                .Where(c => c.IsAvailable == "Yes")
-                .ToListAsync();
 
-            return View(availableCars);
+        public async Task<IActionResult> Index(string searchString, string fuelType, string transmission, int? seats)
+        {
+            var carsQuery = _context.Cars.Where(c => c.IsAvailable == "Yes");
+
+            //  A flag to check if any filter is active
+            var searchAttempted = !string.IsNullOrEmpty(searchString) ||
+                                  !string.IsNullOrEmpty(fuelType) ||
+                                  !string.IsNullOrEmpty(transmission) ||
+                                  seats.HasValue;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                carsQuery = carsQuery.Where(c => c.CarName.Contains(searchString) || c.CarModel.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(fuelType))
+            {
+                carsQuery = carsQuery.Where(c => c.FuelType == fuelType);
+            }
+
+            if (!string.IsNullOrEmpty(transmission))
+            {
+                carsQuery = carsQuery.Where(c => c.Transmission == transmission);
+            }
+
+            if (seats.HasValue)
+            {
+                carsQuery = carsQuery.Where(c => c.Seats == seats.Value);
+            }
+
+            var filteredCars = await carsQuery.ToListAsync();
+
+            ViewData["CurrentSearch"] = searchString;
+            ViewData["CurrentFuelType"] = fuelType;
+            ViewData["CurrentTransmission"] = transmission;
+            ViewData["CurrentSeats"] = seats;
+
+            //  Pass the flag to the view
+            ViewData["SearchAttempted"] = searchAttempted;
+
+            return View(filteredCars);
         }
 
         public IActionResult Privacy()
@@ -35,10 +71,7 @@ namespace CarRentalManagementSystem.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            });
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
