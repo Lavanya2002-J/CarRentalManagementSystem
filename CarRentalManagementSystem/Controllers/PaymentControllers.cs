@@ -1,92 +1,9 @@
-﻿//using CarRentalManagementSystem.Data;
-//using CarRentalManagementSystem.Models;
-//using CarRentalManagementSystem.ViewModels; // ✅ Make sure to include this
-//using Microsoft.AspNetCore.Mvc;
-
-//namespace CarRentalManagementSystem.Controllers
-//{
-//    public class PaymentController : Controller
-//    {
-//        private readonly ApplicationDbContext _context;
-
-//        public PaymentController(ApplicationDbContext context)
-//        {
-//            _context = context;
-//        }
-//        // GET: Payment/Create
-//        public IActionResult Create(int bookingId, decimal amount)
-//        {
-//            var viewModel = new PaymentViewModel
-//            {
-//                BookingID = bookingId,
-//                Amount = amount
-//            };
-//            return View(viewModel);
-//        }
-
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public IActionResult Create(PaymentViewModel model)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                // Simulate payment
-//                string transactionId = Guid.NewGuid().ToString().Substring(0, 10);
-
-//                var payment = new Payment
-//                {
-//                    BookingID = model.BookingID,
-//                    Amount = model.Amount,
-//                    PaymentDate = DateTime.Now,
-//                    PaymentMethod = model.PaymentMethod,
-//                    PaymentStatus = "Success",
-//                    TransactionID = transactionId
-//                };
-
-//                _context.Payments.Add(payment);
-
-//                // Update Booking status to Paid
-//                var booking = _context.Bookings.Find(model.BookingID);
-//                if (booking != null)
-//                {
-//                    booking.Status = "Paid";
-//                    _context.Bookings.Update(booking);
-//                }
-//                var car = _context.Cars.Find(booking.CarID);
-//                if (car != null)
-//                {
-//                    car.IsAvailable = "No";
-//                    _context.Cars.Update(car);
-//                }
-
-//                _context.SaveChanges();
-
-//                return RedirectToAction("Confirmation", new { id = payment.PaymentID });
-//            }
-
-//            return View(model);
-//        }
-
-
-//        public IActionResult Confirmation(int id)
-//        {
-//            var payment = _context.Payments.Find(id);
-//            if (payment == null) return NotFound();
-//            return View(payment);
-//        }
-
-//        public IActionResult Index()
-//        {
-//            var payments = _context.Payments;
-//            return View(payments);
-//        }
-//    }
-//}
-using CarRentalManagementSystem.Data;
+﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
 using CarRentalManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalManagementSystem.Controllers
 {
@@ -99,76 +16,135 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-        // GET: Payment/Create
-        public IActionResult Create(int bookingId, decimal amount)
+        // ITHAI PUTHUSAAGA SERKAVUM
+        // GET: Payment or /Payment/Index
+        public async Task<IActionResult> Index()
         {
+            // Anaithu payments-aiyum thethiyin adippadayil iranga varisaiyil edukkavum
+            var payments = await _context.Payments
+                                         .OrderByDescending(p => p.PaymentDate)
+                                         .ToListAsync();
+            return View(payments); // Payment list-ai view-ku anuppavum
+        }
+
+        // GET: Payment/Create
+        [HttpGet]
+        public async Task<IActionResult> Create(int bookingId, decimal amount)
+        {
+            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+            var booking = await _context.Bookings
+                                        .Include(b => b.Car)
+                                        .FirstOrDefaultAsync(b => b.BookingID == bookingId);
+
+            if (booking == null)
+            {
+                return NotFound("Booking not found.");
+            }
+
             var viewModel = new PaymentViewModel
             {
-                BookingID = bookingId,
-                Amount = amount
+                BookingID = booking.BookingID,
+                Amount = booking.TotalCost,
+                CarName = booking.Car.CarName,
+                CarModel = booking.Car.CarModel,
+                PickupDate = booking.PickupDate,
+                ReturnDate = booking.ReturnDate,
+                PaymentMethods = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
+                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
+                }
             };
             return View(viewModel);
         }
 
+        // POST: Payment/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PaymentViewModel model)
+        public async Task<IActionResult> Create(PaymentViewModel viewModel)
         {
+            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
             if (ModelState.IsValid)
             {
-                // Simulate payment
-                string transactionId = Guid.NewGuid().ToString().Substring(0, 10);
+                var booking = await _context.Bookings.FindAsync(viewModel.BookingID);
+                if (booking == null) return NotFound();
 
-                var payment = new Payment
+                var car = await _context.Cars.FindAsync(booking.CarID);
+                if (car == null) return NotFound();
+
+                var newPayment = new Payment
                 {
-                    BookingID = model.BookingID,
-                    Amount = model.Amount,
-                    PaymentDate = DateTime.Now,
-                    PaymentMethod = model.PaymentMethod,
-                    PaymentStatus = "Success",
-                    TransactionID = transactionId
+                    BookingID = viewModel.BookingID,
+                    Amount = viewModel.Amount,
+                    PaymentMethod = viewModel.PaymentMethod,
+                    PaymentDate = System.DateTime.Now,
+                    PaymentStatus = "Completed",
+                    TransactionID = $"TXN-{System.DateTime.UtcNow.Ticks}"
                 };
 
-                _context.Payments.Add(payment);
+                _context.Payments.Add(newPayment);
 
-                // Find the booking
-                var booking = _context.Bookings.Find(model.BookingID);
+                booking.Status = "Paid";
+                car.IsAvailable = "No";
 
-                // ✅ FIXED LOGIC: Only proceed if the booking exists
-                if (booking != null)
-                {
-                    // 1. Update Booking status to Paid
-                    booking.Status = "Paid";
-                    _context.Bookings.Update(booking);
+                await _context.SaveChangesAsync();
 
-                    // 2. Find the associated car and make it unavailable
-                    var car = _context.Cars.Find(booking.CarID);
-                    if (car != null)
-                    {
-                        car.IsAvailable = "No";
-                        _context.Cars.Update(car);
-                    }
-                }
-
-                _context.SaveChanges();
-
-                return RedirectToAction("Confirmation", new { id = payment.PaymentID });
+                return RedirectToAction("Success", new { bookingId = booking.BookingID });
             }
 
-            return View(model);
+            var bookingForDisplay = await _context.Bookings.Include(b => b.Car).FirstOrDefaultAsync(b => b.BookingID == viewModel.BookingID);
+            viewModel.CarName = bookingForDisplay.Car.CarName;
+            viewModel.CarModel = bookingForDisplay.Car.CarModel;
+            viewModel.PickupDate = bookingForDisplay.PickupDate;
+            viewModel.ReturnDate = bookingForDisplay.ReturnDate;
+            viewModel.PaymentMethods = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
+                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
+                };
+            return View(viewModel);
         }
 
-        public IActionResult Confirmation(int id)
+        // GET: Payment/Success
+        public async Task<IActionResult> Success(int bookingId)
         {
-            var payment = _context.Payments.Find(id);
-            if (payment == null) return NotFound();
+            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+            var booking = await _context.Bookings
+                                        .Include(b => b.Car)
+                                        .Include(b => b.Customer)
+                                        .FirstOrDefaultAsync(b => b.BookingID == bookingId);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.SuccessMessage = "Your booking has been confirmed successfully!";
+            return View(booking);
+        }
+
+        // GET: Payment/Confirmation/5
+        public async Task<IActionResult> Confirmation(int? id)
+        {
+            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var payment = await _context.Payments
+                .Include(p => p.Booking)
+                    .ThenInclude(b => b.Car)
+                .Include(p => p.Booking)
+                    .ThenInclude(b => b.Customer)
+                .FirstOrDefaultAsync(m => m.PaymentID == id);
+
+            if (payment == null)
+            {
+                return NotFound();
+            }
+
             return View(payment);
-        }
-
-        public IActionResult Index()
-        {
-            var payments = _context.Payments.ToList(); // Added .ToList() for immediate execution
-            return View(payments);
         }
     }
 }
