@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitaialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -121,7 +121,7 @@ namespace CarRentalManagementSystem.Migrations
             migrationBuilder.InsertData(
                 table: "Admins",
                 columns: new[] { "AdminID", "Email", "Name", "Password", "Username" },
-                values: new object[] { new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"), "admin@carental.com", "Administrator", "admin123", "admin" });
+                values: new object[] { new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"), "admin@carental.com", "Administrator", "Admin@123", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CarID",

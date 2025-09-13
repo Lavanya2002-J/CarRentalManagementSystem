@@ -55,8 +55,8 @@ namespace CarRentalManagementSystem.Migrations
                             AdminID = new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"),
                             Email = "admin@carental.com",
                             Name = "Administrator",
-                            Password = "admin123",
-                            Username = "admin"
+                            Password = "Admin@123",
+                            Username = "Admin"
                         });
                 });
 
