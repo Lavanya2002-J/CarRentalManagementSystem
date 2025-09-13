@@ -99,7 +99,7 @@ namespace CarRentalManagementSystem.Controllers
             viewModel.ReturnDate = bookingForDisplay.ReturnDate;
             viewModel.PaymentMethods = new List<SelectListItem>
                 {
-                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" }
                     
                 };
             return View(viewModel);
