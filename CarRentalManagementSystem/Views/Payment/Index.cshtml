@@ -27,22 +27,22 @@
                 <tr>
                     <td>@payment.PaymentID</td>
                     <td>@payment.BookingID</td>
-                    <td>@payment.Amount.ToString("C")</td>
+                    <td>LKR @payment.Amount.ToString("N2")</td>
                     <td>@payment.PaymentDate.ToString("g")</td>
                     <td>@payment.PaymentMethod</td>
                     <td>
-                        @if (payment.PaymentStatus == "Success")
+                        @if (payment.PaymentStatus == "Completed")
                         {
-                            <span class="badge bg-success">Success</span>
+                            <span class="badge bg-success">Completed</span>
                         }
                         else
                         {
-                            <span class="badge bg-danger">Failed</span>
+                            <span class="badge bg-danger">@payment.PaymentStatus</span>
                         }
                     </td>
                     <td>@payment.TransactionID</td>
                     <td>
-                        <a asp-action="Confirmation" asp-route-id="@payment.PaymentID" class="btn btn-sm btn-info">View</a>
+                        <a asp-controller="Payment" asp-action="Confirmation" asp-route-id="@payment.PaymentID" class="btn btn-sm btn-info">View</a>
                     </td>
                 </tr>
             }

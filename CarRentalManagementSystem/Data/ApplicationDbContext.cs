@@ -24,8 +24,8 @@ namespace CarRentalManagementSystem.Data
                 {
                     
                     AdminID = new Guid("E82B713C-997C-4E9A-B71C-289A4281AE80"), //  Guid
-                    Username = "admin",
-                    Password = "admin123",
+                    Username = "Admin",
+                    Password = "Admin@123",
                     Name = "Administrator",
                     Email = "admin@carental.com"
                 }

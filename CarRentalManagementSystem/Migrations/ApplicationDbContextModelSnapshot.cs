@@ -55,8 +55,8 @@ namespace CarRentalManagementSystem.Migrations
                             AdminID = new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"),
                             Email = "admin@carental.com",
                             Name = "Administrator",
-                            Password = "admin123",
-                            Username = "admin"
+                            Password = "Admin@123",
+                            Username = "Admin"
                         });
                 });
 
@@ -230,6 +230,8 @@ namespace CarRentalManagementSystem.Migrations
 
                     b.HasKey("PaymentID");
 
+                    b.HasIndex("BookingID");
+
                     b.ToTable("Payments");
                 });
 
@@ -250,6 +252,17 @@ namespace CarRentalManagementSystem.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CarRentalManagementSystem.Models.Payment", b =>
+                {
+                    b.HasOne("CarRentalManagementSystem.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Car", b =>

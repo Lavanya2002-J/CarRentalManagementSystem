@@ -29,5 +29,7 @@ namespace CarRentalManagementSystem.Models
         // Add this new property
         [StringLength(50)]
         public string TransactionID { get; set; }
+        public virtual Booking Booking { get; set; }
+
     }
 }
