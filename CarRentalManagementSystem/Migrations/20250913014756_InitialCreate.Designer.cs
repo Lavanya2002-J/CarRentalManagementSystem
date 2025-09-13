@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250912053210_InitaialCreate")]
-    partial class InitaialCreate
+    [Migration("20250913014756_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,8 +58,8 @@ namespace CarRentalManagementSystem.Migrations
                             AdminID = new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"),
                             Email = "admin@carental.com",
                             Name = "Administrator",
-                            Password = "admin123",
-                            Username = "admin"
+                            Password = "Admin@123",
+                            Username = "Admin"
                         });
                 });
 
