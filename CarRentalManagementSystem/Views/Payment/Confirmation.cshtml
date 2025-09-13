@@ -4,12 +4,57 @@
     ViewData["Title"] = "Payment Confirmation";
 }
 
-<div class="card p-4 shadow-sm">
-    <h2 class="text-success">  Payment Successful!</h2>
-    <p><strong>Transaction ID:</strong> @Model.TransactionID</p>
-    <p><strong>Amount:</strong> @Model.Amount.ToString("C")</p>
-    <p><strong>Date:</strong> @Model.PaymentDate.ToString("g")</p>
-    <p><strong>Method:</strong> @Model.PaymentMethod</p>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Payment Confirmation</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Transaction Details</h5>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <strong>Payment ID:</strong> @Model.PaymentID
+                </div>
+                <div class="col-md-6">
+                    <strong>Transaction ID:</strong> @Model.TransactionID
+                </div>
+                <div class="col-md-6">
+                    <strong>Payment Date:</strong> @Model.PaymentDate.ToString("f")
+                </div>
+                <div class="col-md-6">
+                    <strong>Payment Method:</strong> @Model.PaymentMethod
+                </div>
+                <div class="col-md-6">
+                    <strong>Amount Paid:</strong> <span class="fw-bold text-success">LKR @Model.Amount.ToString("N2")</span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Status:</strong> <span class="badge bg-success">@Model.PaymentStatus</span>
+                </div>
+            </div>
 
-    <a asp-controller="Booking" asp-action="Details" asp-route-id="@Model.BookingID" class="btn btn-primary">Back to Booking</a>
+            <hr />
+
+            <h5 class="card-title mt-4">Associated Booking Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Booking ID:</strong> @Model.Booking.BookingID
+                </div>
+                <div class="col-md-6">
+                    <strong>Customer:</strong> @Model.Booking.Customer.CustomerName
+                </div>
+                <div class="col-md-6">
+                    <strong>Car:</strong> @Model.Booking.Car.CarName
+                </div>
+                <div class="col-md-6">
+                    <strong>Pickup Date:</strong> @Model.Booking.PickupDate.ToString("yyyy-MM-dd")
+                </div>
+                <div class="col-md-6">
+                    <strong>Return Date:</strong> @Model.Booking.ReturnDate.ToString("yyyy-MM-dd")
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Index" class="btn btn-secondary">Back to Payments List</a>
+        </div>
+    </div>
 </div>
