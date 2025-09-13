@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250913014756_InitialCreate")]
+    [Migration("20250913030142_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -233,6 +233,8 @@ namespace CarRentalManagementSystem.Migrations
 
                     b.HasKey("PaymentID");
 
+                    b.HasIndex("BookingID");
+
                     b.ToTable("Payments");
                 });
 
@@ -253,6 +255,17 @@ namespace CarRentalManagementSystem.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CarRentalManagementSystem.Models.Payment", b =>
+                {
+                    b.HasOne("CarRentalManagementSystem.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Car", b =>
