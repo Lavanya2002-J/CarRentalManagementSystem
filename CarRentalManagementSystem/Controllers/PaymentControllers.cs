@@ -52,7 +52,7 @@ namespace CarRentalManagementSystem.Controllers
                 PaymentMethods = new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
-                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
+                   
                 }
             };
             return View(viewModel);
@@ -100,7 +100,7 @@ namespace CarRentalManagementSystem.Controllers
             viewModel.PaymentMethods = new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
-                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
+                    
                 };
             return View(viewModel);
         }
