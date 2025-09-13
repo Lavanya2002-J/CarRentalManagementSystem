@@ -1,6 +1,8 @@
 ﻿
+
 using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
+using CarRentalManagementSystem.ViewModels; // <-- Add this using statement
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,66 +43,96 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Car = car;
-            return View(new Booking());
+            // Create and populate the ViewModel instead of using ViewBag
+            var viewModel = new BookingViewModel
+            {
+                CarID = car.CarId,
+                CarName = car.CarName,
+                CarModel = car.CarModel,
+                DailyRate = car.DailyRate,
+                CarImageFileName = car.CarImageFileName,
+                Seats = car.Seats,
+                FuelType = car.FuelType,
+                Transmission = car.Transmission
+            };
+
+            return View(viewModel);
         }
 
         // POST: Booking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Booking model)
+        public async Task<IActionResult> Create(BookingViewModel viewModel)
         {
-            // Re-fetch car details for security and consistency
-            var car = await _context.Cars.FindAsync(model.CarID);
-
             if (!IsCustomer())
             {
                 TempData["ErrorMessage"] = "Your session has expired. Please log in again.";
                 return RedirectToAction("Login", "Account");
             }
 
+            var car = await _context.Cars.FindAsync(viewModel.CarID);
             if (car == null)
             {
                 ModelState.AddModelError("", "The selected car could not be found.");
             }
-            // Check if car is still available at the time of submission
             else if (car.IsAvailable != "Yes")
             {
                 TempData["ErrorMessage"] = "Sorry, this car was booked by another user while you were deciding. Please choose another car.";
                 return RedirectToAction("Index", "Home");
             }
 
-            // Server-side validation for dates
-            if (model.PickupDate < DateTime.Today)
+            // --- Additional Server-side Validation ---
+            if (viewModel.PickupDate < DateTime.Today)
             {
                 ModelState.AddModelError("PickupDate", "Pickup date cannot be in the past.");
             }
 
-            if (model.ReturnDate <= model.PickupDate)
+            if (viewModel.ReturnDate <= viewModel.PickupDate)
             {
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
             }
 
-            if (!ModelState.IsValid)
+
+            // ✅ **BUG FIX:** The logic is now correctly placed inside 'if (ModelState.IsValid)'
+            if (ModelState.IsValid)
             {
-                var rentalDays = (model.ReturnDate - model.PickupDate).TotalDays;
+                var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
                 if (rentalDays <= 0) rentalDays = 1; // Ensure at least one day is charged
 
-                model.TotalCost = (decimal)rentalDays * car.DailyRate;
-                model.CustomerID = HttpContext.Session.GetInt32("UserID").Value;
-                model.Status = "Pending";
+                // Create a new Booking domain model from the ViewModel
+                var newBooking = new Booking
+                {
+                    CarID = viewModel.CarID,
+                    PickupDate = viewModel.PickupDate,
+                    ReturnDate = viewModel.ReturnDate,
+                    TotalCost = (decimal)rentalDays * car.DailyRate,
+                    CustomerID = HttpContext.Session.GetInt32("UserID").Value,
+                    Status = "Pending" // Initial status before payment
+                };
 
-                _context.Bookings.Add(model);
+                _context.Bookings.Add(newBooking);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Create", "Payment", new { bookingId = model.BookingID, amount = model.TotalCost });
+                // Redirect to payment with the newly created BookingID
+                return RedirectToAction("Create", "Payment", new { bookingId = newBooking.BookingID });
             }
 
-            // If the model is invalid, return to the form with the car details and error messages
-            ViewBag.Car = car;
-            return View(model);
+            // If the model is NOT valid, we must re-populate the car details for display
+            if (car != null)
+            {
+                viewModel.CarName = car.CarName;
+                viewModel.CarModel = car.CarModel;
+                viewModel.DailyRate = car.DailyRate;
+                viewModel.CarImageFileName = car.CarImageFileName;
+                viewModel.Seats = car.Seats;
+                viewModel.FuelType = car.FuelType;
+                viewModel.Transmission = car.Transmission;
+            }
+
+            return View(viewModel); // Return the view with validation errors
         }
 
+        // ... (The rest of your controller methods: History, Details, etc. remain the same)
         // GET: Booking/History
         public async Task<IActionResult> History()
         {
