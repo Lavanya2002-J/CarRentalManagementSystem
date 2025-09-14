@@ -1,7 +1,8 @@
 ﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
-using CarRentalManagementSystem.ViewModels; // <-- Add this using statement
+using CarRentalManagementSystem.ViewModels; 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalManagementSystem.Controllers
@@ -18,6 +19,10 @@ namespace CarRentalManagementSystem.Controllers
         private bool IsCustomer()
         {
             return HttpContext.Session.GetString("Role") == "Customer";
+        }
+        private bool IsAdmin()
+        {
+            return HttpContext.Session.GetString("Role") == "Admin";
         }
 
         // GET: Booking/Create/{carId}
@@ -132,7 +137,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(viewModel); // Return the view with car details and validation errors
         }
 
-        // ... (The rest of your controller methods: History, Details, etc. remain the same)
+        
         // GET: Booking/History
         public async Task<IActionResult> History()
         {
@@ -277,5 +282,89 @@ namespace CarRentalManagementSystem.Controllers
             return RedirectToAction(nameof(History));
         }
 
+        // GET: Booking/CreateByAdmin
+        public async Task<IActionResult> CreateByAdmin()
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var viewModel = new AdminBookingViewModel
+            {
+                Customers = await _context.Customers
+                    .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
+                    .ToListAsync(),
+
+                Cars = await _context.Cars
+                    .Where(car => car.IsAvailable == "Yes")
+                    .Select(car => new SelectListItem { Value = car.CarId.ToString(), Text = car.CarName + " - " + car.CarModel })
+                    .ToListAsync()
+            };
+
+            return View(viewModel);
+        }
+
+        // POST: Booking/CreateByAdmin
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateByAdmin(AdminBookingViewModel viewModel)
+        {
+            if (!IsAdmin())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (viewModel.ReturnDate <= viewModel.PickupDate)
+            {
+                ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                var car = await _context.Cars.FindAsync(viewModel.CarID);
+                if (car == null || car.IsAvailable != "Yes")
+                {
+                    TempData["ErrorMessage"] = "The selected car is no longer available.";
+                    return RedirectToAction(nameof(CreateByAdmin));
+                }
+
+                var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
+                if (rentalDays <= 0) rentalDays = 1;
+
+                var newBooking = new Booking
+                {
+                    CustomerID = viewModel.CustomerID,
+                    CarID = viewModel.CarID,
+                    PickupDate = viewModel.PickupDate,
+                    ReturnDate = viewModel.ReturnDate,
+                    TotalCost = (decimal)rentalDays * car.DailyRate,
+                    Status = "Paid"
+                };
+
+                car.IsAvailable = "No";
+
+                _context.Bookings.Add(newBooking);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Booking created successfully!";
+                return RedirectToAction(nameof(ViewAllBookings));
+            }
+
+            viewModel.Customers = await _context.Customers
+                .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
+                .ToListAsync();
+            viewModel.Cars = await _context.Cars
+                .Where(car => car.IsAvailable == "Yes")
+                .Select(car => new SelectListItem { Value = car.CarId.ToString(), Text = car.CarName + " - " + car.CarModel })
+                .ToListAsync();
+
+            return View(viewModel);
+        }
     }
 }
+
+
+
+    
+

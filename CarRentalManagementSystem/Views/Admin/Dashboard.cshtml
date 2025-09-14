@@ -1,14 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "_Layout"; // make sure you use your main layout
-    
 }
 
 <div class="container-fluid mt-4">
     <h2 class="mb-4 text-primary">👨‍💼 Admin Dashboard</h2>
 
     <div class="row">
-        <!-- Manage Cars -->
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
@@ -19,7 +17,6 @@
             </div>
         </div>
 
-        <!-- Manage Bookings -->
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
@@ -30,7 +27,6 @@
             </div>
         </div>
 
-        <!-- Manage Payments -->
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
@@ -43,7 +39,16 @@
     </div>
 
     <div class="row">
-        <!-- Reports -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">➕ Create New Booking</h5>
+                    <p class="card-text text-muted">Create a new booking on behalf of a customer.</p>
+                    <a asp-controller="Booking" asp-action="CreateByAdmin" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
@@ -54,24 +59,12 @@
             </div>
         </div>
 
-        <!-- Manage Users -->
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <h5 class="card-title">👥 Manage Users</h5>
                     <p class="card-text text-muted">Manage admins, staff, and customers.</p>
                     <a asp-controller="User" asp-action="Index" class="btn btn-primary">Go</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Settings -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">⚙️ Settings</h5>
-                    <p class="card-text text-muted">Update system settings and preferences.</p>
-                    <a asp-controller="Admin" asp-action="Settings" class="btn btn-primary">Go</a>
                 </div>
             </div>
         </div>
