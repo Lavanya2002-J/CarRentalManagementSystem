@@ -332,6 +332,7 @@ namespace CarRentalManagementSystem.Controllers
                 var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
                 if (rentalDays <= 0) rentalDays = 1;
 
+                // 1. Create the new booking
                 var newBooking = new Booking
                 {
                     CustomerID = viewModel.CustomerID,
@@ -341,21 +342,37 @@ namespace CarRentalManagementSystem.Controllers
                     TotalCost = (decimal)rentalDays * car.DailyRate,
                     Status = "Paid"
                 };
+                _context.Bookings.Add(newBooking);
 
+                // 2. Mark the car as unavailable
                 car.IsAvailable = "No";
 
-                _context.Bookings.Add(newBooking);
+                // --- NEW SECTION: Create the corresponding payment record ---
+                var newPayment = new Payment
+                {
+                    Booking = newBooking, // Link the payment to the booking object
+                    Amount = newBooking.TotalCost,
+                    PaymentDate = DateTime.Now,
+                    PaymentMethod = "Admin Entry", // A clear indicator of how it was paid
+                    PaymentStatus = "Completed",
+                    TransactionID = $"ADM-TXN-{DateTime.UtcNow.Ticks}"
+                };
+                _context.Payments.Add(newPayment);
+                // --- END OF NEW SECTION ---
+
+                // 3. Save both the booking and payment changes to the database
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Booking created successfully!";
+                TempData["SuccessMessage"] = "Booking and Payment created successfully!";
                 return RedirectToAction(nameof(ViewAllBookings));
             }
 
+            // If the form is invalid, re-populate the dropdown lists before showing the page again
             viewModel.Customers = await _context.Customers
                 .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
                 .ToListAsync();
             viewModel.Cars = await _context.Cars
-                .Where(car => car.IsAvailable == "Yes")
+                .Where(c => c.IsAvailable == "Yes")
                 .Select(car => new SelectListItem { Value = car.CarId.ToString(), Text = car.CarName + " - " + car.CarModel })
                 .ToListAsync();
 
@@ -366,5 +383,5 @@ namespace CarRentalManagementSystem.Controllers
 
 
 
-    
+
 
