@@ -1,6 +1,4 @@
-﻿
-
-using CarRentalManagementSystem.Data;
+﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
 using CarRentalManagementSystem.ViewModels; // <-- Add this using statement
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +57,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(viewModel);
         }
 
+        
         // POST: Booking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,12 +69,19 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            // --- BUG FIX STARTS HERE ---
+
+            // 1. Find the car first. This is a prerequisite for any further action.
             var car = await _context.Cars.FindAsync(viewModel.CarID);
             if (car == null)
             {
-                ModelState.AddModelError("", "The selected car could not be found.");
+                // If the car doesn't exist, we cannot proceed.
+                // Returning NotFound() is a standard and secure practice.
+                return NotFound();
             }
-            else if (car.IsAvailable != "Yes")
+
+            // Now that we have the car, we can check its availability.
+            if (car.IsAvailable != "Yes")
             {
                 TempData["ErrorMessage"] = "Sorry, this car was booked by another user while you were deciding. Please choose another car.";
                 return RedirectToAction("Index", "Home");
@@ -92,14 +98,11 @@ namespace CarRentalManagementSystem.Controllers
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
             }
 
-
-            // ✅ **BUG FIX:** The logic is now correctly placed inside 'if (ModelState.IsValid)'
             if (ModelState.IsValid)
             {
                 var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
-                if (rentalDays <= 0) rentalDays = 1; // Ensure at least one day is charged
+                if (rentalDays <= 0) rentalDays = 1;
 
-                // Create a new Booking domain model from the ViewModel
                 var newBooking = new Booking
                 {
                     CarID = viewModel.CarID,
@@ -107,29 +110,26 @@ namespace CarRentalManagementSystem.Controllers
                     ReturnDate = viewModel.ReturnDate,
                     TotalCost = (decimal)rentalDays * car.DailyRate,
                     CustomerID = HttpContext.Session.GetInt32("UserID").Value,
-                    Status = "Pending" // Initial status before payment
+                    Status = "Pending"
                 };
 
                 _context.Bookings.Add(newBooking);
                 await _context.SaveChangesAsync();
 
-                // Redirect to payment with the newly created BookingID
                 return RedirectToAction("Create", "Payment", new { bookingId = newBooking.BookingID });
             }
 
-            // If the model is NOT valid, we must re-populate the car details for display
-            if (car != null)
-            {
-                viewModel.CarName = car.CarName;
-                viewModel.CarModel = car.CarModel;
-                viewModel.DailyRate = car.DailyRate;
-                viewModel.CarImageFileName = car.CarImageFileName;
-                viewModel.Seats = car.Seats;
-                viewModel.FuelType = car.FuelType;
-                viewModel.Transmission = car.Transmission;
-            }
+            // If the model is NOT valid, re-populate the view model's display properties.
+            // Because we fetched 'car' at the very beginning, it is always available here.
+            viewModel.CarName = car.CarName;
+            viewModel.CarModel = car.CarModel;
+            viewModel.DailyRate = car.DailyRate;
+            viewModel.CarImageFileName = car.CarImageFileName;
+            viewModel.Seats = car.Seats;
+            viewModel.FuelType = car.FuelType;
+            viewModel.Transmission = car.Transmission;
 
-            return View(viewModel); // Return the view with validation errors
+            return View(viewModel); // Return the view with car details and validation errors
         }
 
         // ... (The rest of your controller methods: History, Details, etc. remain the same)
@@ -185,5 +185,24 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(booking);
         }
+        public async Task<IActionResult> ViewAllBookings()
+        {
+            // Role-based access check
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Fetch all bookings from the database
+            // Use Include() to load related Customer and Car data to avoid extra queries
+            var allBookings = await _context.Bookings
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .OrderByDescending(b => b.BookingID) // Show the latest bookings first
+                .ToListAsync();
+
+            return View(allBookings);
+        }
+
     }
 }

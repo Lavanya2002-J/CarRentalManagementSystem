@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "_Layout"; // make sure you use your main layout
+    
 }
 
 <div class="container-fluid mt-4">
@@ -24,7 +25,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title">📋 View All Bookings</h5>
                     <p class="card-text text-muted">Check and manage all customer bookings.</p>
-                    <a asp-controller="Booking" asp-action="Index" class="btn btn-primary">Go</a>
+                    <a asp-controller="Booking" asp-action="ViewAllBookings" class="btn btn-primary">Go</a>
                 </div>
             </div>
         </div>
