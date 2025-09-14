@@ -203,6 +203,79 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(allBookings);
         }
+        // GET: Booking/Cancel/5
+        public async Task<IActionResult> Cancel(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            // Ensure the user is a logged-in customer
+            if (!IsCustomer())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var customerId = HttpContext.Session.GetInt32("UserID").Value;
+
+            // Find the booking and include car details
+            var booking = await _context.Bookings
+                .Include(b => b.Car)
+                .FirstOrDefaultAsync(b => b.BookingID == id && b.CustomerID == customerId);
+
+            if (booking == null)
+            {
+                return NotFound(); // Booking not found or doesn't belong to the user
+            }
+
+            // A user can't cancel a booking that's already cancelled or completed
+            if (booking.Status != "Pending" && booking.Status != "Paid")
+            {
+                TempData["ErrorMessage"] = "This booking cannot be cancelled.";
+                return RedirectToAction(nameof(History));
+            }
+
+            return View(booking);
+        }
+
+        // POST: Booking/Cancel/5
+        [HttpPost, ActionName("Cancel")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelConfirmed(int id)
+        {
+            // Ensure the user is a logged-in customer
+            if (!IsCustomer())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var customerId = HttpContext.Session.GetInt32("UserID").Value;
+
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingID == id && b.CustomerID == customerId);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context.Cars.FindAsync(booking.CarID);
+            if (car == null)
+            {
+                // This case is unlikely but good to handle
+                TempData["ErrorMessage"] = "Could not find the associated car.";
+                return RedirectToAction(nameof(History));
+            }
+
+            // Update statuses
+            booking.Status = "Cancelled";
+            car.IsAvailable = "Yes";
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Your booking has been successfully cancelled.";
+            return RedirectToAction(nameof(History));
+        }
 
     }
 }
