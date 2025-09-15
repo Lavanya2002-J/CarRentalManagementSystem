@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialABC : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,24 +30,26 @@ namespace CarRentalManagementSystem.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    CarId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CarName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FuelType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transmission = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CarName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FuelType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Transmission = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Seats = table.Column<int>(type: "int", nullable: false),
-                    DailyRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsAvailable = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Branch = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DailyRate = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    RegistrationNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    FuelCapacity = table.Column<int>(type: "int", nullable: false),
+                    InsurancePolicyNo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    InsuranceExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LogoFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CarImageFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CarImageFileName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cars", x => x.CarId);
+                    table.PrimaryKey("PK_Cars", x => x.CarID);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +92,7 @@ namespace CarRentalManagementSystem.Migrations
                         name: "FK_Bookings_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
-                        principalColumn: "CarId",
+                        principalColumn: "CarID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookings_Customers_CustomerID",
