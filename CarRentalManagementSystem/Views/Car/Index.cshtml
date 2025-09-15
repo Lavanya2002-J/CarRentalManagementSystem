@@ -3,41 +3,33 @@
 @{
     ViewData["Title"] = "Car List";
 }
+
+
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-
-<!-- Optional: Custom CSS for compact table -->
-
 <div class="container mt-4">
-    <!-- Header with Add Car Button -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold mb-0">
-            <i class="bi bi-car-front-fill me-2 text-primary"></i>Car List
+            <i class="bi bi-car-front-fill me-2 text-primary"></i>Car Management
         </h4>
         <a asp-action="Create" class="btn btn-success btn-sm shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> Add Car
+            <i class="bi bi-plus-circle me-1"></i> Add New Car
         </a>
     </div>
 
-    <!-- Card Wrapper -->
     <div class="card shadow-sm border-0 rounded-3">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover table-bordered compact-table text-center align-middle mb-0">
+                <table class="table table-hover table-bordered text-center align-middle mb-0">
                     <thead class="table-dark">
                         <tr>
+                            <th>Image</th>
                             <th>Car</th>
                             <th>Model</th>
                             <th>Fuel</th>
                             <th>Transmission</th>
-                            <th>Seats</th>
                             <th>Rate (Rs)</th>
                             <th>Available</th>
-                            <th>Branch</th>
-                            <th>Color</th>
-                            <th>Reg. No</th>
-                            <th>Logo</th>
-                            <th>Image</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -45,14 +37,19 @@
                         @foreach (var car in Model)
                         {
                             <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(car.CarImageFileName))
+                                    {
+                                        <img src="~/uploads/@car.CarImageFileName" alt="@car.CarName" />
+                                    }
+                                </td>
                                 <td>@car.CarName</td>
-                                <td>@car.CarModel</td>
+                                <td>@car.Model</td>
                                 <td>@car.FuelType</td>
                                 <td>@car.Transmission</td>
-                                <td>@car.Seats</td>
-                                <td class="text-success fw-semibold">Rs. @car.DailyRate</td>
+                                <td class="text-success fw-semibold">@car.DailyRate.ToString("N2")</td>
                                 <td>
-                                    @if (car.IsAvailable?.ToLower() == "yes")
+                                    @if (car.IsAvailable)
                                     {
                                         <span class="badge bg-success">Available</span>
                                     }
@@ -61,50 +58,15 @@
                                         <span class="badge bg-danger">Not Available</span>
                                     }
                                 </td>
-                                <td>@car.Branch</td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(car.Color))
-                                    {
-                                        <div class="d-flex justify-content-center align-items-center gap-1">
-                                            <span class="car-color-box" style="background-color:@car.Color"></span>
-                                            <small>@car.Color</small>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">N/A</span>
-                                    }
-                                </td>
-                                <td>@car.RegistrationNumber</td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(car.LogoFileName))
-                                    {
-                                        <img src="~/uploads/@car.LogoFileName" />
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">N/A</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(car.CarImageFileName))
-                                    {
-                                        <img src="~/uploads/@car.CarImageFileName" class="img-thumbnail" />
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">N/A</span>
-                                    }
-                                </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-sm btn-info text-white">
+                                        <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-sm btn-info text-white" title="Details">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a asp-action="Edit" asp-route-id="@car.CarId" class="btn btn-sm btn-primary text-white">
+                                        <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-sm btn-primary text-white" title="Edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-sm btn-danger text-white">
+                                        <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-sm btn-danger text-white" title="Delete">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </div>

@@ -46,12 +46,12 @@ namespace CarRentalManagementSystem.Controllers
                 BookingID = booking.BookingID,
                 Amount = booking.TotalCost,
                 CarName = booking.Car.CarName,
-                CarModel = booking.Car.CarModel,
+                CarModel = booking.Car.Model,
                 PickupDate = booking.PickupDate,
                 ReturnDate = booking.ReturnDate,
                 PaymentMethods = new List<SelectListItem>
                 {
-                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" }
                    
                 }
             };
@@ -85,7 +85,7 @@ namespace CarRentalManagementSystem.Controllers
                 _context.Payments.Add(newPayment);
 
                 booking.Status = "Paid";
-                car.IsAvailable = "No";
+                car.IsAvailable = false;
 
                 await _context.SaveChangesAsync();
 
@@ -94,7 +94,7 @@ namespace CarRentalManagementSystem.Controllers
 
             var bookingForDisplay = await _context.Bookings.Include(b => b.Car).FirstOrDefaultAsync(b => b.BookingID == viewModel.BookingID);
             viewModel.CarName = bookingForDisplay.Car.CarName;
-            viewModel.CarModel = bookingForDisplay.Car.CarModel;
+            viewModel.CarModel = bookingForDisplay.Car.Model;
             viewModel.PickupDate = bookingForDisplay.PickupDate;
             viewModel.ReturnDate = bookingForDisplay.ReturnDate;
             viewModel.PaymentMethods = new List<SelectListItem>
