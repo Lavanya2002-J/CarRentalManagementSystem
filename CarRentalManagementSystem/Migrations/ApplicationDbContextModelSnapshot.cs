@@ -98,50 +98,68 @@ namespace CarRentalManagementSystem.Migrations
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Car", b =>
                 {
-                    b.Property<Guid>("CarId")
+                    b.Property<Guid>("CarID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Branch")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CarImageFileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CarModel")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CarName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("DailyRate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("FuelCapacity")
+                        .HasColumnType("int");
 
                     b.Property<string>("FuelType")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("IsAvailable")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("InsuranceExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InsurancePolicyNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LogoFileName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("RegistrationNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Seats")
                         .HasColumnType("int");
 
                     b.Property<string>("Transmission")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("CarId");
+                    b.HasKey("CarID");
 
                     b.ToTable("Cars");
                 });

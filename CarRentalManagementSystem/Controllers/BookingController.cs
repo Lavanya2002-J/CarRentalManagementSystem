@@ -37,7 +37,7 @@ namespace CarRentalManagementSystem.Controllers
                 return NotFound();
             }
 
-            if (car.IsAvailable != "Yes")
+            if (car.IsAvailable != true)
             {
                 TempData["ErrorMessage"] = "This car is no longer available for booking.";
                 return RedirectToAction("Index", "Home");
@@ -46,9 +46,9 @@ namespace CarRentalManagementSystem.Controllers
             // Create and populate the ViewModel instead of using ViewBag
             var viewModel = new BookingViewModel
             {
-                CarID = car.CarId,
+                CarID = car.CarID,
                 CarName = car.CarName,
-                CarModel = car.CarModel,
+                CarModel = car.Model,
                 DailyRate = car.DailyRate,
                 CarImageFileName = car.CarImageFileName,
                 Seats = car.Seats,
@@ -75,7 +75,7 @@ namespace CarRentalManagementSystem.Controllers
             {
                 ModelState.AddModelError("", "The selected car could not be found.");
             }
-            else if (car.IsAvailable != "Yes")
+            else if (car.IsAvailable != true)
             {
                 TempData["ErrorMessage"] = "Sorry, this car was booked by another user while you were deciding. Please choose another car.";
                 return RedirectToAction("Index", "Home");
@@ -121,7 +121,7 @@ namespace CarRentalManagementSystem.Controllers
             if (car != null)
             {
                 viewModel.CarName = car.CarName;
-                viewModel.CarModel = car.CarModel;
+                viewModel.CarModel = car.Model;
                 viewModel.DailyRate = car.DailyRate;
                 viewModel.CarImageFileName = car.CarImageFileName;
                 viewModel.Seats = car.Seats;
