@@ -1,0 +1,61 @@
+﻿@model CarRentalManagementSystem.ViewModels.AdminBookingViewModel
+
+@{
+    ViewData["Title"] = "Create New Booking";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Optional: Use if you have a specific admin layout
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="mb-0">Create a New Booking</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateByAdmin" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="CustomerID" class="control-label fw-bold"></label>
+                            <select asp-for="CustomerID" class="form-control" asp-items="Model.Customers">
+                                <option value="">-- Select a Customer --</option>
+                            </select>
+                            <span asp-validation-for="CustomerID" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="CarID" class="control-label fw-bold"></label>
+                            <select asp-for="CarID" class="form-control" asp-items="Model.Cars">
+                                <option value="">-- Select an Available Car --</option>
+                            </select>
+                            <span asp-validation-for="CarID" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PickupDate" class="control-label fw-bold"></label>
+                                    <input asp-for="PickupDate" class="form-control" type="date" />
+                                    <span asp-validation-for="PickupDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ReturnDate" class="control-label fw-bold"></label>
+                                    <input asp-for="ReturnDate" class="form-control" type="date" />
+                                    <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary w-100">Create Booking</button>
+                            <a asp-action="ViewAllBookings" class="btn btn-secondary w-100 mt-2">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
