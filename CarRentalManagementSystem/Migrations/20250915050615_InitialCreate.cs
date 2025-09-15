@@ -62,8 +62,8 @@ namespace CarRentalManagementSystem.Migrations
                     Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    NIC = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
-                    LicenseNo = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                    NIC = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LicenseNo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

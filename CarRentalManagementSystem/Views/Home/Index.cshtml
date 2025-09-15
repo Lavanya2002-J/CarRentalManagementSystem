@@ -1,6 +1,4 @@
-﻿@* 
-
- *@
+﻿
 @model IEnumerable<CarRentalManagementSystem.Models.Car>
 @{
     ViewData["Title"] = "Home";
@@ -23,11 +21,15 @@
                 </div>
                 <div class="col-lg-2 col-md-6">
                     <label for="fuelType" class="form-label fw-bold">Fuel Type</label>
-                    <select name="fuelType" class="form-select">
+                    <select name="fuelType" class="form-select">  
                         <option value="">All</option>
                         <option value="Petrol" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Petrol")">Petrol</option>
                         <option value="Diesel" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Diesel")">Diesel</option>
                         <option value="Electric" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Electric")">Electric</option>
+                        <option value="Electric" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Electric")">Hybrid</option>
+
+                        
+
                     </select>
                 </div>
                 <div class="col-lg-2 col-md-6">
@@ -78,7 +80,7 @@
 
                         <!-- Card Body -->
                         <div class="card-body d-flex flex-column">
-                            <h5 class="fw-bold text-dark">@car.CarName <span class="text-muted">(@car.CarModel)</span></h5>
+                            <h5 class="fw-bold text-dark">@car.CarName <span class="text-muted">(@car.Model)</span></h5>
 
                             <!-- Car Specs as badges -->
                             <div class="mb-3">
@@ -91,7 +93,7 @@
                             <div class="mt-auto">
                                 <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted">/ day</small></h5>
                                 <!-- Corrected Book Now Button -->
-                                <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarId" class="btn btn-primary w-100 fw-bold shadow-sm">Book Now</a>
+                                <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarID" class="btn btn-primary w-100 fw-bold shadow-sm">Book Now</a>
                             </div>
                         </div>
                     </div>
