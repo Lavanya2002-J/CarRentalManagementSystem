@@ -22,7 +22,7 @@ namespace CarRentalManagementSystem.Controllers
 
         public async Task<IActionResult> Index(string searchString, string fuelType, string transmission, int? seats)
         {
-            var carsQuery = _context.Cars.Where(c => c.IsAvailable == "Yes");
+            var carsQuery = _context.Cars.Where(c => c.IsAvailable == true);
 
             //  A flag to check if any filter is active
             var searchAttempted = !string.IsNullOrEmpty(searchString) ||
@@ -32,7 +32,7 @@ namespace CarRentalManagementSystem.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                carsQuery = carsQuery.Where(c => c.CarName.Contains(searchString) || c.CarModel.Contains(searchString));
+                carsQuery = carsQuery.Where(c => c.CarName.Contains(searchString) || c.Model.Contains(searchString));
             }
 
             if (!string.IsNullOrEmpty(fuelType))
