@@ -1,12 +1,7 @@
 ﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
 using CarRentalManagementSystem.ViewModels;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace CarRentalManagementSystem.Controllers
 {
@@ -21,18 +16,16 @@ namespace CarRentalManagementSystem.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-
         // Helper method to check if the current user is an Admin
         private bool IsAdmin()
         {
             return HttpContext.Session.GetString("Role") == "Admin";
         }
 
-
         // GET: Car
         public IActionResult Index()
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             List<Car> cars = _context.Cars.ToList();
             return View(cars);
@@ -41,7 +34,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Car/Create
         public IActionResult Create()
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
 
             return View(new CarViewModel());
@@ -49,11 +42,10 @@ namespace CarRentalManagementSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CarViewModel model)
+        
+        public IActionResult Create(CarViewModel viewModel) 
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
-
-
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             try
             {
@@ -61,57 +53,45 @@ namespace CarRentalManagementSystem.Controllers
                 {
                     string logoFileName = null;
                     string imageFileName = null;
-
-                    // ✅ Step 1: Get the path to the "uploads" folder
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
-                    // ✅ Step 2: Create the folder if it doesn't exist
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    // ✅ Step 3: Save the logo file
-                    if (model.LogoFile != null && model.LogoFile.Length > 0)
+                    if (viewModel.LogoFile != null) 
                     {
-                        logoFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.LogoFile.FileName);
+                        logoFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.LogoFile.FileName);
                         string logoPath = Path.Combine(uploadsFolder, logoFileName);
-
-                        using (var fs = new FileStream(logoPath, FileMode.Create))
-                        {
-                            model.LogoFile.CopyTo(fs);
-                        }
+                        using (var fs = new FileStream(logoPath, FileMode.Create)) { viewModel.LogoFile.CopyTo(fs); }
                     }
 
-                    // ✅ Step 4: Save the car image file
-                    if (model.CarImageFile != null && model.CarImageFile.Length > 0)
+                    if (viewModel.CarImageFile != null) 
                     {
-                        imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.CarImageFile.FileName);
+                        imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.CarImageFile.FileName);
                         string imagePath = Path.Combine(uploadsFolder, imageFileName);
-
-                        using (var fs = new FileStream(imagePath, FileMode.Create))
-                        {
-                            model.CarImageFile.CopyTo(fs);
-                        }
+                        using (var fs = new FileStream(imagePath, FileMode.Create)) { viewModel.CarImageFile.CopyTo(fs); }
                     }
 
-                    // ✅ Step 5: Map and save the car entity
                     var car = new Car
                     {
-                        CarId = Guid.NewGuid(),
-                        CarName = model.CarName,
-                        CarModel = model.CarModel,
-                        FuelType = model.FuelType,
-                        Transmission = model.Transmission,
-                        Seats = model.Seats,
-                        DailyRate = model.DailyRate,
-                        IsAvailable = model.IsAvailable,
-                        Branch = model.Branch,
+                        CarID = Guid.NewGuid(),
+                        CarName = viewModel.CarName,
+                        Model = viewModel.Model,
+                        FuelType = viewModel.FuelType,
+                        Transmission = viewModel.Transmission,
+                        Seats = viewModel.Seats,
+                        DailyRate = viewModel.DailyRate,
+                        IsAvailable = viewModel.IsAvailable,
                         LogoFileName = logoFileName,
                         CarImageFileName = imageFileName,
-                        Description = model.Description,
-                        Color = model.Color,
-                        RegistrationNumber = model.RegistrationNumber
+                        Description = viewModel.Description,
+                        Color = viewModel.Color,
+                        RegistrationNumber = viewModel.RegistrationNumber,
+                        FuelCapacity = viewModel.FuelCapacity,
+                        InsurancePolicyNo = viewModel.InsurancePolicyNo,
+                        InsuranceExpiryDate = viewModel.InsuranceExpiryDate
                     };
 
                     _context.Cars.Add(car);
@@ -120,135 +100,95 @@ namespace CarRentalManagementSystem.Controllers
                     TempData["Success"] = "Car added successfully!";
                     return RedirectToAction(nameof(Index));
                 }
-
-                // if ModelState is NOT valid, return the view with model
-                return View(model);
+                return View(viewModel);
             }
             catch (Exception ex)
             {
-                // Log error and show user-friendly message
-                ModelState.AddModelError("", "An error occurred while saving the car: " + ex.Message);
-
-                //  return the view with the current model
-                return View(model);
+                ModelState.AddModelError("", "An error occurred: " + ex.Message);
+                return View(viewModel); 
             }
         }
 
         // GET: Car/Edit/{id}
         public IActionResult Edit(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
-
-            var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
+            var car = _context.Cars.FirstOrDefault(c => c.CarID == id);
             if (car == null) return NotFound();
 
-            // Map entity to ViewModel
-            var model = new CarViewModel
+            var viewModel = new CarViewModel
             {
-                CarId = car.CarId,
+                CarID = car.CarID,
                 CarName = car.CarName,
-                CarModel = car.CarModel,
+                Model = car.Model,
                 FuelType = car.FuelType,
                 Transmission = car.Transmission,
                 Seats = car.Seats,
                 DailyRate = car.DailyRate,
                 IsAvailable = car.IsAvailable,
-                Branch = car.Branch,
                 Description = car.Description,
                 Color = car.Color,
-                RegistrationNumber = car.RegistrationNumber
-                // Existing file paths for display
-                ,
+                RegistrationNumber = car.RegistrationNumber,
+                FuelCapacity = car.FuelCapacity,
+                InsurancePolicyNo = car.InsurancePolicyNo,
+                InsuranceExpiryDate = car.InsuranceExpiryDate,
                 ExistingLogoPath = car.LogoFileName,
                 ExistingCarImagePath = car.CarImageFileName
-
             };
-
-            return View(model);
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CarViewModel model)
+        
+        public IActionResult Edit(CarViewModel viewModel) 
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             if (ModelState.IsValid)
             {
-                var car = _context.Cars.FirstOrDefault(c => c.CarId == model.CarId);
+                var car = _context.Cars.FirstOrDefault(c => c.CarID == viewModel.CarID); 
                 if (car == null) return NotFound();
 
-                car.CarName = model.CarName;
-                car.CarModel = model.CarModel;
-                car.FuelType = model.FuelType;
-                car.Transmission = model.Transmission;
-                car.Seats = model.Seats;
-                car.DailyRate = model.DailyRate;
-                car.IsAvailable = model.IsAvailable;
-                car.Branch = model.Branch;
-                car.Description = model.Description;
-                car.Color = model.Color;
-                car.RegistrationNumber = model.RegistrationNumber;
+                car.CarName = viewModel.CarName; 
+                car.Model = viewModel.Model;
+                car.FuelType = viewModel.FuelType;
+                car.Transmission = viewModel.Transmission;
+                car.Seats = viewModel.Seats;
+                car.DailyRate = viewModel.DailyRate;
+                car.IsAvailable = viewModel.IsAvailable;
+                car.Description = viewModel.Description;
+                car.Color = viewModel.Color;
+                car.RegistrationNumber = viewModel.RegistrationNumber;
+                car.FuelCapacity = viewModel.FuelCapacity;
+                car.InsurancePolicyNo = viewModel.InsurancePolicyNo;
+                car.InsuranceExpiryDate = viewModel.InsuranceExpiryDate;
 
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
-                // Handle logo file upload
-                if (model.LogoFile != null && model.LogoFile.Length > 0)
+                if (viewModel.LogoFile != null) 
                 {
-                    // Delete old logo if exists (optional)
                     if (!string.IsNullOrEmpty(car.LogoFileName))
                     {
                         var oldLogoPath = Path.Combine(uploadsFolder, car.LogoFileName);
-                        if (System.IO.File.Exists(oldLogoPath))
-                        {
-                            System.IO.File.Delete(oldLogoPath);
-                        }
+                        if (System.IO.File.Exists(oldLogoPath)) { System.IO.File.Delete(oldLogoPath); }
                     }
-
-                    string logoFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.LogoFile.FileName);
-                    string logoPath = Path.Combine(uploadsFolder, logoFileName);
-
-                    using (var fs = new FileStream(logoPath, FileMode.Create))
-                    {
-                        model.LogoFile.CopyTo(fs);
-                    }
-
-                    car.LogoFileName = logoFileName;
-                }
-                else
-                {
-                    // Keep existing logo if no new file uploaded
-                    car.LogoFileName = model.ExistingLogoPath;
+                    car.LogoFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.LogoFile.FileName);
+                    var logoPath = Path.Combine(uploadsFolder, car.LogoFileName);
+                    using (var fs = new FileStream(logoPath, FileMode.Create)) { viewModel.LogoFile.CopyTo(fs); }
                 }
 
-                // Handle car image file upload
-                if (model.CarImageFile != null && model.CarImageFile.Length > 0)
+                if (viewModel.CarImageFile != null) 
                 {
-                    // Delete old image if exists (optional)
                     if (!string.IsNullOrEmpty(car.CarImageFileName))
                     {
                         var oldImagePath = Path.Combine(uploadsFolder, car.CarImageFileName);
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
+                        if (System.IO.File.Exists(oldImagePath)) { System.IO.File.Delete(oldImagePath); }
                     }
-
-                    string imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.CarImageFile.FileName);
-                    string imagePath = Path.Combine(uploadsFolder, imageFileName);
-
-                    using (var fs = new FileStream(imagePath, FileMode.Create))
-                    {
-                        model.CarImageFile.CopyTo(fs);
-                    }
-
-                    car.CarImageFileName = imageFileName;
-                }
-                else
-                {
-                    // Keep existing image if no new file uploaded
-                    car.CarImageFileName = model.ExistingCarImagePath;
+                    car.CarImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.CarImageFile.FileName);
+                    var imagePath = Path.Combine(uploadsFolder, car.CarImageFileName);
+                    using (var fs = new FileStream(imagePath, FileMode.Create)) { viewModel.CarImageFile.CopyTo(fs); }
                 }
 
                 _context.Cars.Update(car);
@@ -257,19 +197,16 @@ namespace CarRentalManagementSystem.Controllers
                 TempData["Success"] = "Car updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(model);
+            return View(viewModel); 
         }
-
 
         // GET: Car/Delete/{id}
         public IActionResult Delete(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
-            var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
+            var car = _context.Cars.FirstOrDefault(c => c.CarID == id);
             if (car == null) return NotFound();
-
             return View(car);
         }
 
@@ -277,26 +214,21 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
-            var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
+            var car = _context.Cars.FirstOrDefault(c => c.CarID == id);
             if (car == null) return NotFound();
 
-            // Delete image files
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-
             if (!string.IsNullOrEmpty(car.LogoFileName))
             {
                 string logoPath = Path.Combine(uploadsFolder, car.LogoFileName);
-                if (System.IO.File.Exists(logoPath))
-                    System.IO.File.Delete(logoPath);
+                if (System.IO.File.Exists(logoPath)) System.IO.File.Delete(logoPath);
             }
-
             if (!string.IsNullOrEmpty(car.CarImageFileName))
             {
                 string imagePath = Path.Combine(uploadsFolder, car.CarImageFileName);
-                if (System.IO.File.Exists(imagePath))
-                    System.IO.File.Delete(imagePath);
+                if (System.IO.File.Exists(imagePath)) System.IO.File.Delete(imagePath);
             }
 
             _context.Cars.Remove(car);
@@ -306,34 +238,34 @@ namespace CarRentalManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Car/Details/{id}
         public IActionResult Details(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
-
-            var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
+            var car = _context.Cars.FirstOrDefault(c => c.CarID == id);
             if (car == null) return NotFound();
 
-            // Map to ViewModel
-            var model = new CarViewModel
+            var viewModel = new CarViewModel
             {
-                CarId = car.CarId,
+                CarID = car.CarID,
                 CarName = car.CarName,
-                CarModel = car.CarModel,
+                Model = car.Model,
                 FuelType = car.FuelType,
                 Transmission = car.Transmission,
                 Seats = car.Seats,
                 DailyRate = car.DailyRate,
                 IsAvailable = car.IsAvailable,
-                Branch = car.Branch,
                 Description = car.Description,
                 Color = car.Color,
                 RegistrationNumber = car.RegistrationNumber,
+                FuelCapacity = car.FuelCapacity,
+                InsurancePolicyNo = car.InsurancePolicyNo,
+                InsuranceExpiryDate = car.InsuranceExpiryDate,
                 ExistingLogoPath = car.LogoFileName,
                 ExistingCarImagePath = car.CarImageFileName
             };
-
-            return View(model);
+            return View(viewModel);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarRentalManagementSystem.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRentalManagementSystem.Models
 {
@@ -23,6 +24,7 @@ namespace CarRentalManagementSystem.Models
 
         [Required]
         [DataType(DataType.Password)]
+        [CustomPassword]
         public string Password { get; set; }
     }
 }

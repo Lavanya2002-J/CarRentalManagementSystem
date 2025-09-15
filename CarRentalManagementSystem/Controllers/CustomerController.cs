@@ -18,7 +18,7 @@ namespace CarRentalManagementSystem.Controllers
             // Role-based access check
             if (HttpContext.Session.GetString("Role") != "Customer")
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             // Pass the username to the view using ViewBag

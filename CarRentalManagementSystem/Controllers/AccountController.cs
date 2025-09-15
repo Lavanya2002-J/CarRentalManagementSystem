@@ -16,11 +16,40 @@ namespace CarRentalManagementSystem.Controllers
         }
 
         // --- UNIFIED LOGIN ---
-        public IActionResult Login() => View();
+        //public IActionResult Login() => View();
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Login(LoginViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var admin = _context.Admins.FirstOrDefault(a => a.Username == model.Username && a.Password == model.Password);
+        //        if (admin != null)
+        //        {
+        //            HttpContext.Session.SetString("Username", admin.Username);
+        //            HttpContext.Session.SetString("Role", "Admin");
+        //            HttpContext.Session.SetString("UserID", admin.AdminID.ToString());
+        //            return RedirectToAction("Dashboard", "Admin");
+        //        }
+
+        //        var customer = _context.Customers.FirstOrDefault(c => c.Username == model.Username && c.Password == model.Password);
+        //        if (customer != null)
+        //        {
+        //            HttpContext.Session.SetString("Username", customer.Username);
+        //            HttpContext.Session.SetString("Role", "Customer");
+        //            HttpContext.Session.SetInt32("UserID", customer.CustomerID);
+        //            return RedirectToAction("Dashboard", "Customer");
+        //        }
+
+        //        ModelState.AddModelError("", "Invalid username or password.");
+        //    }
+        //    return View(model);
+        //}
+        public IActionResult AdminLogin() => View();
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel model)
+        public IActionResult AdminLogin(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -33,6 +62,18 @@ namespace CarRentalManagementSystem.Controllers
                     return RedirectToAction("Dashboard", "Admin");
                 }
 
+                ModelState.AddModelError("", "Invalid admin username or password or email.");
+            }
+            return View(model);
+        }
+
+        public IActionResult CustomerLogin() => View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CustomerLogin(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
                 var customer = _context.Customers.FirstOrDefault(c => c.Username == model.Username && c.Password == model.Password);
                 if (customer != null)
                 {
@@ -42,11 +83,10 @@ namespace CarRentalManagementSystem.Controllers
                     return RedirectToAction("Dashboard", "Customer");
                 }
 
-                ModelState.AddModelError("", "Invalid username or password.");
+                ModelState.AddModelError("", "Invalid customer username or password.");
             }
             return View(model);
         }
-
         // --- CUSTOMER REGISTRATION ONLY ---
         public IActionResult Register() => View();
 
@@ -66,7 +106,7 @@ namespace CarRentalManagementSystem.Controllers
                 _context.Customers.Add(model);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Registration completed successfully! You can now log in.";
-                return RedirectToAction("Login");
+                return RedirectToAction("CustomerLogin");
             }
             return View(model);
         }
