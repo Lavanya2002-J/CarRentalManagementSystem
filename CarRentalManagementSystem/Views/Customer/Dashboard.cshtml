@@ -1,83 +1,182 @@
 ﻿
+
 @{
     ViewData["Title"] = "Customer Dashboard";
-    // Dummy data for demonstration. You would pass this from your controller.
+    // Dummy data for demonstration.
+    ViewBag.Username = "Customer";
     ViewBag.ActiveBookingsCount = 2;
 }
 
 <style>
-    /* A simple hover effect for the cards */
+    body {
+        background-color: #f4f7f6; /* A softer, professional background color */
+    }
+
+    /* --- Professional Dashboard Header --- */
+    .dashboard-header {
+        background-color: #ffffff;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        border: 1px solid #e9ecef;
+    }
+
+        .dashboard-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+    .stat-box {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        text-align: center;
+    }
+
+        .stat-box .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+
+    /* --- Refined Dashboard Cards --- */
     .dashboard-card {
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: 1px solid #e9ecef;
+        border-radius: 0.75rem;
+        background-color: #fff;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
     }
 
         .dashboard-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-    .card-icon {
-        font-size: 3rem;
-        color: #0d6efd; /* Bootstrap primary color */
+        .dashboard-card.card-primary {
+            border-top: 4px solid #0d6efd;
+        }
+
+        .dashboard-card.card-success {
+            border-top: 4px solid #198754;
+        }
+
+        .dashboard-card.card-secondary {
+            border-top: 4px solid #6c757d;
+        }
+
+    .card-icon-wrapper {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.75rem;
+        color: #fff;
     }
+
+    .icon-primary {
+        background-color: #0d6efd;
+    }
+
+    .icon-success {
+        background-color: #198754;
+    }
+
+    .icon-secondary {
+        background-color: #6c757d;
+    }
+
+    .dashboard-card h5 {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #212529;
+    }
+
 </style>
 
-<div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-3">
-        <h1 class="display-5 fw-bold">Vanakam Da Mapila , @ViewBag.Username!</h1>
-        <p class="col-md-8 fs-4">This is your personal space to manage rentals, view your history, and find your next ride.</p>
+<div class="container py-4">
+
+    <h1 class="h2 mb-4">My Dashboard</h1>
+
+    <div class="dashboard-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="mb-1">hello;, @ViewBag.Username!</h1>
+                <p class="text-muted">Welcome back. Here you can manage your bookings and personal information.</p>
+            </div>
+            <div class="col-lg-4 d-flex justify-content-lg-end">
+                <div class="stat-box w-100">
+                    <div class="stat-number">@ViewBag.ActiveBookingsCount</div>
+                    <div class="stat-label">Active Rentals</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-primary alert-dismissible fade show border-0" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Quick Tip:</strong> Planning a long trip around Sri Lanka? Check out our weekly rental plans for extra savings!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+
+        <div class="col">
+            <div class="card h-100 dashboard-card card-primary">
+                <div class="card-icon-wrapper icon-primary">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h5>My Bookings</h5>
+                <p class="text-muted">Review your active and past rental agreements.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Booking" asp-action="History" class="btn btn-primary fw-bold">View History</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 dashboard-card card-success">
+                <div class="card-icon-wrapper icon-success">
+                    <i class="fas fa-car"></i>
+                </div>
+                <h5>Find a Car</h5>
+                <p class="text-muted">Explore our collection and book your next vehicle.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-success fw-bold">Browse & Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 dashboard-card card-secondary">
+                <div class="card-icon-wrapper icon-secondary">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <h5>Manage Profile</h5>
+                <p class="text-muted">Update your personal information and preferences.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Account" asp-action="Profile" class="btn btn-secondary fw-bold">Update Profile</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-    <div class="col">
-        <div class="card h-100 text-center shadow-sm dashboard-card">
-            <div class="card-body d-flex flex-column">
-                <div class="mb-3">
-                    <i class="fas fa-calendar-check card-icon"></i>
-                </div>
-                <h5 class="card-title">My Bookings</h5>
-                <p class="card-text text-muted">Review your active and past rental agreements.</p>
-                @if (ViewBag.ActiveBookingsCount > 0)
-                {
-                    <p><span class="badge bg-primary rounded-pill">@ViewBag.ActiveBookingsCount Active Rentals</span></p>
-                }
-                <div class="mt-auto">
-                    <a asp-controller="Booking" asp-action="History" class="btn btn-primary">View History</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="col">
-        <div class="card h-100 text-center shadow-sm dashboard-card">
-            <div class="card-body d-flex flex-column">
-                <div class="mb-3">
-                    <i class="fas fa-car card-icon" style="color: #198754;"></i>
-                </div>
-                <h5 class="card-title">Find a Car</h5>
-                <p class="card-text text-muted">Explore our collection and book your next vehicle with ease.</p>
-                <div class="mt-auto">
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-success">Browse & Book Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="col">
-        <div class="card h-100 text-center shadow-sm dashboard-card">
-            <div class="card-body d-flex flex-column">
-                <div class="mb-3">
-                    <i class="fas fa-user-cog card-icon" style="color: #6c757d;"></i>
-                </div>
-                <h5 class="card-title">Manage Profile</h5>
-                <p class="card-text text-muted">Update your personal information and preferences.</p>
-                <div class="mt-auto">
-                    <a asp-controller="Account" asp-action="Profile" class="btn btn-secondary">Update Profile</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-</div>
+
