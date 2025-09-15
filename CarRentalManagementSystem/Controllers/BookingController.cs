@@ -86,7 +86,7 @@ namespace CarRentalManagementSystem.Controllers
             }
 
             // Now that we have the car, we can check its availability.
-            if (car.IsAvailable != "Yes")
+            if (car.IsAvailable != true)
             {
                 TempData["ErrorMessage"] = "Sorry, this car was booked by another user while you were deciding. Please choose another car.";
                 return RedirectToAction("Index", "Home");
@@ -127,7 +127,7 @@ namespace CarRentalManagementSystem.Controllers
             // If the model is NOT valid, re-populate the view model's display properties.
             // Because we fetched 'car' at the very beginning, it is always available here.
             viewModel.CarName = car.CarName;
-            viewModel.CarModel = car.CarModel;
+            viewModel.CarModel = car.Model;
             viewModel.DailyRate = car.DailyRate;
             viewModel.CarImageFileName = car.CarImageFileName;
             viewModel.Seats = car.Seats;
@@ -276,7 +276,7 @@ namespace CarRentalManagementSystem.Controllers
 
             // Update statuses
             booking.Status = "Cancelled";
-            car.IsAvailable = "Yes";
+            car.IsAvailable = true;
 
             await _context.SaveChangesAsync();
 
@@ -299,8 +299,8 @@ namespace CarRentalManagementSystem.Controllers
                     .ToListAsync(),
 
                 Cars = await _context.Cars
-                    .Where(car => car.IsAvailable == "Yes")
-                    .Select(car => new SelectListItem { Value = car.CarId.ToString(), Text = car.CarName + " - " + car.CarModel })
+                    .Where(car => car.IsAvailable == true)
+                    .Select(car => new SelectListItem { Value = car.CarID.ToString(), Text = car.CarName + " - " + car.Model })
                     .ToListAsync()
             };
 
@@ -325,7 +325,7 @@ namespace CarRentalManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 var car = await _context.Cars.FindAsync(viewModel.CarID);
-                if (car == null || car.IsAvailable != "Yes")
+                if (car == null || car.IsAvailable != true)
                 {
                     TempData["ErrorMessage"] = "The selected car is no longer available.";
                     return RedirectToAction(nameof(CreateByAdmin));
@@ -347,7 +347,7 @@ namespace CarRentalManagementSystem.Controllers
                 _context.Bookings.Add(newBooking);
 
                 // 2. Mark the car as unavailable
-                car.IsAvailable = "No";
+                car.IsAvailable = false;
 
                 // --- NEW SECTION: Create the corresponding payment record ---
                 var newPayment = new Payment
@@ -374,8 +374,8 @@ namespace CarRentalManagementSystem.Controllers
                 .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
                 .ToListAsync();
             viewModel.Cars = await _context.Cars
-                .Where(c => c.IsAvailable == "Yes")
-                .Select(car => new SelectListItem { Value = car.CarId.ToString(), Text = car.CarName + " - " + car.CarModel })
+                .Where(c => c.IsAvailable == true)
+                .Select(car => new SelectListItem { Value = car.CarID.ToString(), Text = car.CarName + " - " + car.Model })
                 .ToListAsync();
 
             return View(viewModel);

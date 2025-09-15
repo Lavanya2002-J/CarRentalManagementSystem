@@ -12,11 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:CarRentalManagementSystem/Migrations/20250915060855_InitialCreate.Designer.cs
-    [Migration("20250915060855_InitialCreate")]
-========
-    [Migration("20250913133913_InitialCreate")]
->>>>>>>> 3aa86eff1937ad0353322eb226da57deca6436c4:CarRentalManagementSystem/Migrations/20250913133913_InitialCreate.Designer.cs
+    [Migration("20250915073021_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -195,13 +191,11 @@ namespace CarRentalManagementSystem.Migrations
 
                     b.Property<string>("LicenseNo")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NIC")
                         .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
