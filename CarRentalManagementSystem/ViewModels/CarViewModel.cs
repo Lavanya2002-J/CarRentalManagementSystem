@@ -32,7 +32,7 @@ namespace CarRentalManagementSystem.ViewModels
         [Range(1, 15, ErrorMessage = "Seats must be between 1 and 15")]
         public int Seats { get; set; }
 
-        [Required(ErrorMessage = "Daily rate is required")]
+        
         [Range(500, 200000, ErrorMessage = "Daily rate must be a valid amount")]
         [Display(Name = "Daily Rate (LKR)")]
         public decimal DailyRate { get; set; }
