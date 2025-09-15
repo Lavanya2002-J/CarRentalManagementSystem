@@ -18,12 +18,12 @@ html {
 }
 
 
-}
+
 body, html {
     height: 100%;
     margin-bottom: 60px;
 }
-}
+
 
 .main-content {
     min-height: calc(100vh - 100px); /* 100px = footer height */
@@ -106,4 +106,12 @@ table.compact-table th {
     background: linear-gradient(45deg, #0056b3, #00aaff) !important;
     color: #fff;
 }
+.table img {
+    width: 100px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+
 
