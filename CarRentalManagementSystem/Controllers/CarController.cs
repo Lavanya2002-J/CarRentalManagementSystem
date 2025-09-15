@@ -32,7 +32,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Car
         public IActionResult Index()
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             List<Car> cars = _context.Cars.ToList();
             return View(cars);
@@ -41,7 +41,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Car/Create
         public IActionResult Create()
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
 
             return View(new CarViewModel());
@@ -51,7 +51,7 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CarViewModel model)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
 
 
@@ -137,7 +137,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Car/Edit/{id}
         public IActionResult Edit(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
 
             var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
@@ -172,7 +172,7 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(CarViewModel model)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             if (ModelState.IsValid)
             {
@@ -265,7 +265,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Car/Delete/{id}
         public IActionResult Delete(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
             if (car == null) return NotFound();
@@ -277,7 +277,7 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
             if (car == null) return NotFound();
@@ -308,7 +308,7 @@ namespace CarRentalManagementSystem.Controllers
 
         public IActionResult Details(Guid id)
         {
-            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+            if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
 
             var car = _context.Cars.FirstOrDefault(c => c.CarId == id);
