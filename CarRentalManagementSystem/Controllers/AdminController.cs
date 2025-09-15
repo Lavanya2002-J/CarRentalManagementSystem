@@ -1,30 +1,8 @@
-﻿//using Microsoft.AspNetCore.Mvc;
-
-//namespace CarRentalManagementSystem.Controllers
-//{
-//    public class AdminController : Controller
-//    {
-
-//        public IActionResult Dashboard()
-//        {
-//            // Role-based access check
-//            if (HttpContext.Session.GetString("Role") != "Admin")
-//            {
-//                return RedirectToAction("Login", "Account");
-//            }
-//            return View();
-//        }
-//    }
-
-//}
-// --- ADD THESE using statements at the top ---
-using CarRentalManagementSystem.Data;
+﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace CarRentalManagementSystem.Controllers
 {
@@ -48,7 +26,7 @@ namespace CarRentalManagementSystem.Controllers
             }
 
             // 1. Count of available cars
-            var availableCars = await _context.Cars.CountAsync(c => c.IsAvailable == "Yes");
+            var availableCars = await _context.Cars.CountAsync(c => c.IsAvailable == true);
 
             // 2. Count of active bookings
             var activeBookings = await _context.Bookings.CountAsync(b => b.Status == "Paid" || b.Status == "Pending");
