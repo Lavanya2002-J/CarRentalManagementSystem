@@ -26,7 +26,7 @@ namespace CarRentalManagementSystem.Controllers
             if (!IsCustomer())
             {
                 TempData["ErrorMessage"] = "You must be logged in to make a booking.";
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var car = await _context.Cars.FindAsync(carId);
@@ -56,7 +56,7 @@ namespace CarRentalManagementSystem.Controllers
             if (!IsCustomer())
             {
                 TempData["ErrorMessage"] = "Your session has expired. Please log in again.";
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             if (car == null)
@@ -107,13 +107,13 @@ namespace CarRentalManagementSystem.Controllers
             if (!IsCustomer())
             {
                 TempData["ErrorMessage"] = "You must be logged in to view your booking history.";
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerId = HttpContext.Session.GetInt32("UserID");
             if (customerId == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerBookings = await _context.Bookings
@@ -136,7 +136,7 @@ namespace CarRentalManagementSystem.Controllers
             if (!IsCustomer())
             {
                 TempData["ErrorMessage"] = "You are not authorized to view this page.";
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerId = HttpContext.Session.GetInt32("UserID").Value;
@@ -150,6 +150,8 @@ namespace CarRentalManagementSystem.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+           
 
             return View(booking);
         }
