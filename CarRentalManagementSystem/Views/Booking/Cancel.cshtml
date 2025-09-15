@@ -1,0 +1,48 @@
+﻿@model CarRentalManagementSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Cancel Booking";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Confirm Cancellation</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Are you sure you want to cancel this booking?</p>
+                    <hr />
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Booking ID</dt>
+                        <dd class="col-sm-8">@Model.BookingID</dd>
+
+                        <dt class="col-sm-4">Car</dt>
+                        <dd class="col-sm-8">@Model.Car.CarName @Model.Car.CarModel</dd>
+
+                        <dt class="col-sm-4">Pickup Date</dt>
+                        <dd class="col-sm-8">@Model.PickupDate.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-4">Return Date</dt>
+                        <dd class="col-sm-8">@Model.ReturnDate.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-4">Total Cost</dt>
+                        <dd class="col-sm-8">LKR @Model.TotalCost.ToString("N2")</dd>
+                    </dl>
+
+                    <form asp-action="Cancel" method="post">
+                        @* Pass the booking ID back to the POST action *@
+                        <input type="hidden" asp-for="BookingID" />
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-danger">Yes, Cancel Booking</button>
+                            <a asp-action="History" class="btn btn-secondary">No, Go Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
