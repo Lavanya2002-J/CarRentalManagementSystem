@@ -44,7 +44,7 @@ namespace CarRentalManagementSystem.Controllers
             // Role-based access check
             if (HttpContext.Session.GetString("Role") != "Admin")
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("AdminLogin", "Account");
             }
 
             // 1. Count of available cars

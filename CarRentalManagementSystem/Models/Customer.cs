@@ -21,7 +21,7 @@ namespace CarRentalManagementSystem.Models
         public string Username { get; set; }
         [Required]
         [StringLength(50)]
-        [CustomPasswordAttribute]
+        [CustomPassword]
         public string Password { get; set; }
         [Required]
         [Phone]
@@ -30,10 +30,10 @@ namespace CarRentalManagementSystem.Models
         [Required]
         public string Address { get; set; }
         [Required]
-        [StringLength(12)]
+        [CustomNic]
         public string NIC { get; set; }
         [Required]
-        [StringLength(30)]
+        [CustomLicence]
         public string LicenseNo { get; set; }
         public ICollection<Booking> Bookings { get; set; } 
 
