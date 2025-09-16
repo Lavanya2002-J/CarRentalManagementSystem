@@ -1,4 +1,4 @@
-﻿@model Customer
+﻿@model CarRentalManagementSystem.ViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Register";
 }
@@ -12,50 +12,61 @@
             <div class="card-body">
                 <form asp-action="Register" method="post">
 
-                   
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
+                        <label asp-for="CustomerName"></label>
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="Username" class="form-control" placeholder="Username" />
                         <label asp-for="Username"></label>
-                        <span asp-validation-for="@Model.Username" class="text-danger"></span>
-
-      
+                        <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="Password" class="form-control" placeholder="Password" />
                         <label asp-for="Password"></label>
-                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
-                        <input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
-                        <label asp-for="CustomerName">Full Name</label>
-                        <span asp-validation-for="@Model.CustomerName" class="text-danger"></span>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <label asp-for="ConfirmPassword"></label>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="Email" class="form-control" placeholder="Email" />
                         <label asp-for="Email"></label>
-                        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
                         <label asp-for="PhoneNumber"></label>
-                        <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="Address" class="form-control" placeholder="Address" />
                         <label asp-for="Address"></label>
-                        <span asp-validation-for="@Model.Address" class="text-danger"></span>
+                        <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="NIC" class="form-control" placeholder="NIC" />
                         <label asp-for="NIC"></label>
-                        <span asp-validation-for="@Model.NIC" class="text-danger"></span>
+                        <span asp-validation-for="NIC" class="text-danger"></span>
                     </div>
+
                     <div class="form-floating mb-3">
                         <input asp-for="LicenseNo" class="form-control" placeholder="License No" />
                         <label asp-for="LicenseNo"></label>
-                        <span asp-validation-for="@Model.LicenseNo" class="text-danger"></span>
+                        <span asp-validation-for="LicenseNo" class="text-danger"></span>
                     </div>
-
 
                     <div class="d-grid">
                         <input type="submit" value="Register" class="btn btn-success" />
@@ -68,3 +79,9 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
