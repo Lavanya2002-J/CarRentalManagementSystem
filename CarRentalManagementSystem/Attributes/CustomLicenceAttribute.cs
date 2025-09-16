@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace CarRentalManagementSystem.Attributes
 {
-    public class CustomLicence : ValidationAttribute
+    public class CustomLicenceAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
