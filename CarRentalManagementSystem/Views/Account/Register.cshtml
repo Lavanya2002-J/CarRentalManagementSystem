@@ -21,12 +21,6 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input asp-for="Username" class="form-control" placeholder="Username" />
-                        <label asp-for="Username"></label>
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div> 
-
-                    <div class="form-floating mb-3">
                         <input asp-for="Email" class="form-control" placeholder="Email" />
                         <label asp-for="Email"></label>
                         <span asp-validation-for="Email" class="text-danger"></span>
@@ -55,8 +49,11 @@
                         <label asp-for="LicenseNo"></label>
                         <span asp-validation-for="LicenseNo" class="text-danger"></span>
                     </div>
-
-
+                    <div class="form-floating mb-3">
+                        <input asp-for="Username" class="form-control" placeholder="Username" />
+                        <label asp-for="Username"></label>
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
                     <div class="form-floating mb-3">
                         <input asp-for="Password" class="form-control" placeholder="Password" />
                         <label asp-for="Password"></label>
@@ -68,7 +65,6 @@
                         <label asp-for="ConfirmPassword"></label>
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
-
 
                     <div class="d-grid">
                         <input type="submit" value="Register" class="btn btn-success" />
