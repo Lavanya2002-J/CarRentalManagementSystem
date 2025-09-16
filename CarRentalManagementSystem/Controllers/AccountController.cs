@@ -31,7 +31,9 @@ namespace CarRentalManagementSystem.Controllers
                     HttpContext.Session.SetString("UserID", admin.AdminID.ToString());
                     return RedirectToAction("Dashboard", "Admin");
                 }
-                ModelState.AddModelError("", "Invalid admin username / Email or password.");
+
+                ModelState.AddModelError("", "Invalid admin username/Email or password.");
+
             }
             return View(model);
         }
@@ -52,7 +54,10 @@ namespace CarRentalManagementSystem.Controllers
                     HttpContext.Session.SetInt32("UserID", customer.CustomerID);
                     return RedirectToAction("Dashboard", "Customer");
                 }
-                ModelState.AddModelError("", "Invalid customer username / Email  or password.");
+
+                ModelState.AddModelError("", "Invalid customer username/Email or password.");
+
+                
             }
             return View(model);
         }
@@ -80,7 +85,10 @@ namespace CarRentalManagementSystem.Controllers
                     ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
                     return View(model);
                 }
-                bool Emailvalid = _context.Admins.Any(a => a.Email == model.Email) || _context.Customers.Any(a => a.Email == model.Email);
+
+                bool Emailvalid = _context.Admins.Any(a => a.Email == model.Email) || _context.Customers.Any(c => c.Email == model.Email);
+
+
                 if (Emailvalid)
                 {
                     ModelState.AddModelError("Email", "This email already exists.");
@@ -99,6 +107,9 @@ namespace CarRentalManagementSystem.Controllers
                     ModelState.AddModelError("LicenseNo", "This License Number already exists.");
                     return View(model);
                 }
+
+
+                
                 // Map data from ViewModel to the Customer model
                 var customer = new Customer
                 {
