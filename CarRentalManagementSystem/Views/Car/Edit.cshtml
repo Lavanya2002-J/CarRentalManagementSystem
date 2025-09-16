@@ -45,6 +45,7 @@
                                     <option>Hybrid</option>
                                     <option>Electric</option>
                                 </select>
+                                <span asp-validation-for="FuelType" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="Transmission" class="form-label fw-semibold"></label>
@@ -53,39 +54,47 @@
                                     <option>Manual</option>
                                     <option>Automatic</option>
                                 </select>
+                                <span asp-validation-for="Transmission" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-6">
                                 <label asp-for="Seats" class="form-label fw-semibold"></label>
                                 <input asp-for="Seats" type="number" class="form-control" />
+                                <span asp-validation-for="Seats" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="DailyRate" class="form-label fw-semibold"></label>
                                 <div class="input-group">
                                     <span class="input-group-text">Rs.</span>
-                                    <input asp-for="DailyRate" type="number" step="100" class="form-control" />
+                                    <input asp-for="DailyRate" type="number"  class="form-control" />
+                                    <span asp-validation-for="DailyRate" class="text-danger"></span>
                                 </div>
                             </div>
-
+                                  
                             <div class="col-md-6">
                                 <label asp-for="FuelCapacity" class="form-label fw-semibold"></label>
                                 <input asp-for="FuelCapacity" type="number" class="form-control" />
+                                <span asp-validation-for="FuelCapacity" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="Color" class="form-label fw-semibold"></label>
                                 <input asp-for="Color" class="form-control" />
+                                <span asp-validation-for="Color" class="text-danger"></span>
                             </div>
                             <div class="col-12">
                                 <label asp-for="RegistrationNumber" class="form-label fw-semibold"></label>
                                 <input asp-for="RegistrationNumber" class="form-control" />
+                                <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="InsurancePolicyNo" class="form-label fw-semibold"></label>
                                 <input asp-for="InsurancePolicyNo" class="form-control" />
+                                <span asp-validation-for="InsurancePolicyNo" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="InsuranceExpiryDate" class="form-label fw-semibold"></label>
                                 <input asp-for="InsuranceExpiryDate" type="date" class="form-control" />
+                                <span asp-validation-for="InsuranceExpiryDate" class="text-danger"></span>
                             </div>
                             <div class="col-12">
                                 <div class="form-check mt-2">
@@ -93,12 +102,14 @@
                                     <label class="form-check-label" asp-for="IsAvailable">
                                         Is Available for Rent
                                     </label>
+                                    <span asp-validation-for="IsAvailable" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <label asp-for="Description" class="form-label fw-semibold"></label>
                                 <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-6">
@@ -111,6 +122,7 @@
                                 }
                                 <label asp-for="LogoFile" class="form-label fw-semibold mt-2">Upload New Logo</label>
                                 <input asp-for="LogoFile" type="file" class="form-control" />
+                                <span asp-validation-for="LogoFile" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-6">
@@ -123,6 +135,8 @@
                                 }
                                 <label asp-for="CarImageFile" class="form-label fw-semibold mt-2">Upload New Car Image</label>
                                 <input asp-for="CarImageFile" type="file" class="form-control" />
+                                <span asp-validation-for="CarImageFile" class="text-danger"></span>
+
                             </div>
                         </div>
 
