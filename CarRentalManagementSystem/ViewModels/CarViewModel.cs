@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarRentalManagementSystem.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRentalManagementSystem.ViewModels
 {
@@ -32,7 +33,7 @@ namespace CarRentalManagementSystem.ViewModels
         [Range(1, 15, ErrorMessage = "Seats must be between 1 and 15")]
         public int Seats { get; set; }
 
-        
+
         [Range(500, 200000, ErrorMessage = "Daily rate must be a valid amount")]
         [Display(Name = "Daily Rate (LKR)")]
         public decimal DailyRate { get; set; }
@@ -64,6 +65,7 @@ namespace CarRentalManagementSystem.ViewModels
 
         [DataType(DataType.Date)]
         [Display(Name = "Insurance Expiry Date")]
+        [CustomExp(ErrorMessage = "Expiration date must be a future date.")]
         public DateTime? InsuranceExpiryDate { get; set; }
 
 
