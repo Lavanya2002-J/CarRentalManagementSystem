@@ -23,7 +23,7 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var admin = _context.Admins.FirstOrDefault(a => a.Username == model.Username && a.Password == model.Password);
+                var admin = _context.Admins.FirstOrDefault(a => (a.Username == model.UsernameOrEmail || a.Email == model.UsernameOrEmail) && a.Password == model.Password);
                 if (admin != null)
                 {
                     HttpContext.Session.SetString("Username", admin.Username);
@@ -31,7 +31,7 @@ namespace CarRentalManagementSystem.Controllers
                     HttpContext.Session.SetString("UserID", admin.AdminID.ToString());
                     return RedirectToAction("Dashboard", "Admin");
                 }
-                ModelState.AddModelError("", "Invalid admin username or password.");
+                ModelState.AddModelError("", "Invalid admin username / Email or password.");
             }
             return View(model);
         }
@@ -44,7 +44,7 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var customer = _context.Customers.FirstOrDefault(c => c.Username == model.Username && c.Password == model.Password);
+                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.Email == model.UsernameOrEmail) && c.Password == model.Password);
                 if (customer != null)
                 {
                     HttpContext.Session.SetString("Username", customer.Username);
@@ -52,7 +52,7 @@ namespace CarRentalManagementSystem.Controllers
                     HttpContext.Session.SetInt32("UserID", customer.CustomerID);
                     return RedirectToAction("Dashboard", "Customer");
                 }
-                ModelState.AddModelError("", "Invalid customer username or password.");
+                ModelState.AddModelError("", "Invalid customer username / Email  or password.");
             }
             return View(model);
         }
@@ -80,7 +80,25 @@ namespace CarRentalManagementSystem.Controllers
                     ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
                     return View(model);
                 }
+                bool Emailvalid = _context.Admins.Any(a => a.Email == model.Email) || _context.Customers.Any(a => a.Email == model.Email);
+                if (Emailvalid)
+                {
+                    ModelState.AddModelError("Email", "This email already exists.");
+                    return View(model);
+                }
+                bool NICvalid = _context.Customers.Any(a => a.NIC == model.NIC);
+                if (NICvalid)
+                {
+                    ModelState.AddModelError("NIC", "This NIC already exists.");
+                    return View(model);
+                }
 
+                bool Licvalid = _context.Customers.Any(a => a.LicenseNo == model.LicenseNo);
+                if (Licvalid)
+                {
+                    ModelState.AddModelError("LicenseNo", "This License Number already exists.");
+                    return View(model);
+                }
                 // Map data from ViewModel to the Customer model
                 var customer = new Customer
                 {

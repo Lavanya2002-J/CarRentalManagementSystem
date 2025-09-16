@@ -15,9 +15,9 @@
                 <form asp-action="AdminLogin" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
                     <div class="form-floating mb-3">
-                        <input asp-for="Username" class="form-control" placeholder="Username" />
-                        <label asp-for="Username"></label>
-                        <span asp-validation-for="Username" class="text-danger"></span>
+                        <input asp-for="UsernameOrEmail" class="form-control" placeholder="Username" />
+                        <label asp-for="UsernameOrEmail"></label>
+                        <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
                         <input asp-for="Password" class="form-control" placeholder="Password" />
@@ -29,9 +29,7 @@
                     </div>
                 </form>
             </div>
-           @*  <div class="card-footer text-center">
-                <a asp-action="Register">Don't have an account? Register here</a>
-            </div> *@
+         
         </div>
     </div>
 </div>
