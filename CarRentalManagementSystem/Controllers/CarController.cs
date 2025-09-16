@@ -165,6 +165,10 @@ namespace CarRentalManagementSystem.Controllers
                 car.InsurancePolicyNo = viewModel.InsurancePolicyNo;
                 car.InsuranceExpiryDate = viewModel.InsuranceExpiryDate;
 
+                
+
+
+
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
                 if (viewModel.LogoFile != null) 
