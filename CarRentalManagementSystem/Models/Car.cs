@@ -34,8 +34,8 @@ namespace CarRentalManagementSystem.Models
             public int Seats { get; set; }
 
 
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal DailyRate { get; set; }
+            [Column(TypeName = "decimal(10,2)")]
+            public decimal DailyRate { get; set; }
 
     
             public bool IsAvailable { get; set; } = true; 
