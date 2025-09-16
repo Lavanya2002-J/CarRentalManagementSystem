@@ -113,5 +113,170 @@ table.compact-table th {
     border-radius: 5px;
 }
 
+/* Hero Section with Background Image */
+.hero-section {
+    position: relative;
+    padding: 120px 0;
+    text-align: center;
+    color: white;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1533106478329-188b0a19545d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    font-size: 3.5rem;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Style adjustments for the search card */
+.search-card {
+    margin-top: -50px; /* Pulls the card up slightly over the hero image */
+    z-index: 10;
+    position: relative;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- NEW: Why Choose Us Section --- */
+.why-choose-us {
+    padding: 80px 0;
+    background-color: #f8f9fa; /* A slightly different background to separate it */
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+.feature-box {
+    text-align: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+    .feature-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+.feature-icon {
+    font-size: 3rem;
+    color: #0d6efd; /* Bootstrap primary color */
+    margin-bottom: 20px;
+    display: inline-block;
+}
+/* --- End of NEW CSS --- */
+
+
+/* Car Card enhancements */
+.car-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 1rem; /* Softer corners */
+    overflow: hidden;
+}
+
+    .car-card:hover {
+        transform: translateY(-10px); /* Lifts the card on hover */
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+
+.car-img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.car-logo {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
+}
+
+/* Animation utility: hide elements until they are ready to be animated */
+.wow {
+    visibility: hidden;
+}
+
+.text-gradient {
+    background: -webkit-linear-gradient(45deg, #0d6efd, #0dcaf0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+/* --- Style for the Hero Section --- */
+.hero-section {
+    position: relative; /* Needed to position the pseudo-element correctly */
+    overflow: hidden; /* Hides the parts of the image that zoom outside the box */
+    padding: 100px 0;
+    color: white;
+    text-align: center;
+}
+
+    /* We create a pseudo-element to hold and animate the background */
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1740');
+        background-size: cover;
+        background-position: center;
+        z-index: -1; /* Puts the image layer behind your text content */
+        /* Apply the animation here */
+        animation: zoomAndPan 25s infinite alternate;
+    }
+
+/* This defines the animation steps */
+@keyframes zoomAndPan {
+
+
+{
+    transform: scale(1.0); /* Start at normal size */
+}
+
+100% {
+    transform: scale(1.15); /* End 15% zoomed in */
+}
+
+}
+
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Makes text stand out */
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto; /* Centers the paragraph */
+}
+
+
 
 
