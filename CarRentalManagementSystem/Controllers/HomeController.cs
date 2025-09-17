@@ -19,12 +19,21 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-
         public async Task<IActionResult> Index(string searchString, string fuelType, string transmission, int? seats)
         {
-            var carsQuery = _context.Cars.Where(c => c.IsAvailable == true);
+            // Get the IDs of all cars that are in a 'Paid' booking
+            // that hasn't ended yet (i.e., the return date is today or in the future).
+            var unavailableCarIds = await _context.Bookings
+            .Where(b => (b.Status == "Paid" || b.Status == "Pending") && b.ReturnDate >= DateTime.Today) //...
+                .Select(b => b.CarID)
+                .Distinct()
+                .ToListAsync();
 
-            //  A flag to check if any filter is active
+            // The main query now fetches cars that are marked as available AND are NOT in the unavailable list.
+            var carsQuery = _context.Cars
+                .Where(c => c.IsAvailable == true && !unavailableCarIds.Contains(c.CarID));
+
+            // A flag to check if any filter is active
             var searchAttempted = !string.IsNullOrEmpty(searchString) ||
                                   !string.IsNullOrEmpty(fuelType) ||
                                   !string.IsNullOrEmpty(transmission) ||
@@ -57,7 +66,7 @@ namespace CarRentalManagementSystem.Controllers
             ViewData["CurrentTransmission"] = transmission;
             ViewData["CurrentSeats"] = seats;
 
-            //  Pass the flag to the view
+            // Pass the flag to the view
             ViewData["SearchAttempted"] = searchAttempted;
 
             return View(filteredCars);
