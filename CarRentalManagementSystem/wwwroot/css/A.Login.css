@@ -1,0 +1,132 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop'); /* New Car Background */
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column; /* Arrange header and main content vertically */
+    min-height: 100vh;
+}
+
+/* --- Full Width Header --- */
+.app-header {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.4); /* Semi-transparent header background */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0; /* Prevents header from shrinking */
+}
+
+.header-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+}
+
+/* --- Main Content Area --- */
+main {
+    flex-grow: 1; /* Allows this section to fill available space */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    width: 100%;
+}
+
+/* --- Login Panel --- */
+.login-panel {
+    max-width: 480px;
+    width: 100%;
+    padding: 2rem 1.5rem;
+    color: #fff;
+    background: rgba(10, 10, 10, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@media (min-width: 768px) {
+    .login-panel {
+        padding: 3rem;
+    }
+}
+
+/* --- Panel Header & Form Styles (Unchanged) --- */
+.login-header h3 {
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.form-floating > .form-control {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+    .form-floating > .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+    }
+
+.form-floating > label {
+    color: #adb5bd;
+}
+
+.form-check-label, a.forgot-password {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+a.forgot-password {
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+.btn-primary {
+    padding: 0.8rem;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.text-danger {
+    color: #ff8a8a !important;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add this to your existing A.Login.css file */
+
+.btn-success {
+    background-color: #1cc88a;
+    border-color: #1cc88a;
+}
+
+    .btn-success:hover {
+        background-color: #17a673;
+        border-color: #17a673;
+    }
+

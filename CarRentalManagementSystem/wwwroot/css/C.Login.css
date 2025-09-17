@@ -1,0 +1,129 @@
+﻿/ /* --- Login Page Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+/* --- The Professional "Blur Div" Panel --- */
+.login-panel {
+    max-width: 480px; /* Slightly wider */
+    width: 100%;
+    padding: 3rem; /* More spacious padding */
+    color: #fff;
+    /* The Glassmorphism Effect */
+    background: rgba(10, 10, 10, 0.25); /* Slightly darker for better contrast */
+    backdrop-filter: blur(15px); /* Stronger blur */
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    /* Animation */
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* --- Professional: Branding & Headers --- */
+.company-logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    margin-bottom: 0.5rem;
+}
+
+.login-header h3 {
+    font-weight: 300; /* Lighter font weight for elegance */
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* --- Custom Form Styling --- */
+.form-floating > .form-control {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+    .form-floating > .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+    }
+
+.form-floating > label {
+    color: #adb5bd;
+}
+
+/* --- Professional: Checkbox & Links --- */
+.form-check-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.form-check-input {
+    background-color: rgba(0,0,0,0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+    .form-check-input:checked {
+        background-color: #00d9ff;
+        border-color: #00d9ff;
+    }
+
+a.forgot-password {
+    font-size: 0.9rem;
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+    a.forgot-password:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+/* --- Button and Footer Link --- */
+.btn-primary {
+    padding: 0.8rem;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.login-footer a {
+    color: #00d9ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+    .login-footer a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+/* Custom validation text color */
+.text-danger {
+    color: #ff8a8a !important;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
