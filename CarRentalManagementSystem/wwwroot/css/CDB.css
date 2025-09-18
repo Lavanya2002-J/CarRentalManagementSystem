@@ -1,0 +1,144 @@
+﻿/* --- Base & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Frosted Glass Effect (For Header & Alert) --- */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* --- Text Styling --- */
+h1, h2, h5, p, .stat-label {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.dashboard-header h1 {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.dashboard-header .text-muted {
+    color: #e9ecef !important;
+}
+
+.stat-box .stat-number {
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: #00d9ff;
+}
+/* --- UPDATED: Frosted Glass Dashboard Cards --- */
+.dashboard-card {
+    /* Re-applying the glass effect properties */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    /* General card styling */
+    border-radius: 0.75rem;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+
+/* We need to re-add the original icon styles */
+.card-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.icon-primary {
+    background-color: #0d6efd;
+}
+
+.icon-success {
+    background-color: #198754;
+}
+
+.icon-secondary {
+    background-color: #6c757d;
+}
+
+
+/* Card content styling */
+.dashboard-card .card-body {
+    padding: 0; /* Remove padding as it's now on the parent */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dashboard-card h5 {
+    font-weight: 600;
+    font-size: 1.25rem; /* Adjusted for icon layout */
+}
+
+.dashboard-card p {
+    color: #e9ecef;
+}
+
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1.h2, .dashboard-header, .alert, .dashboard-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+/* Staggering animations */
+.dashboard-header {
+    animation-delay: 0.1s;
+}
+
+.alert {
+    animation-delay: 0.2s;
+}
+
+.col:nth-child(1) .dashboard-card {
+    animation-delay: 0.3s;
+}
+
+.col:nth-child(2) .dashboard-card {
+    animation-delay: 0.4s;
+}
+
+.col:nth-child(3) .dashboard-card {
+    animation-delay: 0.5s;
+}
