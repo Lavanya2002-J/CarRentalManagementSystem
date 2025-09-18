@@ -3,31 +3,71 @@
     ViewData["Title"] = "Booking Confirmed";
 }
 
-<div class="container text-center mt-5">
-    <div class="py-5">
-        <i class="fas fa-check-circle text-success" style="font-size: 80px;"></i>
-        <h1 class="display-4 mt-3">Booking Confirmed!</h1>
-        <p class="lead">Thank you, @Model.Customer.CustomerName. Your booking has been successfully processed.</p>
-        <hr>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-8">
-                <div class="card text-start">
-                    <div class="card-header">
-                        <strong>Booking Reference ID: @Model.BookingID</strong>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Car:</strong> @Model.Car.CarName (@Model.Car.Model)</p>
-                        <p><strong>Pickup Date:</strong> @Model.PickupDate.ToString("dddd, MMMM dd, yyyy")</p>
-                        <p><strong>Return Date:</strong> @Model.ReturnDate.ToString("dddd, MMMM dd, yyyy")</p>
-                        <p class="fw-bold fs-5"><strong>Total Paid:</strong> LKR @Model.TotalCost.ToString("N2")</p>
-                        <p>A confirmation has been sent to your email address. Please have your Booking ID ready when you come to pick up the car.</p>
-                    </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/BookingConfirmation.css" asp-append-version="true" />
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-panel p-4 p-md-5">
+                <div class="text-center mb-5 confirmation-header">
+                    <i class="bi bi-patch-check-fill icon-success mb-3"></i>
+                    <h1 class="display-4 mt-3">Booking Confirmed!</h1>
+                    <p class="lead">Thank you, @Model.Customer.CustomerName. Your car is reserved.</p>
+                    <p class="text-white-50 small">Confirmation sent to your email on Thursday, 12:37 PM.</p>
                 </div>
-                <div class="mt-4">
-                    <a asp-controller="Booking" asp-action="History" class="btn btn-primary">View My Booking History</a>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Find Another Car</a>
+
+                <div class="booking-summary">
+                    <p class="booking-id text-center">Booking ID: @Model.BookingID</p>
+
+                    <ul class="details-list">
+                        <li>
+                            <i class="bi bi-car-front-fill"></i>
+                            <div>
+                                <strong>Vehicle</strong>
+                                <span>@Model.Car.CarName (@Model.Car.Model)</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="bi bi-calendar-arrow-right"></i>
+                            <div>
+                                <strong>Pickup Date</strong>
+                                <span>@Model.PickupDate.ToString("dddd, MMMM dd, yyyy")</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="bi bi-calendar-arrow-left"></i>
+                            <div>
+                                <strong>Return Date</strong>
+                                <span>@Model.ReturnDate.ToString("dddd, MMMM dd, yyyy")</span>
+                            </div>
+                        </li>
+                        <hr class="border-secondary opacity-25 my-3" />
+                        <li>
+                            <i class="bi bi-wallet2"></i>
+                            <div>
+                                <strong>Total Paid</strong>
+                                <span class="total-cost">LKR @Model.TotalCost.ToString("N2")</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mt-5 text-center actions">
+                    <a asp-controller="Booking" asp-action="History" class="btn btn-primary">
+                        <i class="bi bi-clock-history me-1"></i> View Booking History
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light ms-2">
+                        <i class="bi bi-search me-1"></i> Find Another Car
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
