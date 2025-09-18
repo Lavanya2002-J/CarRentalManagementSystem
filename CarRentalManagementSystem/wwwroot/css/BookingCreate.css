@@ -1,0 +1,156 @@
+﻿/* --- Flatpickr Dark Theme --- */
+/* This is needed to style the calendar popup */
+.flatpickr-calendar {
+    background: #2c3e50;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.flatpickr-months .flatpickr-month {
+    color: #fff;
+    fill: #fff;
+}
+
+.flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month {
+    fill: #fff;
+    color: #fff;
+}
+
+    .flatpickr-months .flatpickr-prev-month:hover svg, .flatpickr-months .flatpickr-next-month:hover svg {
+        fill: #00d9ff;
+    }
+
+.flatpickr-weekdays {
+    background: #34495e;
+}
+
+span.flatpickr-weekday {
+    color: #bdc3c7;
+}
+
+.flatpickr-day {
+    color: #ecf0f1;
+}
+
+    .flatpickr-day:hover, .flatpickr-day:focus {
+        background: #34495e;
+        border-color: #34495e;
+    }
+
+    .flatpickr-day.today {
+        border-color: #00d9ff;
+    }
+
+    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
+        background: #00d9ff;
+        border-color: #00d9ff;
+        color: #2c3e50;
+    }
+
+    .flatpickr-day.disabled, .flatpickr-day.disabled:hover {
+        color: #7f8c8d;
+    }
+
+/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(15, 20, 30, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.panel-header {
+    background: rgba(0, 217, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+}
+
+    .panel-header h2 {
+        color: #fff;
+    }
+
+/* --- Car Summary --- */
+.car-summary-image {
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.summary-list .list-group-item {
+    background-color: transparent;
+    color: #ccc;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+    .summary-list .list-group-item strong {
+        color: #fff;
+    }
+
+/* --- Booking Form --- */
+.form-label {
+    color: #c0c0c0;
+}
+
+.form-control {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+    .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+    }
+
+    .form-control::placeholder {
+        color: #888;
+    }
+
+/* Total Cost Box */
+.total-cost-box {
+    background: rgba(0,0,0,0.2);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+    .total-cost-box #totalCost {
+        color: #1cc88a;
+    }
+
+/* --- Button --- */
+.btn-primary {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    padding: 0.8rem 1rem;
+}
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(78, 115, 223, 0.4);
+    }
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
