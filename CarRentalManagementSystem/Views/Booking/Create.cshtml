@@ -1,46 +1,49 @@
-﻿
-
- 
-@model CarRentalManagementSystem.ViewModels.BookingViewModel
+﻿@model CarRentalManagementSystem.ViewModels.BookingViewModel
 
 @{
     ViewData["Title"] = "Book a Car";
 }
 
-<div class="container mt-4">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/BookingCreate.css" asp-append-version="true" />
+
+<div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="mb-0">Complete Your Booking</h2>
+            <div class="card glass-panel rounded-3 overflow-hidden">
+                <div class="panel-header p-4 text-center">
+                    <h2 class="mb-0 fw-bold">Complete Your Booking</h2>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4 p-md-5">
                     <div class="row">
 
-                        <div class="col-md-6">
-                            <h4 class="mb-3">You are booking: @Model.CarName</h4>
-                            <img src="@Url.Content("~/uploads/" + Model.CarImageFileName)" class="img-fluid rounded mb-3" alt="@Model.CarName">
+                        <div class="col-md-6 border-end-md border-secondary border-opacity-25 pe-md-5">
+                            <h4 class="mb-3 text-white">You are booking: @Model.CarName</h4>
+                            <img src="@Url.Content("~/uploads/" + Model.CarImageFileName)" class="img-fluid rounded mb-3 car-summary-image" alt="@Model.CarName">
 
-                            <ul class="list-group list-group-flush">
+                            <ul class="list-group list-group-flush summary-list">
                                 <li class="list-group-item d-flex justify-content-between">
-                                    <strong>Model:</strong> <span>@Model.CarModel</span>
+                                    <strong><i class="bi bi-tag-fill me-2"></i>Model:</strong>
+                                    <span>@Model.CarModel</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between">
-                                    <strong>Transmission:</strong> <span>@Model.Transmission</span>
+                                    <strong><i class="bi bi-gear-fill me-2"></i>Transmission:</strong>
+                                    <span>@Model.Transmission</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between">
-                                    <strong>Fuel Type:</strong> <span>@Model.FuelType</span>
+                                    <strong><i class="bi bi-fuel-pump-fill me-2"></i>Fuel Type:</strong>
+                                    <span>@Model.FuelType</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between">
-                                    <strong>Daily Rate:</strong>
+                                    <strong><i class="bi bi-currency-dollar me-2"></i>Daily Rate:</strong>
                                     <span id="dailyRate" data-rate="@Model.DailyRate">LKR @Model.DailyRate.ToString("N2")</span>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="col-md-6">
-                            <h4 class="mb-3">Select Your Dates</h4>
+                        <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
+                            <h4 class="mb-3 text-white">Select Your Dates</h4>
                             <form asp-action="Create" method="post">
                                 @Html.AntiForgeryToken()
                                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -59,14 +62,16 @@
                                     <span asp-validation-for="ReturnDate" class="text-danger"></span>
                                 </div>
 
-                                <hr />
+                                <hr class="border-secondary opacity-25" />
 
-                                <div class="text-center my-3">
-                                    <h4 class="fw-bold">Estimated Total</h4>
-                                    <h2 id="totalCost" class="text-success fw-bolder">LKR 0.00</h2>
+                                <div class="text-center my-3 p-3 total-cost-box">
+                                    <h4 class="fw-bold text-white">Estimated Total</h4>
+                                    <h2 id="totalCost" class="fw-bolder">LKR 0.00</h2>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Confirm & Proceed to Payment</button>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                                    <i class="bi bi-arrow-right-circle-fill me-2"></i>Confirm & Proceed to Payment
+                                </button>
                             </form>
                         </div>
 

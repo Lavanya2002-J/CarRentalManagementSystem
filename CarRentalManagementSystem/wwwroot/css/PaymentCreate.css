@@ -1,0 +1,106 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(15, 20, 30, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.panel-header {
+    background: rgba(28, 200, 138, 0.2); /* Subtle green tint */
+    border-bottom: 1px solid rgba(28, 200, 138, 0.4);
+}
+
+    .panel-header h2, .panel-header p {
+        color: #fff;
+    }
+
+/* --- Booking Summary --- */
+.summary-list {
+    background-color: transparent !important;
+}
+
+    .summary-list .list-group-item {
+        background-color: transparent;
+        color: #ccc;
+        border-color: rgba(255, 255, 255, 0.15);
+        padding: 1rem 0;
+    }
+
+        .summary-list .list-group-item strong {
+            color: #fff;
+        }
+
+    .summary-list .total-amount-item {
+        background-color: rgba(28, 200, 138, 0.15) !important;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+
+/* --- Payment Form --- */
+.form-label {
+    color: #c0c0c0;
+}
+
+.form-select {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cccccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+    .form-select:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border-color: #1cc88a;
+        box-shadow: 0 0 0 0.25rem rgba(28, 200, 138, 0.25);
+    }
+
+/* Custom "Glass" Alert */
+.alert-glass {
+    background: rgba(54, 185, 204, 0.1);
+    border: 1px solid rgba(54, 185, 204, 0.4);
+    color: #8cd9ed;
+}
+
+    .alert-glass p {
+        margin-bottom: 0;
+    }
+
+/* --- Button --- */
+.btn-success {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    padding: 0.8rem 1rem;
+}
+
+    .btn-success:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(28, 200, 138, 0.4);
+    }
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

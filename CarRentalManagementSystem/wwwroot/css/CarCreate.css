@@ -151,7 +151,7 @@ details {
 
     /* Custom chevron icon for details/summary */
     .form-section-toggle::after {
-        content: '\\F282'; /* Bootstrap Icons: chevron-down */
+        content: '⬇️'; /* Bootstrap Icons: chevron-down */
         font-family: 'bootstrap-icons';
         float: right;
         transition: transform 0.3s ease;
