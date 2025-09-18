@@ -4,9 +4,7 @@
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
 <link href="~/css/site.css" rel="stylesheet" />
 
 <div class="hero-section">
@@ -23,67 +21,34 @@
         <form asp-controller="Home" asp-action="Index" method="get">
             <div class="row align-items-end g-3">
                 <div class="col-lg-3 col-md-6">
-                    <label for="searchString" class="form-label fw-bold">Search by Name/Model</label>
-                    <input type="text" name="searchString" class="form-control" value="@ViewData["CurrentSearch"]" />
+                    <label for="searchString" class="form-label fw-bold">Car Name or Model</label>
+                    <input type="text" name="searchString" class="form-control" placeholder="e.g., Toyota Aqua" value="@ViewData["CurrentSearch"]" />
                 </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="fuelType" class="form-label fw-bold">Fuel Type</label>
-                    <select name="fuelType" class="form-select">
-                        <option value="">All</option>
-                        <option value="Petrol" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Petrol")">Petrol</option>
-                        <option value="Diesel" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Diesel")">Diesel</option>
-                        <option value="Electric" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Electric")">Electric</option>
-                        <option value="Hybrid" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Hybrid")">Hybrid</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="transmission" class="form-label fw-bold">Transmission</label>
-                    <select name="transmission" class="form-select">
-                        <option value="">All</option>
-                        <option value="Automatic" selected="@(ViewData["CurrentTransmission"]?.ToString() == "Automatic")">Automatic</option>
-                        <option value="Manual" selected="@(ViewData["CurrentTransmission"]?.ToString() == "Manual")">Manual</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-1 col-md-6">
                     <label for="seats" class="form-label fw-bold">Seats</label>
-                    <input type="number" name="seats" class="form-control" min="1" step="1" value="@ViewData["CurrentSeats"]" />
+                    <input type="number" name="seats" class="form-control" placeholder="e.g., 5" min="1" value="@ViewData["CurrentSeats"]" />
                 </div>
-                <div class="col-lg-3 col-md-12 d-grid">
-                    <button type="submit" class="btn btn-primary fw-bold">Find Car</button>
+                <div class="col-lg-2 col-md-6">
+                    <label for="pickupDate" class="form-label fw-bold">Pickup Date</label>
+                    <input type="date" name="pickupDate" class="form-control" value="@ViewData["CurrentPickupDate"]" />
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="returnDate" class="form-label fw-bold">Return Date</label>
+                    <input type="date" name="returnDate" class="form-control" value="@ViewData["CurrentReturnDate"]" />
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="maxRate" class="form-label fw-bold">Max Rate /day</label>
+                    <input type="number" name="maxRate" class="form-control" placeholder="e.g., 15000" min="0" value="@ViewData["CurrentMaxRate"]" />
+                </div>
+
+                <div class="col-lg-2 col-md-12 d-grid gap-2 d-md-flex">
+                    <button type="submit" class="btn btn-primary fw-bold flex-grow-1">Find Car</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
-<section class="why-choose-us">
-    <div class="container">
-        <h2 class="section-title wow">Why Our Service is the Best</h2>
-        <div class="row g-4">
-            <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.1s">
-                <div class="feature-box">
-                    <div class="feature-icon"><i class="bi bi-collection-fill"></i></div>
-                    <h5 class="fw-bold">Wide Vehicle Selection</h5>
-                    <p class="text-muted">From compact cars for city trips to spacious SUVs for family adventures in Sri Lanka.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.2s">
-                <div class="feature-box">
-                    <div class="feature-icon"><i class="bi bi-tags-fill"></i></div>
-                    <h5 class="fw-bold">Transparent Pricing</h5>
-                    <p class="text-muted">Enjoy competitive rates with no hidden fees. The price you see is the price you pay.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.3s">
-                <div class="feature-box">
-                    <div class="feature-icon"><i class="bi bi-headset"></i></div>
-                    <h5 class="fw-bold">24/7 Customer Support</h5>
-                    <p class="text-muted">Our dedicated local team is always here to assist you, ensuring a smooth rental experience.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <div class="container my-5">
     <h2 class="section-title wow">Our Available Fleet</h2>
@@ -132,29 +97,80 @@
     </div>
 </div>
 
+<section class="why-choose-us py-5">
+    <div class="container">
+        <h3 class="section-title wow">Why Our Service is the Best</h3>
+        <div class="row g-4 mt-3">
+            <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.1s">
+                <div class="card shadow-sm h-100 text-center border-0">
+                    <div class="card-body p-4">
+                        <div class="feature-icon-dark mx-auto mb-3">
+                            <i class="bi bi-collection-fill"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Wide Vehicle Selection</h5>
+                        <p class="text-muted mb-0">From compact cars to spacious SUVs for your Sri Lankan adventures.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.2s">
+                <div class="card shadow-sm h-100 text-center border-0">
+                    <div class="card-body p-4">
+                        <div class="feature-icon-dark mx-auto mb-3">
+                            <i class="bi bi-tags-fill"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Transparent Pricing</h5>
+                        <p class="text-muted mb-0">Enjoy competitive rates with no hidden fees. The price you see is what you pay.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.3s">
+                <div class="card shadow-sm h-100 text-center border-0">
+                    <div class="card-body p-4">
+                        <div class="feature-icon-dark mx-auto mb-3">
+                            <i class="bi bi-headset"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">24/7 Customer Support</h5>
+                        <p class="text-muted mb-0">Our dedicated local team is always here to assist, ensuring a smooth experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .feature-icon-dark {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e9ecef; /* A light grey */
+        color: #0d6efd; /* Bootstrap primary blue */
+        font-size: 2rem;
+    }
+</style>
+
+
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Get the animation delay from the data attribute, if it exists
                         const delay = entry.target.dataset.wowDelay || '0s';
                         entry.target.style.animationDelay = delay;
-
                         entry.target.style.visibility = 'visible';
-                        // Determine animation type based on a data attribute, or default to fadeInUp
                         const animation = entry.target.dataset.wowAnimation || 'fadeInUp';
                         entry.target.classList.add('animate__animated', `animate__${animation}`);
-
-                        observer.unobserve(entry.target); // Animate only once
+                        observer.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
+                threshold: 0.1
             });
 
-            // Find all elements with the 'wow' class and observe them
             const animatedElements = document.querySelectorAll('.wow');
             animatedElements.forEach(el => observer.observe(el));
         });
