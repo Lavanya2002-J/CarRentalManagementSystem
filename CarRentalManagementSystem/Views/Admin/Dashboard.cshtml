@@ -12,9 +12,43 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4 animate__animated animate__fadeIn">
         <div>
             <h1 class="h3 mb-1 text-gray-800">Admin Dashboard</h1>
-            <p class="text-muted small mb-0">
-                Welcome back! It's currently 1:54 PM on Wednesday in Sri Lanka.
-            </p>
+            <div id="live-datetime" class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
+            </div>
+
+            <script>
+                // This function gets the current time and formats it
+                function updateLiveTime() {
+                    const dateTimeElement = document.getElementById('live-datetime');
+
+                    // Make sure the element exists before trying to update it
+                    if (dateTimeElement) {
+                        const now = new Date();
+
+                        // Options to format the date and time for Sri Lanka
+                        const options = {
+                            weekday: 'long',    // e.g., "Wednesday"
+                            hour: 'numeric',      // e.g., "1"
+                            minute: 'numeric',    // e.g., "50"
+                            second: 'numeric',    // e.g., "30"
+                            hour12: true,       // Use 12-hour format (AM/PM)
+                            timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
+                            timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
+                        };
+
+                        // Create the formatted string
+                        const formattedDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
+
+                        // Update the HTML content
+                        dateTimeElement.innerHTML = `Good day! It's currently ${formattedDateTime} in Sri Lanka.`;
+                    }
+                }
+
+                // Run the function once immediately on page load
+                updateLiveTime();
+
+                // Set the function to run every second (1000 milliseconds)
+                setInterval(updateLiveTime, 1000);
+            </script>
         </div>
     </div>
 
