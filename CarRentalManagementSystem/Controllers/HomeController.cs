@@ -3,8 +3,6 @@ using CarRentalManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CarRentalManagementSystem.Controllers
 {
@@ -19,45 +17,66 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-
-        public async Task<IActionResult> Index(string searchString, string fuelType, string transmission, int? seats)
+        public async Task<IActionResult> Index(
+            string searchString,
+            int? seats,
+            DateTime? pickupDate,
+            DateTime? returnDate,
+            decimal? maxRate)
         {
+            // Start with the base query for cars that are generally available.
             var carsQuery = _context.Cars.Where(c => c.IsAvailable == true);
 
-            //  A flag to check if any filter is active
-            var searchAttempted = !string.IsNullOrEmpty(searchString) ||
-                                  !string.IsNullOrEmpty(fuelType) ||
-                                  !string.IsNullOrEmpty(transmission) ||
-                                  seats.HasValue;
+            // --- 1. Date-wise Filtering ---
+            // If a valid date range is provided, find and exclude cars that are already booked during that time.
+            if (pickupDate.HasValue && returnDate.HasValue && returnDate > pickupDate)
+            {
+                // Find IDs of cars with bookings that overlap with the selected date range.
+                var unavailableCarIds = await _context.Bookings
+                    .Where(b => (b.Status == "Paid" || b.Status == "Pending") &&
+                                b.PickupDate < returnDate.Value &&
+                                b.ReturnDate > pickupDate.Value)
+                    .Select(b => b.CarID)
+                    .Distinct()
+                    .ToListAsync();
 
+                // Exclude these unavailable cars from our results.
+                carsQuery = carsQuery.Where(c => !unavailableCarIds.Contains(c.CarID));
+            }
+
+            // --- 2. Car Name or Model Filtering ---
             if (!string.IsNullOrEmpty(searchString))
             {
                 carsQuery = carsQuery.Where(c => c.CarName.Contains(searchString) || c.Model.Contains(searchString));
             }
 
-            if (!string.IsNullOrEmpty(fuelType))
-            {
-                carsQuery = carsQuery.Where(c => c.FuelType == fuelType);
-            }
-
-            if (!string.IsNullOrEmpty(transmission))
-            {
-                carsQuery = carsQuery.Where(c => c.Transmission == transmission);
-            }
-
-            if (seats.HasValue)
+            // --- 3. Seats Filtering ---
+            if (seats.HasValue && seats > 0)
             {
                 carsQuery = carsQuery.Where(c => c.Seats == seats.Value);
             }
 
+            // --- 4. Daily Rate Filtering ---
+            if (maxRate.HasValue && maxRate > 0)
+            {
+                carsQuery = carsQuery.Where(c => c.DailyRate <= maxRate.Value);
+            }
+
+            // Execute the final query to get the list of cars.
             var filteredCars = await carsQuery.ToListAsync();
 
-            ViewData["CurrentSearch"] = searchString;
-            ViewData["CurrentFuelType"] = fuelType;
-            ViewData["CurrentTransmission"] = transmission;
-            ViewData["CurrentSeats"] = seats;
+            // A flag to check if the user has tried to filter anything.
+            var searchAttempted = !string.IsNullOrEmpty(searchString) ||
+                                  seats.HasValue ||
+                                  pickupDate.HasValue ||
+                                  maxRate.HasValue;
 
-            //  Pass the flag to the view
+            // Pass the current filter values back to the view to keep the form fields populated.
+            ViewData["CurrentSearch"] = searchString;
+            ViewData["CurrentSeats"] = seats;
+            ViewData["CurrentPickupDate"] = pickupDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentReturnDate"] = returnDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentMaxRate"] = maxRate;
             ViewData["SearchAttempted"] = searchAttempted;
 
             return View(filteredCars);
