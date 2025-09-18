@@ -16,22 +16,22 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-        // ITHAI PUTHUSAAGA SERKAVUM
+        
         // GET: Payment or /Payment/Index
         public async Task<IActionResult> Index()
         {
-            // Anaithu payments-aiyum thethiyin adippadayil iranga varisaiyil edukkavum
+            
             var payments = await _context.Payments
                                          .OrderByDescending(p => p.PaymentDate)
                                          .ToListAsync();
-            return View(payments); // Payment list-ai view-ku anuppavum
+            return View(payments); 
         }
 
         // GET: Payment/Create
         [HttpGet]
         public async Task<IActionResult> Create(int bookingId, decimal amount)
         {
-            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+            
             var booking = await _context.Bookings
                                         .Include(b => b.Car)
                                         .FirstOrDefaultAsync(b => b.BookingID == bookingId);
@@ -63,7 +63,7 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PaymentViewModel viewModel)
         {
-            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+           
             if (ModelState.IsValid)
             {
                 var booking = await _context.Bookings.FindAsync(viewModel.BookingID);
@@ -85,7 +85,7 @@ namespace CarRentalManagementSystem.Controllers
                 _context.Payments.Add(newPayment);
 
                 booking.Status = "Paid";
-                car.IsAvailable = false;
+                
 
                 await _context.SaveChangesAsync();
 
@@ -108,7 +108,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Payment/Success
         public async Task<IActionResult> Success(int bookingId)
         {
-            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+           
             var booking = await _context.Bookings
                                         .Include(b => b.Car)
                                         .Include(b => b.Customer)
@@ -126,7 +126,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Payment/Confirmation/5
         public async Task<IActionResult> Confirmation(int? id)
         {
-            // ... (intha method-la entha maatamum illai, appadiye irukkattum)
+            
             if (id == null)
             {
                 return NotFound();
