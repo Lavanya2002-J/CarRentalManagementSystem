@@ -21,33 +21,29 @@
         <form asp-controller="Home" asp-action="Index" method="get">
             <div class="row align-items-end g-3">
                 <div class="col-lg-3 col-md-6">
-                    <label for="searchString" class="form-label fw-bold">Search by Name/Model</label>
-                    <input type="text" name="searchString" class="form-control" value="@ViewData["CurrentSearch"]" />
+                    <label for="searchString" class="form-label fw-bold">Car Name or Model</label>
+                    <input type="text" name="searchString" class="form-control" placeholder="e.g., Toyota Aqua" value="@ViewData["CurrentSearch"]" />
                 </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="fuelType" class="form-label fw-bold">Fuel Type</label>
-                    <select name="fuelType" class="form-select">
-                        <option value="">All</option>
-                        <option value="Petrol" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Petrol")">Petrol</option>
-                        <option value="Diesel" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Diesel")">Diesel</option>
-                        <option value="Electric" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Electric")">Electric</option>
-                        <option value="Hybrid" selected="@(ViewData["CurrentFuelType"]?.ToString() == "Hybrid")">Hybrid</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="transmission" class="form-label fw-bold">Transmission</label>
-                    <select name="transmission" class="form-select">
-                        <option value="">All</option>
-                        <option value="Automatic" selected="@(ViewData["CurrentTransmission"]?.ToString() == "Automatic")">Automatic</option>
-                        <option value="Manual" selected="@(ViewData["CurrentTransmission"]?.ToString() == "Manual")">Manual</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-1 col-md-6">
                     <label for="seats" class="form-label fw-bold">Seats</label>
-                    <input type="number" name="seats" class="form-control" min="1" step="1" value="@ViewData["CurrentSeats"]" />
+                    <input type="number" name="seats" class="form-control" placeholder="e.g., 5" min="1" value="@ViewData["CurrentSeats"]" />
                 </div>
-                <div class="col-lg-3 col-md-12 d-grid">
-                    <button type="submit" class="btn btn-primary fw-bold">Find Car</button>
+                <div class="col-lg-2 col-md-6">
+                    <label for="pickupDate" class="form-label fw-bold">Pickup Date</label>
+                    <input type="date" name="pickupDate" class="form-control" value="@ViewData["CurrentPickupDate"]" />
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="returnDate" class="form-label fw-bold">Return Date</label>
+                    <input type="date" name="returnDate" class="form-control" value="@ViewData["CurrentReturnDate"]" />
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label for="maxRate" class="form-label fw-bold">Max Rate /day</label>
+                    <input type="number" name="maxRate" class="form-control" placeholder="e.g., 15000" min="0" value="@ViewData["CurrentMaxRate"]" />
+                </div>
+
+                <div class="col-lg-2 col-md-12 d-grid gap-2 d-md-flex">
+                    <button type="submit" class="btn btn-primary fw-bold flex-grow-1">Find Car</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Clear</a>
                 </div>
             </div>
         </form>
