@@ -1,0 +1,117 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(15, 20, 30, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    animation: fadeIn 0.6s ease-out;
+}
+
+    .glass-panel .panel-header {
+        background: rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+        .glass-panel .panel-header h3 {
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+/* --- Form Element Styling --- */
+.form-label {
+    color: #c0c0c0;
+}
+
+.form-control, .form-select {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+    }
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cccccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* --- Special Form Elements for Edit Page --- */
+.input-group-text {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ccc;
+}
+
+.img-thumbnail {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem;
+}
+
+.form-check-label {
+    color: #e0e0e0;
+}
+
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+/* --- Buttons --- */
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #2e59d9;
+        border-color: #2653b4;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(78, 115, 223, 0.4);
+    }
+
+.btn-outline-secondary {
+    color: #ccc;
+    border-color: #888;
+}
+
+    .btn-outline-secondary:hover {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

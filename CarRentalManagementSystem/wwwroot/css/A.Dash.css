@@ -1,0 +1,143 @@
+﻿/* --- Dashboard Body & Background --- */
+/* Note: This style will apply to the body of any page that links this stylesheet. */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e0e0e0; /* Default light text for dark background */
+}
+
+/* --- General Typography & Elements --- */
+.text-gray-800 {
+    color: #f0f0f0 !important; /* Make dashboard titles white */
+}
+
+.text-muted {
+    color: #b0b0b0 !important;
+}
+
+hr {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* --- Stat Cards (Glassmorphism) --- */
+.stat-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: scaleIn 0.5s ease-out forwards;
+    color: #e0e0e0;
+}
+
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    }
+
+/* --- Colored Borders for Stat Cards --- */
+.border-left-primary {
+    border-left: 0.3rem solid rgba(78, 115, 223, 0.8) !important;
+}
+
+.border-left-success {
+    border-left: 0.3rem solid rgba(28, 200, 138, 0.8) !important;
+}
+
+.border-left-info {
+    border-left: 0.3rem solid rgba(54, 185, 204, 0.8) !important;
+}
+
+.border-left-warning {
+    border-left: 0.3rem solid rgba(246, 194, 62, 0.8) !important;
+}
+
+/* --- Stat Card Content --- */
+.text-xs {
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+.stat-card .fa-2x {
+    color: rgba(255, 255, 255, 0.3);
+    transition: color 0.3s ease;
+}
+
+.stat-card:hover .fa-2x {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.text-primary-light {
+    color: #8cbaff !important;
+}
+
+.text-success-light {
+    color: #9be6a8 !important;
+}
+
+.text-info-light {
+    color: #8cd9ed !important;
+}
+
+.text-warning-light {
+    color: #ffe39a !important;
+}
+
+/* --- Management Cards (Glassmorphism) --- */
+.management-card {
+    text-decoration: none;
+    color: #e0e0e0;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.75rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+    .management-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        border-color: rgba(102, 204, 255, 0.5);
+    }
+
+    .management-card .fa-3x {
+        color: #66ccff;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .management-card:hover .fa-3x {
+        transform: scale(1.1);
+        color: #99e6ff;
+    }
+
+/* --- Animations --- */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
