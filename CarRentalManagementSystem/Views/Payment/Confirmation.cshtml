@@ -1,60 +1,90 @@
 ﻿@model CarRentalManagementSystem.Models.Payment
-
 @{
     ViewData["Title"] = "Payment Confirmation";
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Payment Confirmation</h4>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Transaction Details</h5>
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <strong>Payment ID:</strong> @Model.PaymentID
-                </div>
-                <div class="col-md-6">
-                    <strong>Transaction ID:</strong> @Model.TransactionID
-                </div>
-                <div class="col-md-6">
-                    <strong>Payment Date:</strong> @Model.PaymentDate.ToString("f")
-                </div>
-                <div class="col-md-6">
-                    <strong>Payment Method:</strong> @Model.PaymentMethod
-                </div>
-                <div class="col-md-6">
-                    <strong>Amount Paid:</strong> <span class="fw-bold text-success">LKR @Model.Amount.ToString("N2")</span>
-                </div>
-                <div class="col-md-6">
-                    <strong>Status:</strong> <span class="badge bg-success">@Model.PaymentStatus</span>
-                </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<link rel="stylesheet" href="~/css/PaymentConfirmation.css" asp-append-version="true" />
+
+<div class="confirmation-container">
+    <div class="card-header-custom">
+        <i class="fas fa-check-circle icon"></i>
+        <h2 class="mb-0">Payment Successful</h2>
+        <p>Your transaction has been completed successfully.</p>
+    </div>
+
+    <div class="card-body-custom">
+
+        <h5 class="section-title">Transaction Details</h5>
+        <div class="details-group">
+            <div class="detail-item">
+                <strong>Payment ID:</strong>
+                <span>@Model.PaymentID</span>
             </div>
-
-            <hr />
-
-            <h5 class="card-title mt-4">Associated Booking Details</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <strong>Booking ID:</strong> @Model.Booking.BookingID
-                </div>
-                <div class="col-md-6">
-                    <strong>Customer:</strong> @Model.Booking.Customer.CustomerName
-                </div>
-                <div class="col-md-6">
-                    <strong>Car:</strong> @Model.Booking.Car.CarName
-                </div>
-                <div class="col-md-6">
-                    <strong>Pickup Date:</strong> @Model.Booking.PickupDate.ToString("yyyy-MM-dd")
-                </div>
-                <div class="col-md-6">
-                    <strong>Return Date:</strong> @Model.Booking.ReturnDate.ToString("yyyy-MM-dd")
-                </div>
+            <div class="detail-item">
+                <strong>Transaction ID:</strong>
+                <span>@Model.TransactionID</span>
+            </div>
+            <div class="detail-item">
+                <strong>Payment Date:</strong>
+                <span>@Model.PaymentDate.ToString("f")</span>
+            </div>
+            <div class="detail-item">
+                <strong>Payment Method:</strong>
+                <span>@Model.PaymentMethod</span>
+            </div>
+            <div class="detail-item">
+                <strong>Amount Paid:</strong>
+                <span class="amount-paid">LKR @Model.Amount.ToString("N2")</span>
+            </div>
+            <div class="detail-item">
+                <strong>Status:</strong>
+                <span><span class="status-badge">@Model.PaymentStatus</span></span>
             </div>
         </div>
-        <div class="card-footer">
-            <a asp-action="Index" class="btn btn-secondary">Back to Payments List</a>
+
+        <hr class="separator" />
+
+        <h5 class="section-title">Booking Summary</h5>
+        <div class="details-group">
+            <div class="detail-item">
+                <strong>Booking ID:</strong>
+                <span>@Model.Booking.BookingID</span>
+            </div>
+            <div class="detail-item">
+                <strong>Customer:</strong>
+                <span>@Model.Booking.Customer.CustomerName</span>
+            </div>
+            <div class="detail-item">
+                <strong>Car:</strong>
+                <span>@Model.Booking.Car.CarName</span>
+            </div>
+            <div class="detail-item">
+                <strong>Pickup Date:</strong>
+                <span>@Model.Booking.PickupDate.ToString("yyyy-MM-dd")</span>
+            </div>
+            <div class="detail-item">
+                <strong>Return Date:</strong>
+                <span>@Model.Booking.ReturnDate.ToString("yyyy-MM-dd")</span>
+            </div>
         </div>
+
+    </div>
+
+    <div class="card-footer-custom">
+        <a asp-controller="Payments" asp-action="Index" class="btn btn-back">
+            <i class="fas fa-arrow-left"></i> Back to All Payments
+        </a>
     </div>
 </div>
+
+<script>
+    // Add a class to the body. The CSS will use this to apply the background image.
+    document.body.classList.add('payment-confirmation-page');
+
+    // Optional: Remove the class when leaving the page to avoid the background on other pages.
+    window.addEventListener('beforeunload', function () {
+        document.body.classList.remove('payment-confirmation-page');
+    });
+</script>

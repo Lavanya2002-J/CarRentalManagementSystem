@@ -1,0 +1,214 @@
+﻿/* --- Keyframe Animations --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes icon-pop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* --- Body Styling with Background Image --- */
+/* This style applies only when the body has the 'payment-confirmation-page' class */
+.payment-confirmation-page {
+    /* --- REPLACE WITH YOUR IMAGE URL --- */
+    background-image: url('https://images.unsplash.com/photo-1553440569-b506764b52c6?auto=format&fit=crop&q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Keeps the background stationary on scroll */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 40px 15px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* --- Main Container --- */
+.confirmation-container {
+    max-width: 700px;
+    width: 100%;
+    margin: auto;
+    border-radius: 15px;
+    overflow: hidden; /* Ensures child elements conform to the border-radius */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Apply the main animation to the whole container */
+    animation: fadeInUp 0.8s ease-out;
+}
+
+
+/* --- Styling for Card Sections (The "Transparent Boxes") --- */
+.card-header-custom,
+.card-body-custom,
+.card-footer-custom {
+    padding: 30px;
+    color: #ffffff;
+    /* Frosted Glass Effect */
+    background: rgba(20, 25, 40, 0.75); /* Dark, semi-transparent background */
+    backdrop-filter: blur(12px) saturate(150%); /* The magic blur effect */
+    -webkit-backdrop-filter: blur(12px) saturate(150%); /* For Safari */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border between sections */
+}
+
+.card-footer-custom {
+    border-bottom: none; /* No border for the last section */
+}
+
+
+/* --- Header Specific Styles --- */
+.card-header-custom {
+    text-align: center;
+}
+
+    .card-header-custom .icon {
+        font-size: 60px;
+        color: #28a745; /* Success Green */
+        margin-bottom: 15px;
+        text-shadow: 0 0 15px rgba(40, 167, 69, 0.6);
+        /* Apply icon animation */
+        animation: icon-pop 0.6s ease-out 0.5s; /* 0.5s delay */
+        animation-fill-mode: backwards; /* Ensures the icon is hidden before the animation starts */
+    }
+
+    .card-header-custom h2 {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .card-header-custom p {
+        font-size: 1rem;
+        color: #d1d1d1;
+        margin: 0;
+    }
+
+
+/* --- Body Specific Styles --- */
+.section-title {
+    font-weight: 600;
+    color: #ffffff;
+    border-left: 3px solid #00aaff;
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
+
+.details-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between detail items */
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+    .detail-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .detail-item strong {
+        color: #b0c4de; /* Light Steel Blue for labels */
+        font-weight: 500;
+    }
+
+    .detail-item span {
+        font-weight: 500;
+        text-align: right;
+    }
+
+.amount-paid {
+    font-size: 1.1rem;
+    font-weight: bold !important;
+    color: #28a745;
+}
+
+.status-badge {
+    background-color: rgba(40, 167, 69, 0.3);
+    color: #28a745;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    border: 1px solid rgba(40, 167, 69, 0.7);
+}
+
+.separator {
+    border-color: rgba(255, 255, 255, 0.15);
+    margin: 2rem 0;
+}
+
+
+/* --- Footer & Button Styles --- */
+.card-footer-custom {
+    text-align: center;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+    .btn-back:hover {
+        background: #0056b3;
+        transform: scale(1.05);
+        color: #ffffff;
+    }
+
+    .btn-back i {
+        margin-right: 8px;
+    }
+
+
+/* --- Responsive Design for Smaller Screens --- */
+@media (max-width: 576px) {
+    .payment-confirmation-page {
+        padding: 20px 10px;
+    }
+
+    .card-header-custom,
+    .card-body-custom,
+    .card-footer-custom {
+        padding: 20px;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+        .detail-item span {
+            text-align: left;
+        }
+}
