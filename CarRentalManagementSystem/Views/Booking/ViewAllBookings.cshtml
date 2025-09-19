@@ -1,80 +1,81 @@
-﻿
- @model IEnumerable<CarRentalManagementSystem.Models.Booking>
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
 
 @{
     ViewData["Title"] = "All Customer Bookings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/AdminAllBookings.css" asp-append-version="true" />
+
 <div class="container-fluid px-4">
 
-    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-        <h1 class="m-0">📋 All Customer Bookings</h1>
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4 page-header">
+        <h1 class="m-0 fw-bold"><i class="bi bi-journal-richtext me-2" style="color:#00d9ff;"></i> All Customer Bookings</h1>
         <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
         </a>
     </div>
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-dark text-white">
-            <i class="fas fa-table me-1"></i>
-            Booking Records
-        </div>
-        <div class="card-body">
-            @if (Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle" id="bookingsTable" width="100%">
-                        <thead class="table-dark">
+
+    <div class="glass-panel">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-glass align-middle" id="bookingsTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer Name</th>
+                            <th>Car Details</th>
+                            <th>Pickup Date</th>
+                            <th>Return Date</th>
+                            <th>Total Cost (LKR)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in Model)
+                        {
                             <tr>
-                                <th>Booking ID</th>
-                                <th>Customer Name</th>
-                                <th>Car Details</th>
-                                <th>Pickup Date</th>
-                                <th>Return Date</th>
-                                <th>Total Cost (LKR)</th>
-                                <th>Status</th>
+                                <td class="text-center">@booking.BookingID</td>
+                                <td>@booking.Customer.CustomerName</td>
+                                <td>@booking.Car.CarName (@booking.Car.Model)</td>
+                                <td>@booking.PickupDate.ToString("yyyy-MM-dd")</td>
+                                <td>@booking.ReturnDate.ToString("yyyy-MM-dd")</td>
+                                <td class="text-end fw-bold text-success">@booking.TotalCost.ToString("N2")</td>
+                                <td class="text-center">
+                                    @switch (booking.Status)
+                                    {
+                                        case "Paid":
+                                            <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Paid</span>
+                                            ;
+                                            break;
+                                        case "Pending":
+                                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Pending</span>
+                                            ;
+                                            break;
+                                        case "Cancelled":
+                                            <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle">Cancelled</span>
+                                            ;
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">@booking.Status</span>
+                                            ;
+                                            break;
+                                    }
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var booking in Model)
-                            {
-                                <tr>
-                                    <td class="text-center">@booking.BookingID</td>
-                                    <td>@booking.Customer.CustomerName</td>
-                                    <td>@booking.Car.CarName (@booking.Car.Model)</td>
-                                    <td>@booking.PickupDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@booking.ReturnDate.ToString("yyyy-MM-dd")</td>
-                                    <td class="text-end fw-bold">@booking.TotalCost.ToString("N2")</td>
-                                    <td>
-                                        @switch (booking.Status)
-                                        {
-                                            case "Paid":
-                                                <span class="badge bg-success">Paid</span>;
-                                                break;
-                                            case "Pending":
-                                                <span class="badge bg-warning text-dark">Pending</span>;
-                                                break;
-                                            case "Cancelled":
-                                                <span class="badge bg-danger">Cancelled</span>;
-                                                break;
-                                            default:
-                                                <span class="badge bg-secondary">@booking.Status</span>;
-                                                break;
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-info text-center" role="alert">
-                    No bookings have been made yet.
-                </div>
-            }
-        </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center" role="alert">
+                No bookings have been made yet.
+            </div>
+        }
     </div>
 </div>
 
