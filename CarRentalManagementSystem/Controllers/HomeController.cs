@@ -24,30 +24,44 @@ namespace CarRentalManagementSystem.Controllers
             DateTime? returnDate,
             decimal? maxRate)
         {
-            // Start with the base query for cars that are generally available.
+            // Start with cars that are globally available (not disabled or under maintenance)
             var carsQuery = _context.Cars.Where(c => c.IsAvailable == true);
 
-            // --- 1. Date-wise Filtering ---
-            // If a valid date range is provided, find and exclude cars that are already booked during that time.
+            // --- 1. Date-wise Filtering (prevent showing cars already booked for selected dates) ---
             if (pickupDate.HasValue && returnDate.HasValue && returnDate > pickupDate)
             {
-                // Find IDs of cars with bookings that overlap with the selected date range.
-                var unavailableCarIds = await _context.Bookings
-                    .Where(b => (b.Status == "Paid" || b.Status == "Pending") &&
-                                b.PickupDate < returnDate.Value &&
-                                b.ReturnDate > pickupDate.Value)
-                    .Select(b => b.CarID)
-                    .Distinct()
-                    .ToListAsync();
-
-                // Exclude these unavailable cars from our results.
-                carsQuery = carsQuery.Where(c => !unavailableCarIds.Contains(c.CarID));
+                carsQuery = carsQuery.Where(c =>
+                    !_context.Bookings.Any(b =>
+                        (b.Status == "Paid" || b.Status == "Pending") &&
+                        b.CarID == c.CarID &&
+                        b.PickupDate < returnDate.Value &&
+                        b.ReturnDate > pickupDate.Value));
+            }
+            else if (pickupDate.HasValue && !returnDate.HasValue)
+            {
+                // Only pickup date provided → exclude cars still booked after pickupDate
+                carsQuery = carsQuery.Where(c =>
+                    !_context.Bookings.Any(b =>
+                        (b.Status == "Paid" || b.Status == "Pending") &&
+                        b.CarID == c.CarID &&
+                        b.ReturnDate > pickupDate.Value));
+            }
+            else if (returnDate.HasValue && !pickupDate.HasValue)
+            {
+                // Only return date provided → exclude cars that start booking before returnDate
+                carsQuery = carsQuery.Where(c =>
+                    !_context.Bookings.Any(b =>
+                        (b.Status == "Paid" || b.Status == "Pending") &&
+                        b.CarID == c.CarID &&
+                        b.PickupDate < returnDate.Value));
             }
 
-            // --- 2. Car Name or Model Filtering ---
+            // --- 2. Car Name or Model Filtering (case-insensitive) ---
             if (!string.IsNullOrEmpty(searchString))
             {
-                carsQuery = carsQuery.Where(c => c.CarName.Contains(searchString) || c.Model.Contains(searchString));
+                carsQuery = carsQuery.Where(c =>
+                    EF.Functions.Like(c.CarName, $"%{searchString}%") ||
+                    EF.Functions.Like(c.Model, $"%{searchString}%"));
             }
 
             // --- 3. Seats Filtering ---
@@ -62,16 +76,17 @@ namespace CarRentalManagementSystem.Controllers
                 carsQuery = carsQuery.Where(c => c.DailyRate <= maxRate.Value);
             }
 
-            // Execute the final query to get the list of cars.
+            // Execute the final query
             var filteredCars = await carsQuery.ToListAsync();
 
-            // A flag to check if the user has tried to filter anything.
+            // Check if user tried to filter anything
             var searchAttempted = !string.IsNullOrEmpty(searchString) ||
                                   seats.HasValue ||
                                   pickupDate.HasValue ||
+                                  returnDate.HasValue ||
                                   maxRate.HasValue;
 
-            // Pass the current filter values back to the view to keep the form fields populated.
+            // Pass filter values back to the view to preserve form inputs
             ViewData["CurrentSearch"] = searchString;
             ViewData["CurrentSeats"] = seats;
             ViewData["CurrentPickupDate"] = pickupDate?.ToString("yyyy-MM-dd");
