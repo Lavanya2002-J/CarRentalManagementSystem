@@ -2,55 +2,62 @@
 
 @{
     ViewData["Title"] = "Create New Booking";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Optional: Use if you have a specific admin layout
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h3 class="mb-0">Create a New Booking</h3>
-                </div>
-                <div class="card-body">
-                    <form asp-action="CreateByAdmin" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/AdminBookingCreatePro.css" asp-append-version="true" />
 
-                        <div class="form-group mb-3">
-                            <label asp-for="CustomerID" class="control-label fw-bold"></label>
-                            <select asp-for="CustomerID" class="form-control" asp-items="Model.Customers">
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card glass-panel">
+                <div class="card-header panel-header py-3">
+                    <h3 class="mb-0">Create a New Booking 🏎️</h3>
+                    <p class="text-white-50 small mb-0">It is now 7:25 AM on Friday in Sri Lanka.</p>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="CreateByAdmin" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="CustomerID" class="form-label mb-2">Customer</label>
+                            <select asp-for="CustomerID" class="form-select" asp-items="Model.Customers">
                                 <option value="">-- Select a Customer --</option>
                             </select>
-                            <span asp-validation-for="CustomerID" class="text-danger"></span>
+                            <span asp-validation-for="CustomerID" class="text-danger mt-1 d-block"></span>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="CarID" class="control-label fw-bold"></label>
-                            <select asp-for="CarID" class="form-control" asp-items="Model.Cars">
+                        <div class="form-group mb-4">
+                            <label asp-for="CarID" class="form-label mb-2">Car</label>
+                            <select asp-for="CarID" class="form-select" asp-items="Model.Cars">
                                 <option value="">-- Select an Available Car --</option>
                             </select>
-                            <span asp-validation-for="CarID" class="text-danger"></span>
+                            <span asp-validation-for="CarID" class="text-danger mt-1 d-block"></span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label asp-for="PickupDate" class="control-label fw-bold"></label>
-                                    <input asp-for="PickupDate" class="form-control" type="date" />
-                                    <span asp-validation-for="PickupDate" class="text-danger"></span>
+                                    <label asp-for="PickupDate" class="form-label mb-2">Pickup Date</label>
+                                    <input asp-for="PickupDate" id="pickupDate" class="form-control" placeholder="Select date..." />
+                                    <span asp-validation-for="PickupDate" class="text-danger mt-1 d-block"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label asp-for="ReturnDate" class="control-label fw-bold"></label>
-                                    <input asp-for="ReturnDate" class="form-control" type="date" />
-                                    <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                                    <label asp-for="ReturnDate" class="form-label mb-2">Return Date</label>
+                                    <input asp-for="ReturnDate" id="returnDate" class="form-control" placeholder="Select date..." />
+                                    <span asp-validation-for="ReturnDate" class="text-danger mt-1 d-block"></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary w-100">Create Booking</button>
+                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-circle-fill me-2"></i>Create Booking</button>
                             <a asp-action="ViewAllBookings" class="btn btn-secondary w-100 mt-2">Back to List</a>
                         </div>
                     </form>
@@ -59,3 +66,23 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#pickupDate", {
+                altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d", minDate: "today"
+            });
+            flatpickr("#returnDate", {
+                altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d", minDate: "today"
+            });
+        });
+    </script>
+}

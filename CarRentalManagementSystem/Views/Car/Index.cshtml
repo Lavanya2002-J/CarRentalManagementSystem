@@ -1,81 +1,85 @@
 ﻿@model List<CarRentalManagementSystem.Models.Car>
 
 @{
-    ViewData["Title"] = "Car List";
+    ViewData["Title"] = "Car Management";
 }
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
 
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 page-header">
         <h4 class="fw-bold mb-0">
-            <i class="bi bi-car-front-fill me-2 text-primary"></i>Car Management
+            <i class="bi bi-car-front-fill me-2" style="color: #00d9ff;"></i>Car Management
         </h4>
-        <a asp-action="Create" class="btn btn-success btn-sm shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> Add New Car
+        <a asp-action="Create" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle-fill me-1"></i> Add New Car
         </a>
     </div>
 
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered text-center align-middle mb-0">
-                    <thead class="table-dark">
+    <div class="glass-panel rounded-3 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-glass text-center align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Car</th>
+                        <th>Model</th>
+                        <th>Fuel</th>
+                        <th>Transmission</th>
+                        <th>Rate (LKR)</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var car in Model)
+                    {
                         <tr>
-                            <th>Image</th>
-                            <th>Car</th>
-                            <th>Model</th>
-                            <th>Fuel</th>
-                            <th>Transmission</th>
-                            <th>Rate (Rs)</th>
-                            <th>Available</th>
-                            <th>Actions</th>
+                            <td>
+                                @if (!string.IsNullOrEmpty(car.CarImageFileName))
+                                {
+                                    <img src="~/uploads/@car.CarImageFileName" alt="@car.CarName" class="table-car-image" />
+                                }
+                            </td>
+                            <td>@car.CarName</td>
+                            <td>@car.Model</td>
+                            <td>@car.FuelType</td>
+                            <td>@car.Transmission</td>
+                            <td class="text-success fw-bold">@car.DailyRate.ToString("N0")</td>
+                            <td>
+                                @if (car.IsAvailable)
+                                {
+                                    <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle">Rented</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-sm btn-info text-white" title="Details">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-sm btn-primary text-white" title="Edit">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-sm btn-danger text-white" title="Delete">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var car in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(car.CarImageFileName))
-                                    {
-                                        <img src="~/uploads/@car.CarImageFileName" alt="@car.CarName" />
-                                    }
-                                </td>
-                                <td>@car.CarName</td>
-                                <td>@car.Model</td>
-                                <td>@car.FuelType</td>
-                                <td>@car.Transmission</td>
-                                <td class="text-success fw-semibold">@car.DailyRate.ToString("N2")</td>
-                                <td>
-                                    @if (car.IsAvailable)
-                                    {
-                                        <span class="badge bg-success">Available</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">Not Available</span>
-                                    }
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-sm btn-info text-white" title="Details">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-sm btn-primary text-white" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-sm btn-danger text-white" title="Delete">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,35 +1,117 @@
 ﻿@model LoginViewModel
 @{
-    ViewData["Title"] = "AdminLogin";
+    ViewData["Title"] = "Admin Login";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-        }
-        <div class="card mt-4">
-            <div class="card-header text-center"><h3> Login </h3></div>
-            <div class="card-body">
-                <form asp-action="AdminLogin" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
-                    <div class="form-floating mb-3">
-                        <input asp-for="UsernameOrEmail" class="form-control" placeholder="Username" />
-                        <label asp-for="UsernameOrEmail"></label>
-                        <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input asp-for="Password" class="form-control" placeholder="Password" />
-                        <label asp-for="Password"></label>
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="d-grid">
-                        <input type="submit" value="Login" class="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
-         
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ceyloan Travels</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/A.Login.css" asp-append-version="true" />
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-logo">
+            Ceyloan Travels
         </div>
-    </div>
-</div>
+    </header>
+
+    <main>
+        <div class="login-panel text-center">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+
+            <div class="login-header">
+                <h3>Welcome! Admin</h3>
+            </div>
+
+            @* <div class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
+                Good Afternoon! It's currently Wednesday, 1:50 PM in Sri Lanka.
+            </div> *@
+            <div id="live-datetime" class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
+            </div>
+
+            <script>
+                // This function gets the current time and formats it
+                function updateLiveTime() {
+                    const dateTimeElement = document.getElementById('live-datetime');
+
+                    // Make sure the element exists before trying to update it
+                    if (dateTimeElement) {
+                        const now = new Date();
+
+                        // Options to format the date and time for Sri Lanka
+                        const options = {
+                            weekday: 'long',    // e.g., "Wednesday"
+                            hour: 'numeric',      // e.g., "1"
+                            minute: 'numeric',    // e.g., "50"
+                            second: 'numeric',    // e.g., "30"
+                            hour12: true,       // Use 12-hour format (AM/PM)
+                            timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
+                            timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
+                        };
+
+                        // Create the formatted string
+                        const formattedDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
+
+                        // Update the HTML content
+                        dateTimeElement.innerHTML = `Good day! It's currently ${formattedDateTime} in Sri Lanka.`;
+                    }
+                }
+
+                // Run the function once immediately on page load
+                updateLiveTime();
+
+                // Set the function to run every second (1000 milliseconds)
+                setInterval(updateLiveTime, 1000);
+            </script>
+
+
+            <form asp-action="AdminLogin" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="UsernameOrEmail" class="form-control" placeholder="Username or Email" />
+                    <label asp-for="UsernameOrEmail">Username or Email</label>
+                    <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-4">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                    <label asp-for="Password"></label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4 text-start">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="rememberMeCheck">
+                        <label class="form-check-label" for="rememberMeCheck">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <div class="d-grid">
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+</html>

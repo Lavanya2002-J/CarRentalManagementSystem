@@ -1,0 +1,104 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e0e0e0;
+}
+
+/* --- Page Header --- */
+.page-header h2 {
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.page-header p {
+    color: #ccc;
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(15, 20, 30, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* --- Panel Content --- */
+.car-title h3 {
+    color: #fff;
+}
+
+.spec-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.spec-item {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #d0d0d0;
+    margin-bottom: 1rem;
+}
+
+    .spec-item i {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        width: 30px; /* Aligns icons neatly */
+    }
+
+    .spec-item strong {
+        color: #fff;
+        margin-right: 0.5rem;
+    }
+
+.badge {
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+hr {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* --- Buttons --- */
+.btn-success {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+    .btn-success:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(28, 200, 138, 0.4);
+    }
+
+.btn-outline-secondary {
+    color: #ccc;
+    border-color: #888;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .btn-outline-secondary:hover {
+        color: #000;
+        background-color: #ccc;
+        border-color: #ccc;
+        transform: translateY(-3px);
+    }
+
+/* --- Animation --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -4,20 +4,25 @@
     ViewData["Title"] = "Car Details";
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-primary display-5">Car Details</h2>
-        <p class="text-muted fs-5">Explore detailed specifications and check availability</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/CarDeatil.css" asp-append-version="true" />
+
+<div class="container my-5">
+    <div class="page-header text-center mb-5">
+        <h2 class="fw-bold display-5">@Model.CarName</h2>
+        <p class="fs-5">Explore detailed specifications and check availability</p>
     </div>
 
-    <div class="card shadow-lg border-0 rounded-5 mx-auto" style="max-width: 900px;">
-        <div class="card-body p-5">
+    <div class="glass-panel rounded-5 mx-auto" style="max-width: 900px;">
+        <div class="p-4 p-md-5">
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold mb-0 text-dark display-6">
-                    @Model.CarName <span class="text-muted fs-5">(@Model.Model)</span>
-                </h3>
-
+            <div class="d-flex justify-content-between align-items-start mb-4 car-title">
+                <div>
+                    <h3 class="fw-bold mb-0 display-6">
+                        @Model.CarName
+                    </h3>
+                    <span class="text-muted fs-5">Model: @Model.Model</span>
+                </div>
                 <span class="badge @(Model.IsAvailable ? "bg-success" : "bg-danger") fs-6 py-2 px-3 shadow-sm">
                     @(Model.IsAvailable ? "Available" : "Not Available")
                 </span>
@@ -31,44 +36,33 @@
                     <img src="~/uploads/@Model.ExistingCarImagePath"
                          alt="Car Image"
                          class="img-fluid rounded-4 shadow"
-                         style="max-height: 350px; object-fit: cover;" />
+                         style="max-height: 400px; width: 100%; object-fit: cover;" />
                 </div>
             }
 
-            <div class="row mb-4 g-4">
-                <div class="col-md-6">
-                    <p class="fs-5"><i class="bi bi-fuel-pump-fill text-danger me-2"></i><strong>Fuel Type:</strong> @Model.FuelType</p>
-                    <p class="fs-5"><i class="bi bi-gear-fill text-primary me-2"></i><strong>Transmission:</strong> @Model.Transmission</p>
-                    <p class="fs-5"><i class="bi bi-people-fill text-success me-2"></i><strong>Seats:</strong> @Model.Seats</p>
-                    <p class="fs-5"><i class="bi bi-droplet-fill text-info me-2"></i><strong>Fuel Capacity:</strong> @Model.FuelCapacity L</p>
-                </div>
-                <div class="col-md-6">
-                    <p class="fs-5"><i class="bi bi-currency-dollar text-warning me-2"></i><strong>Daily Rate:</strong> Rs. @Model.DailyRate.ToString("N2")</p>
-                    <p class="fs-5"><i class="bi bi-palette-fill text-secondary me-2"></i><strong>Color:</strong> @Model.Color</p>
-                    <p class="fs-5"><i class="bi bi-upc-scan text-dark me-2"></i><strong>Registration:</strong> @Model.RegistrationNumber</p>
-                </div>
-            </div>
-
-            <div class="row mb-4 g-4">
-                <div class="col-md-6">
-                    <p class="fs-5"><i class="bi bi-shield-check text-success me-2"></i><strong>Policy No:</strong> @Model.InsurancePolicyNo</p>
-                </div>
-                <div class="col-md-6">
-                    <p class="fs-5"><i class="bi bi-calendar-x text-danger me-2"></i><strong>Policy Expiry:</strong> @Model.InsuranceExpiryDate?.ToString("yyyy-MM-dd")</p>
-                </div>
-            </div>
+            <ul class="spec-list row mb-4">
+                <li class="spec-item col-lg-6"><i class="bi bi-fuel-pump-fill text-danger"></i><strong>Fuel Type:</strong> @Model.FuelType</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-currency-dollar text-warning"></i><strong>Daily Rate:</strong> LKR @Model.DailyRate.ToString("N0")</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-gear-fill text-primary"></i><strong>Transmission:</strong> @Model.Transmission</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-palette-fill" style="color: #9c9c9c;"></i><strong>Color:</strong> @Model.Color</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-people-fill text-success"></i><strong>Seats:</strong> @Model.Seats</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-card-text" style="color: #aaa;"></i><strong>Registration:</strong> @Model.RegistrationNumber</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-droplet-fill text-info"></i><strong>Fuel Capacity:</strong> @Model.FuelCapacity L</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-shield-shaded text-success"></i><strong>Policy No:</strong> @Model.InsurancePolicyNo</li>
+                <li class="spec-item col-lg-6"><i class="bi bi-calendar-x-fill text-danger"></i><strong>Policy Expiry:</strong> @Model.InsuranceExpiryDate?.ToString("yyyy-MM-dd")</li>
+            </ul>
 
             <div class="mb-4">
-                <h5 class="fw-bold text-primary">Description</h5>
+                <h5 class="fw-bold" style="color: #00d9ff;">Description</h5>
                 <p class="fs-6 text-muted">@Model.Description</p>
             </div>
 
-            <div class="d-flex justify-content-between mt-5">
-                <a asp-action="Index" class="btn btn-outline-secondary fw-bold px-5 py-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mt-5">
+                <a asp-action="Index" class="btn btn-outline-secondary px-5 py-3">
                     <i class="bi bi-arrow-left me-2"></i> Back
                 </a>
-                <a asp-controller="Booking" asp-action="Create" asp-route-id="@Model.CarID" class="btn btn-success fw-bold px-5 py-3 text-white shadow-lg">
-                    <i class="bi bi-calendar-check me-2"></i> Book Now
+                <a asp-controller="Booking" asp-action="Create" asp-route-id="@Model.CarID" class="btn btn-success px-5 py-3 text-white shadow-lg">
+                    <i class="bi bi-calendar-check-fill me-2"></i> Book Now
                 </a>
             </div>
         </div>
