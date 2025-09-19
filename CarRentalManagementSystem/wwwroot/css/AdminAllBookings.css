@@ -1,0 +1,105 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Page Header --- */
+.page-header h1 {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(10, 15, 25, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    animation: fadeIn 0.6s ease-out forwards;
+    padding: 1.5rem;
+}
+
+/* --- Custom Glass Table --- */
+.table-glass {
+    color: #e0e0e0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+    .table-glass thead th {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid rgba(0, 217, 255, 0.5);
+    }
+
+    .table-glass tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+        .table-glass tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+    .table-glass td {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 500;
+        color: black;
+    }
+
+    .table-glass .no-items-row td {
+        color: #888;
+        font-style: italic;
+    }
+
+/* --- DataTables.js Custom Dark Theme --- */
+.dataTables_length label, .dataTables_filter label, .dataTables_info {
+    color: #ccc !important;
+}
+
+.dataTables_filter input, .dataTables_length select {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dataTables_paginate .paginate_button {
+    color: #ccc !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+    .dataTables_paginate .paginate_button:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+    }
+
+    .dataTables_paginate .paginate_button.current, .dataTables_paginate .paginate_button.current:hover {
+        background: #00d9ff !important;
+        color: #1a2238 !important;
+        border-color: #00d9ff !important;
+    }
+
+    .dataTables_paginate .paginate_button.disabled, .dataTables_paginate .paginate_button.disabled:hover {
+        color: #666 !important;
+        background: transparent !important;
+    }
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

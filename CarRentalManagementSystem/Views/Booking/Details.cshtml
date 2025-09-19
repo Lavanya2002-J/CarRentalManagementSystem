@@ -2,49 +2,66 @@
 
 @{
     ViewData["Title"] = "Booking Details";
-    
-    ViewBag.ActiveBookingsCount = 2;
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Booking Details</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/BookingDetails.css" asp-append-version="true" />
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4>@ViewBag.Username</h4>
+<div class="container my-5">
+    <div class="page-header mb-4">
+        <h2 class="fw-bold"><i class="bi bi-receipt me-2" style="color: #00d9ff;"></i>Booking Details</h2>
+        <p>A summary of your booking. It is now 5:07 AM on Friday in Sri Lanka.</p>
+    </div>
+
+    <div class="card glass-panel rounded-3 overflow-hidden">
+        <div class="panel-header p-3">
+            <h4 class="mb-0">Booking ID: @Model.BookingID</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4 p-md-5">
             <div class="row">
-                <div class="col-md-6">
-                    <h5>Car Information</h5>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-4">Car Name</dt>
-                        <dd class="col-sm-8">@Model.Car.CarName</dd>
-                        <dt class="col-sm-4">Model</dt>
-                        <dd class="col-sm-8">@Model.Car.Model</dd>
+                <div class="col-md-6 details-section">
+                    <h5><i class="bi bi-car-front-fill me-2"></i>Car Information</h5>
+                    <dl class="row details-list">
+                        <dt class="col-sm-5"><i class="bi bi-card-heading"></i>Car Name</dt>
+                        <dd class="col-sm-7">@Model.Car.CarName</dd>
+
+                        <dt class="col-sm-5"><i class="bi bi-tag"></i>Model</dt>
+                        <dd class="col-sm-7">@Model.Car.Model</dd>
                     </dl>
                 </div>
-                <div class="col-md-6">
-                    <h5>Booking Information</h5>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-4">Customer</dt>
-                        <dd class="col-sm-8">@Model.Customer.CustomerName</dd>
-                        <dt class="col-sm-4">Pickup Date</dt>
-                        <dd class="col-sm-8">@Model.PickupDate.ToString("yyyy-MM-dd")</dd>
-                        <dt class="col-sm-4">Return Date</dt>
-                        <dd class="col-sm-8">@Model.ReturnDate.ToString("yyyy-MM-dd")</dd>
-                        <dt class="col-sm-4">Total Cost</dt>
-                        <dd class="col-sm-8">$@Model.TotalCost.ToString("N2")</dd>
-                        <dt class="col-sm-4">Status</dt>
-                        <dd class="col-sm-8"><span class="badge bg-success">@Model.Status</span></dd>
+                <div class="col-md-6 details-section mt-4 mt-md-0">
+                    <h5><i class="bi bi-journal-text me-2"></i>Booking Information</h5>
+                    <dl class="row details-list">
+                        <dt class="col-sm-5"><i class="bi bi-person-circle"></i>Customer</dt>
+                        <dd class="col-sm-7">@Model.Customer.CustomerName</dd>
+
+                        <dt class="col-sm-5"><i class="bi bi-calendar-arrow-right"></i>Pickup Date</dt>
+                        <dd class="col-sm-7">@Model.PickupDate.ToString("yyyy-MM-dd")</dd>
+
+                        <dt class="col-sm-5"><i class="bi bi-calendar-arrow-left"></i>Return Date</dt>
+                        <dd class="col-sm-7">@Model.ReturnDate.ToString("yyyy-MM-dd")</dd>
+
+                        <dt class="col-sm-5"><i class="bi bi-wallet2"></i>Total Cost</dt>
+                        <dd class="col-sm-7 text-success">LKR @Model.TotalCost.ToString("N2")</dd>
+
+                        <dt class="col-sm-5"><i class="bi bi-check2-circle"></i>Status</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">@Model.Status</span>
+                        </dd>
                     </dl>
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <a asp-action="History" class="btn btn-secondary">Back to History</a>
+        <div class="card-footer panel-footer text-center">
+            <a asp-action="History" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Back to History
+            </a>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
