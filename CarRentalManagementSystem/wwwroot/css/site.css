@@ -1,5 +1,13 @@
+* --- Global & Base Styles --- */
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+body, html {
+    height: 100%;
+    margin-bottom: 60px; /* Space for the footer */
 }
 
 @media (min-width: 768px) {
@@ -8,16 +16,48 @@ html {
     }
 }
 
-html, body {
-    height: 100%;
-    background: #0d1117; /* Dark background */
-    color: #e6edf3; /* Light text for readability */
-    margin-bottom: 60px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* --- Utility Classes & Components --- */
+.text-gradient {
+    background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+    border: none;
+    color: white;
+    font-weight: 600;
+}
+
+    .btn-gradient-primary:hover {
+        background: linear-gradient(45deg, #0056b3, #00aaff);
+        color: #fff;
+    }
+
+.badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+
+.car-color-box {
+    width: 18px;
+    height: 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+}
+
+.wow {
+    visibility: hidden;
+}
+
+/* --- Layout --- */
 .main-content {
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 100px); /* 100px = header + footer height */
     padding-bottom: 20px;
 }
 
@@ -25,35 +65,14 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: #161b22;
-    color: #aaa;
 }
 
-/* Buttons */
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
-.form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.2rem #00d4ff;
-}
-
-.btn-gradient-primary {
-    background: linear-gradient(45deg, #007bff, #00d4ff);
-    border: none;
-    color: white;
-    transition: 0.3s ease;
-}
-
-    .btn-gradient-primary:hover {
-        background: linear-gradient(45deg, #0056b3, #00aaff);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
-    }
-
-/* Hero Section */
+/* --- Hero Section --- */
 .hero-section {
     position: relative;
-    padding: 140px 0;
-    text-align: center;
+    padding: 100px 0;
     color: white;
+    text-align: center;
     overflow: hidden;
 }
 
@@ -64,82 +83,98 @@ footer {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(rgba(10,10,10,0.7), rgba(10,10,10,0.7)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1740');
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1740');
         background-size: cover;
         background-position: center;
         z-index: -1;
-        animation: zoomAndPan 25s infinite alternate ease-in-out;
+        animation: zoomAndPan 25s infinite alternate;
     }
 
 @keyframes zoomAndPan {
-    0% {
-        transform: scale(1) translate(0, 0);
+    from {
+        transform: scale(1.0);
     }
 
-    100% {
-        transform: scale(1.15) translate(-20px, -20px);
+    to {
+        transform: scale(1.15);
     }
 }
 
 .hero-section h1 {
     font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(90deg, #00d4ff, #8a2be2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: none;
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .hero-section p {
-    font-size: 1.3rem;
-    max-width: 650px;
-    margin: 20px auto;
-    color: #c9d1d9;
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-/* Cards (Cars, Features) */
-.car-card, .feature-box {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    border-radius: 1rem;
-    padding: 20px;
-    color: #e6edf3;
-    border: 1px solid rgba(255,255,255,0.08);
-    transition: all 0.4s ease;
+/* --- Search Card --- */
+.search-card {
+    margin-top: -50px;
+    z-index: 10;
     position: relative;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- Why Choose Us Section --- */
+.why-choose-us {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+.feature-box {
+    text-align: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+    .feature-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+.feature-icon {
+    font-size: 3rem;
+    color: #0d6efd;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+/* --- Car Cards --- */
+.car-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 1rem;
     overflow: hidden;
 }
 
-    .car-card:hover, .feature-box:hover {
-        transform: translateY(-12px) scale(1.03);
-        box-shadow: 0 15px 40px rgba(0,212,255,0.3);
+    .car-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
     }
 
-    .car-card::after, .feature-box::after {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(0,212,255,0.15), transparent 70%);
-        transform: rotate(25deg);
-        transition: 0.5s;
-    }
-
-    .car-card:hover::after, .feature-box:hover::after {
-        top: -30%;
-        left: -30%;
-    }
-
-/* Car Images */
 .car-img {
     height: 220px;
     object-fit: cover;
-    border-radius: 0.8rem;
 }
 
-/* Car Logo */
 .car-logo {
     position: absolute;
     top: 15px;
@@ -147,28 +182,29 @@ footer {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.9);
     padding: 8px;
-    box-shadow: 0 4px 10px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     object-fit: contain;
 }
 
-/* Text Gradient */
-.text-gradient {
-    background: linear-gradient(90deg, #00d4ff, #8a2be2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Tables (compact & modern) */
+/* --- Table Styles --- */
 table.compact-table td, table.compact-table th {
-    padding: 8px 12px !important;
-    font-size: 0.9rem;
-    color: #c9d1d9;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 10px !important;
+    font-size: 0.85rem;
+    vertical-align: middle;
 }
 
 .compact-table .btn-sm {
-    padding: 4px 10px;
-    font-size: 0.8rem;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+}
+
+.compact-table img, .table img {
+    max-height: 40px;
+    max-width: 60px;
+    width: auto; /* Fixes the conflict */
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
 }
