@@ -203,15 +203,74 @@ namespace CarRentalManagementSystem.Controllers
             }
             return RedirectToAction(nameof(ManageCustomers));
         }
+        // In Controllers/AdminController.cs
+
+        // GET: /Admin/ManageRefunds
+        public async Task<IActionResult> ManageRefunds()
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            // Fetch all bookings that are awaiting a refund approval
+            var refundRequests = await _context.Bookings
+                .Where(b => b.Status == "Cancellation Requested")
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .OrderBy(b => b.PickupDate)
+                .ToListAsync();
+
+            return View(refundRequests);
+        }
+
+
+        // In Controllers/AdminController.cs
+
+        // POST: /Admin/ApproveRefund
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveRefund(int bookingId)
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            var booking = await _context.Bookings.FindAsync(bookingId);
+            if (booking == null || booking.Status != "Cancellation Requested")
+            {
+                TempData["ErrorMessage"] = "Booking not found or not awaiting refund.";
+                return RedirectToAction(nameof(ManageRefunds));
+            }
+
+            // 1. Create the negative payment record for the refund
+            var refundPayment = new Payment
+            {
+                BookingID = booking.BookingID,
+                Amount = -booking.TotalCost,
+                PaymentDate = DateTime.Now,
+                PaymentMethod = "Admin Approved Refund",
+                PaymentStatus = "Completed",
+                TransactionID = $"REF-ADM-{DateTime.UtcNow.Ticks}"
+            };
+            _context.Payments.Add(refundPayment);
+
+            // 2. Make the associated car available again
+            var car = await _context.Cars.FindAsync(booking.CarID);
+            if (car != null)
+            {
+                car.IsAvailable = true;
+            }
+
+            // 3. Update the booking status to officially "Cancelled"
+            booking.Status = "Cancelled";
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Refund for Booking ID {booking.BookingID} has been approved and processed.";
+            return RedirectToAction(nameof(ManageRefunds));
+        }
     }
-
-
-
-
-
-
-
-
-
-}
+   }
 
