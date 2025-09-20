@@ -1,5 +1,13 @@
+* --- Global & Base Styles --- */
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+body, html {
+    height: 100%;
+    margin-bottom: 60px; /* Space for the footer */
 }
 
 @media (min-width: 768px) {
@@ -7,6 +15,7 @@ html {
         font-size: 16px;
     }
 }
+
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -90,6 +99,9 @@ table.compact-table th {
     max-width: 60px;
 }
 
+
+
+
 .badge {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -101,6 +113,7 @@ table.compact-table th {
     border: 1px solid #bbb;
     border-radius: 4px;
 }
+
 
 
 
@@ -192,12 +205,13 @@ table.compact-table th {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
     border-radius: 1rem; /* Softer corners */
-    overflow: hidden;
-}
 
-    .car-card:hover {
+}
+.car-card:hover {
+
         transform: translateY(-10px); /* Lifts the card on hover */
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+
     }
 
 .car-img {
@@ -217,6 +231,7 @@ table.compact-table th {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     object-fit: contain;
 }
+
 
 /* Animation utility: hide elements until they are ready to be animated */
 .wow {
@@ -278,4 +293,5 @@ table.compact-table th {
     font-size: 1.25rem;
     max-width: 600px;
     margin: 0 auto; /* Centers the paragraph */
+
 }
