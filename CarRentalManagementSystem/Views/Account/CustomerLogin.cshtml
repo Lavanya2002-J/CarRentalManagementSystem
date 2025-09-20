@@ -19,13 +19,23 @@
                         UnicomTIC Travels
                     </h1>
                 </div>
-               
+
                 <div class="login-header text-center">
                     <h2 class="h2 mb-4">Login In to Your Account</h2>
                 </div>
                 <div id="live-datetime" class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
                 </div>
 
+                @* --- THIS BLOCK IS THE ONLY ADDITION --- *@
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                }
+                @* --- END OF ADDITION --- *@
 
                 <form asp-action="CustomerLogin" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -84,7 +94,7 @@
                 hour: 'numeric',      // e.g., "1"
                 minute: 'numeric',    // e.g., "50"
                 second: 'numeric',    // e.g., "30"
-                hour12: true,       // Use 12-hour format (AM/PM)
+                hour12: true,         // Use 12-hour format (AM/PM)
                 timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
                 timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
             };
