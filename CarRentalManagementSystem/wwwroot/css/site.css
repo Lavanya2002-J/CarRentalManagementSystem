@@ -1,20 +1,29 @@
+* --- Global & Base Styles --- */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+body, html {
+    height: 100%;
+    margin-bottom: 60px; /* Space for the footer */
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 
@@ -41,10 +50,10 @@ footer {
     transition: all 0.3s ease;
 }
 
-.car-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
+    .car-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
 
 .car-img {
     height: 220px;
@@ -60,11 +69,13 @@ footer {
     padding: 5px;
     border-radius: 8px;
 }
+
 .text-gradient {
     background: linear-gradient(90deg, #007bff, #6610f2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 .text-gradient {
     background: linear-gradient(90deg, #007bff, #6610f2);
     -webkit-background-clip: text;
@@ -88,6 +99,9 @@ table.compact-table th {
     max-width: 60px;
 }
 
+
+
+
 .badge {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -102,10 +116,12 @@ table.compact-table th {
 
 
 
+
 .btn-gradient-primary:hover {
     background: linear-gradient(45deg, #0056b3, #00aaff) !important;
     color: #fff;
 }
+
 .table img {
     width: 100px;
     height: 60px;
@@ -125,17 +141,17 @@ table.compact-table th {
     background-attachment: fixed;
 }
 
-.hero-section h1 {
-    font-weight: 700;
-    font-size: 3.5rem;
-}
+    .hero-section h1 {
+        font-weight: 700;
+        font-size: 3.5rem;
+    }
 
-.hero-section p {
-    font-size: 1.25rem;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-}
+    .hero-section p {
+        font-size: 1.25rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
 /* Style adjustments for the search card */
 .search-card {
@@ -189,12 +205,13 @@ table.compact-table th {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
     border-radius: 1rem; /* Softer corners */
-    overflow: hidden;
-}
 
-    .car-card:hover {
+}
+.car-card:hover {
+
         transform: translateY(-10px); /* Lifts the card on hover */
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+
     }
 
 .car-img {
@@ -214,6 +231,7 @@ table.compact-table th {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     object-fit: contain;
 }
+
 
 /* Animation utility: hide elements until they are ready to be animated */
 .wow {
@@ -275,8 +293,5 @@ table.compact-table th {
     font-size: 1.25rem;
     max-width: 600px;
     margin: 0 auto; /* Centers the paragraph */
+
 }
-
-
-
-
