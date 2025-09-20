@@ -42,10 +42,22 @@ namespace CarRentalManagementSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public IActionResult Create(CarViewModel viewModel) 
+
+        public IActionResult Create(CarViewModel viewModel)
         {
             if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
+            var RegistrationNumber = (_context.Cars.Any(a => a.RegistrationNumber == viewModel.RegistrationNumber));
+            if (RegistrationNumber)
+            {
+                ModelState.AddModelError("RegistrationNumber", "This Registration Number already exists.");
+                return View(viewModel);
+            }
+            var InsurancePolicyNo = (_context.Cars.Any(a => a.InsurancePolicyNo == viewModel.InsurancePolicyNo));
+            if (InsurancePolicyNo)
+            {
+                ModelState.AddModelError("InsurancePolicyNo", "This Insurance Policy Number already exists.");
+                return View(viewModel);
+            }
 
             try
             {
@@ -60,14 +72,14 @@ namespace CarRentalManagementSystem.Controllers
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    if (viewModel.LogoFile != null) 
+                    if (viewModel.LogoFile != null)
                     {
                         logoFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.LogoFile.FileName);
                         string logoPath = Path.Combine(uploadsFolder, logoFileName);
                         using (var fs = new FileStream(logoPath, FileMode.Create)) { viewModel.LogoFile.CopyTo(fs); }
                     }
 
-                    if (viewModel.CarImageFile != null) 
+                    if (viewModel.CarImageFile != null)
                     {
                         imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.CarImageFile.FileName);
                         string imagePath = Path.Combine(uploadsFolder, imageFileName);
@@ -105,7 +117,7 @@ namespace CarRentalManagementSystem.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "An error occurred: " + ex.Message);
-                return View(viewModel); 
+                return View(viewModel);
             }
         }
 
@@ -141,17 +153,17 @@ namespace CarRentalManagementSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public IActionResult Edit(CarViewModel viewModel) 
+
+        public IActionResult Edit(CarViewModel viewModel)
         {
             if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             if (ModelState.IsValid)
             {
-                var car = _context.Cars.FirstOrDefault(c => c.CarID == viewModel.CarID); 
+                var car = _context.Cars.FirstOrDefault(c => c.CarID == viewModel.CarID);
                 if (car == null) return NotFound();
 
-                car.CarName = viewModel.CarName; 
+                car.CarName = viewModel.CarName;
                 car.Model = viewModel.Model;
                 car.FuelType = viewModel.FuelType;
                 car.Transmission = viewModel.Transmission;
@@ -165,13 +177,13 @@ namespace CarRentalManagementSystem.Controllers
                 car.InsurancePolicyNo = viewModel.InsurancePolicyNo;
                 car.InsuranceExpiryDate = viewModel.InsuranceExpiryDate;
 
-                
+
 
 
 
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
-                if (viewModel.LogoFile != null) 
+                if (viewModel.LogoFile != null)
                 {
                     if (!string.IsNullOrEmpty(car.LogoFileName))
                     {
@@ -183,7 +195,7 @@ namespace CarRentalManagementSystem.Controllers
                     using (var fs = new FileStream(logoPath, FileMode.Create)) { viewModel.LogoFile.CopyTo(fs); }
                 }
 
-                if (viewModel.CarImageFile != null) 
+                if (viewModel.CarImageFile != null)
                 {
                     if (!string.IsNullOrEmpty(car.CarImageFileName))
                     {
@@ -201,7 +213,7 @@ namespace CarRentalManagementSystem.Controllers
                 TempData["Success"] = "Car updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(viewModel); 
+            return View(viewModel);
         }
 
         // GET: Car/Delete/{id}

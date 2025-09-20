@@ -1,6 +1,6 @@
 ﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
-using CarRentalManagementSystem.ViewModels; 
+using CarRentalManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +61,7 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
+
 
         // POST: Booking/Create
         [HttpPost]
@@ -142,7 +143,6 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
-
 
 
         // GET: Booking/History
@@ -246,6 +246,20 @@ namespace CarRentalManagementSystem.Controllers
                 return NotFound();
             }
 
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+
+
+            return View(booking);
+        }
+        public async Task<IActionResult> ViewAllBookings()
+        {
+            // Role-based access check
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+
             // --- NEW: Fetches all payments (including refunds) for this booking ---
             var payments = await _context.Payments
                 .Where(p => p.BookingID == id)
@@ -275,7 +289,7 @@ namespace CarRentalManagementSystem.Controllers
             // Ensure the user is a logged-in customer
             if (!IsCustomer())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerId = HttpContext.Session.GetInt32("UserID").Value;
@@ -310,7 +324,7 @@ namespace CarRentalManagementSystem.Controllers
             // Ensure the user is a logged-in customer
             if (!IsCustomer())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerId = HttpContext.Session.GetInt32("UserID").Value;
@@ -342,13 +356,13 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (!IsAdmin())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("AdminLogin", "Account");
             }
 
             var viewModel = new AdminBookingViewModel
             {
                 Customers = await _context.Customers
-                    .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
+                    .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.mail + ")" })
                     .ToListAsync(),
 
                 Cars = await _context.Cars
@@ -367,7 +381,7 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (!IsAdmin())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("AdminLogin", "Account");
             }
 
             if (viewModel.ReturnDate <= viewModel.PickupDate)
@@ -424,7 +438,7 @@ namespace CarRentalManagementSystem.Controllers
 
             // If the form is invalid, re-populate the dropdown lists before showing the page again
             viewModel.Customers = await _context.Customers
-                .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
+                .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.mail + ")" })
                 .ToListAsync();
             viewModel.Cars = await _context.Cars
                 .Where(c => c.IsAvailable == true)
