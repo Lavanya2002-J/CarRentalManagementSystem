@@ -28,10 +28,6 @@ namespace CarRentalManagementSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -45,6 +41,10 @@ namespace CarRentalManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("AdminID");
 
                     b.ToTable("Admins");
@@ -53,10 +53,10 @@ namespace CarRentalManagementSystem.Migrations
                         new
                         {
                             AdminID = new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"),
-                            Email = "admin@carental.com",
                             Name = "Administrator",
                             Password = "Admin@123",
-                            Username = "Admin"
+                            Username = "Admin",
+                            mail = "admin@carental.com"
                         });
                 });
 
@@ -77,8 +77,14 @@ namespace CarRentalManagementSystem.Migrations
                     b.Property<DateTime>("PickupDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("PickupEmailSent")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("ReturnEmailSent")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -182,9 +188,8 @@ namespace CarRentalManagementSystem.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LicenseNo")
                         .IsRequired()
@@ -199,6 +204,12 @@ namespace CarRentalManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpires")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -208,9 +219,63 @@ namespace CarRentalManagementSystem.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("VerificationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("VerificationTokenExpires")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CustomerID");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("CarRentalManagementSystem.Models.Feedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("CarID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FeedBack")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ratings")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Feedbacks");
+                });
+
+            modelBuilder.Entity("CarRentalManagementSystem.Models.GmailSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppPassword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GmailSettings");
                 });
 
             modelBuilder.Entity("CarRentalManagementSystem.Models.Payment", b =>

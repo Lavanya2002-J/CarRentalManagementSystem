@@ -16,15 +16,15 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-        
+
         // GET: Payment or /Payment/Index
         public async Task<IActionResult> Index()
         {
-            
+
             var payments = await _context.Payments
                                          .OrderByDescending(p => p.PaymentDate)
                                          .ToListAsync();
-            return View(payments); 
+            return View(payments);
         }
 
         // GET: Payment/Create
@@ -32,6 +32,7 @@ namespace CarRentalManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int bookingId, decimal amount)
         {
+
             var booking = await _context.Bookings
                                         .Include(b => b.Car)
                                         .FirstOrDefaultAsync(b => b.BookingID == bookingId);
@@ -48,9 +49,8 @@ namespace CarRentalManagementSystem.Controllers
                 ReturnDate = booking.ReturnDate,
                 PaymentMethods = new List<SelectListItem>
                 {
-                    // Dropdown-kaana options
-                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
-                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" }
+
                 }
             };
             return View(viewModel);
@@ -61,18 +61,6 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PaymentViewModel viewModel)
         {
-            // Payment method "Credit Card" aaga irunthu, card details thevai-naa, ModelState-ah check pannum mun validation rules-ah serkkanum
-            if (viewModel.PaymentMethod == "Credit Card")
-            {
-                if (string.IsNullOrWhiteSpace(viewModel.CardHolderName))
-                    ModelState.AddModelError("CardHolderName", "Cardholder Name is required.");
-                if (string.IsNullOrWhiteSpace(viewModel.CardNumber))
-                    ModelState.AddModelError("CardNumber", "Card Number is required.");
-                if (string.IsNullOrWhiteSpace(viewModel.ExpiryDate))
-                    ModelState.AddModelError("ExpiryDate", "Expiry Date is required.");
-                if (string.IsNullOrWhiteSpace(viewModel.Cvc))
-                    ModelState.AddModelError("Cvc", "CVC is required.");
-            }
 
             if (ModelState.IsValid)
             {
@@ -108,6 +96,8 @@ namespace CarRentalManagementSystem.Controllers
 
                 _context.Payments.Add(newPayment);
                 booking.Status = "Paid";
+
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Success", new { bookingId = booking.BookingID });
@@ -126,17 +116,17 @@ namespace CarRentalManagementSystem.Controllers
             viewModel.PickupDate = bookingForDisplay.PickupDate;
             viewModel.ReturnDate = bookingForDisplay.ReturnDate;
             viewModel.PaymentMethods = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
-                new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
-            };
-            return View("Create", viewModel);
+                {
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" }
+
+                };
+            return View(viewModel);
         }
 
         // GET: Payment/Success
         public async Task<IActionResult> Success(int bookingId)
         {
-           
+
             var booking = await _context.Bookings
                                         .Include(b => b.Car)
                                         .Include(b => b.Customer)
@@ -154,7 +144,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Payment/Confirmation/5
         public async Task<IActionResult> Confirmation(int? id)
         {
-            
+
             if (id == null)
             {
                 return NotFound();
