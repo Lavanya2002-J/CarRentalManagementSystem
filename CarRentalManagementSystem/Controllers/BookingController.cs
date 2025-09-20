@@ -62,7 +62,6 @@ namespace CarRentalManagementSystem.Controllers
             return View(viewModel);
         }
 
-
         // POST: Booking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -145,6 +144,7 @@ namespace CarRentalManagementSystem.Controllers
         }
 
 
+
         // GET: Booking/History
         public async Task<IActionResult> History()
         {
@@ -169,7 +169,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(customerBookings);
         }
 
-        
+
 
         // GET: Booking/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -196,20 +196,6 @@ namespace CarRentalManagementSystem.Controllers
             {
                 return NotFound();
             }
-
-            ViewBag.Username = HttpContext.Session.GetString("Username");
-
-
-            return View(booking);
-        }
-        public async Task<IActionResult> ViewAllBookings()
-        {
-            // Role-based access check
-            if (HttpContext.Session.GetString("Role") != "Admin")
-            {
-                return RedirectToAction("AdminLogin", "Account");
-            }
-
 
             // --- NEW: Fetches all payments (including refunds) for this booking ---
             var payments = await _context.Payments
@@ -265,7 +251,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(booking);
         }
 
-     
+
 
         // POST: Booking/Cancel/5
         [HttpPost, ActionName("Cancel")]
@@ -404,7 +390,7 @@ namespace CarRentalManagementSystem.Controllers
             // Role-based access check
             if (!IsAdmin())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("AdminLogin", "Account");
             }
 
             // Fetch all bookings from the database

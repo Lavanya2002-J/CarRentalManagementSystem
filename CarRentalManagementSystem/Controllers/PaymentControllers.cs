@@ -28,7 +28,6 @@ namespace CarRentalManagementSystem.Controllers
         }
 
         // GET: Payment/Create
-        // GET: Payment/Create
         [HttpGet]
         public async Task<IActionResult> Create(int bookingId, decimal amount)
         {

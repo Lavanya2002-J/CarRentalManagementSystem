@@ -1,6 +1,5 @@
 ﻿
 @model IEnumerable<CarRentalManagementSystem.Models.Booking>
-
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-glass-success">@TempData["SuccessMessage"]</div>
@@ -9,6 +8,10 @@
     {
         <div class="alert alert-glass-danger">@TempData["ErrorMessage"]</div>
     }
+
+
+<link rel="stylesheet" href="~/css/BookingHistory.css" asp-append-version="true" />
+
 
     @if (!Model.Any())
     {
