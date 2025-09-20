@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarRentalManagementSystem.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRentalManagementSystem.ViewModels
 {
@@ -16,6 +17,7 @@ namespace CarRentalManagementSystem.ViewModels
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid Email Address.")]
+        [CustomEmail]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone Number is required.")]
@@ -27,10 +29,12 @@ namespace CarRentalManagementSystem.ViewModels
         public string Address { get; set; }
 
         [Required(ErrorMessage = "NIC is required.")]
+        [CustomNic]
         public string NIC { get; set; }
 
         [Required(ErrorMessage = "License Number is required.")]
         [Display(Name = "License Number")]
+        [CustomLicence]
         public string LicenseNo { get; set; }
 
         // --- Password Change Fields ---
@@ -38,16 +42,19 @@ namespace CarRentalManagementSystem.ViewModels
 
         [DataType(DataType.Password)]
         [Display(Name = "Current Password")]
+        [CustomPassword]
         public string OldPassword { get; set; }
 
         [DataType(DataType.Password)]
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [Display(Name = "New Password")]
+        [CustomPassword]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm New Password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [CustomPassword]
         public string ConfirmNewPassword { get; set; }
     }
 }

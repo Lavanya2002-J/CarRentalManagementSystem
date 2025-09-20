@@ -16,22 +16,22 @@ namespace CarRentalManagementSystem.Controllers
             _context = context;
         }
 
-        
+
         // GET: Payment or /Payment/Index
         public async Task<IActionResult> Index()
         {
-            
+
             var payments = await _context.Payments
                                          .OrderByDescending(p => p.PaymentDate)
                                          .ToListAsync();
-            return View(payments); 
+            return View(payments);
         }
 
         // GET: Payment/Create
         [HttpGet]
         public async Task<IActionResult> Create(int bookingId, decimal amount)
         {
-            
+
             var booking = await _context.Bookings
                                         .Include(b => b.Car)
                                         .FirstOrDefaultAsync(b => b.BookingID == bookingId);
@@ -52,7 +52,7 @@ namespace CarRentalManagementSystem.Controllers
                 PaymentMethods = new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" }
-                   
+
                 }
             };
             return View(viewModel);
@@ -63,7 +63,7 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PaymentViewModel viewModel)
         {
-           
+
             if (ModelState.IsValid)
             {
                 var booking = await _context.Bookings.FindAsync(viewModel.BookingID);
@@ -85,7 +85,7 @@ namespace CarRentalManagementSystem.Controllers
                 _context.Payments.Add(newPayment);
 
                 booking.Status = "Paid";
-                
+
 
                 await _context.SaveChangesAsync();
 
@@ -100,7 +100,7 @@ namespace CarRentalManagementSystem.Controllers
             viewModel.PaymentMethods = new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" }
-                    
+
                 };
             return View(viewModel);
         }
@@ -108,7 +108,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Payment/Success
         public async Task<IActionResult> Success(int bookingId)
         {
-           
+
             var booking = await _context.Bookings
                                         .Include(b => b.Car)
                                         .Include(b => b.Customer)
@@ -126,7 +126,7 @@ namespace CarRentalManagementSystem.Controllers
         // GET: Payment/Confirmation/5
         public async Task<IActionResult> Confirmation(int? id)
         {
-            
+
             if (id == null)
             {
                 return NotFound();

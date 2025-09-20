@@ -14,7 +14,7 @@ namespace CarRentalManagementSystem.Models
 
         [Required]
         [CustomEmail]
-        public string Email { get; set; }
+        public string mail { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -35,7 +35,15 @@ namespace CarRentalManagementSystem.Models
         [Required]
         [CustomLicence]
         public string LicenseNo { get; set; }
-        public ICollection<Booking> Bookings { get; set; } 
+        public ICollection<Booking> Bookings { get; set; }
+        // Email verification
+        public bool IsVerified { get; set; } = false;
+        public string VerificationToken { get; set; }
+        public DateTime? VerificationTokenExpires { get; set; }
+
+        // Forgot password
+        public string PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpires { get; set; }
 
 
 
