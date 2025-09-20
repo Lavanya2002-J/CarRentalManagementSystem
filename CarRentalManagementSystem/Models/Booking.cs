@@ -33,5 +33,7 @@ namespace CarRentalManagementSystem.Models
         // Add navigation properties
         public virtual Customer Customer { get; set; }
         public virtual Car Car { get; set; }
+        public bool ReturnEmailSent { get; set; } = false;
+        public bool PickupEmailSent { get; set; } = false;
     }
 }

@@ -91,19 +91,43 @@ namespace CarRentalManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                bool userExists = _context.Customers.Any(c => c.Username == model.Username || c.Email == model.Email);
+                bool userExists = _context.Admins.Any(a => a.Username == model.Username) || _context.Customers.Any(c => c.Username == model.Username);
                 if (userExists)
                 {
-                    ModelState.AddModelError("", "A customer with this username or email already exists.");
+                    ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
                     return View(model);
                 }
+
+                bool Emailvalid = _context.Admins.Any(a => a.mail == model.Email) || _context.Customers.Any(c => c.mail == model.Email);
+
+
+                if (Emailvalid)
+                {
+                    ModelState.AddModelError("Email", "This email already exists.");
+                    return View(model);
+                }
+                bool NICvalid = _context.Customers.Any(a => a.NIC == model.NIC);
+                if (NICvalid)
+                {
+                    ModelState.AddModelError("NIC", "This NIC already exists.");
+                    return View(model);
+                }
+
+                bool Licvalid = _context.Customers.Any(a => a.LicenseNo == model.LicenseNo);
+                if (Licvalid)
+                {
+                    ModelState.AddModelError("LicenseNo", "This License Number already exists.");
+                    return View(model);
+                }
+
+
 
                 var customer = new Customer
                 {
                     Username = model.Username,
                     Password = model.Password,
                     CustomerName = model.CustomerName,
-                    Email = model.Email,
+                    mail = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
                     NIC = model.NIC,

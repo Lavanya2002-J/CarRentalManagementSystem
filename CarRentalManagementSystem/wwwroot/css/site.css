@@ -1,5 +1,13 @@
+* --- Global & Base Styles --- */
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+body, html {
+    height: 100%;
+    margin-bottom: 60px; /* Space for the footer */
 }
 
 @media (min-width: 768px) {
@@ -7,6 +15,7 @@ html {
         font-size: 16px;
     }
 }
+
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -90,6 +99,9 @@ table.compact-table th {
     max-width: 60px;
 }
 
+
+
+
 .badge {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -101,6 +113,7 @@ table.compact-table th {
     border: 1px solid #bbb;
     border-radius: 4px;
 }
+
 
 
 
@@ -154,7 +167,7 @@ table.compact-table th {
 /* --- NEW: Why Choose Us Section --- */
 .why-choose-us {
     padding: 80px 0;
-    background-color: #f8f9fa; /* A slightly different background to separate it */
+    background-color:white; /* A slightly different background to separate it */
 }
 
 .section-title {
@@ -192,12 +205,13 @@ table.compact-table th {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
     border-radius: 1rem; /* Softer corners */
-    overflow: hidden;
-}
 
-    .car-card:hover {
+}
+.car-card:hover {
+
         transform: translateY(-10px); /* Lifts the card on hover */
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+
     }
 
 .car-img {
@@ -218,6 +232,7 @@ table.compact-table th {
     object-fit: contain;
 }
 
+
 /* Animation utility: hide elements until they are ready to be animated */
 .wow {
     visibility: hidden;
@@ -233,7 +248,7 @@ table.compact-table th {
     position: relative; /* Needed to position the pseudo-element correctly */
     overflow: hidden; /* Hides the parts of the image that zoom outside the box */
     padding: 100px 0;
-    color: white;
+    color:dimgrey;
     text-align: center;
 }
 
@@ -278,4 +293,5 @@ table.compact-table th {
     font-size: 1.25rem;
     max-width: 600px;
     margin: 0 auto; /* Centers the paragraph */
+
 }

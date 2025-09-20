@@ -64,11 +64,11 @@ namespace CarRentalManagementSystem.Controllers
             // --- 3. Best Customers Report (Top 10 by amount spent) ---
             var topCustomers = await _context.Bookings
                 .Where(b => b.Status == "Paid") // Counting confirmed bookings
-                .GroupBy(b => new { b.Customer.CustomerName, b.Customer.Email })
+                .GroupBy(b => new { b.Customer.CustomerName, b.Customer.mail })
                 .Select(g => new TopCustomerViewModel
                 {
                     CustomerName = g.Key.CustomerName,
-                    CustomerEmail = g.Key.Email,
+                    CustomerEmail = g.Key.mail,
                     TotalBookings = g.Count(),
                     TotalSpent = g.Sum(b => b.TotalCost)
                 })
