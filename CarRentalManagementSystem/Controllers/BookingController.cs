@@ -62,7 +62,6 @@ namespace CarRentalManagementSystem.Controllers
             return View(viewModel);
         }
 
-
         // POST: Booking/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -145,6 +144,7 @@ namespace CarRentalManagementSystem.Controllers
         }
 
 
+
         // GET: Booking/History
         public async Task<IActionResult> History()
         {
@@ -169,56 +169,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(customerBookings);
         }
 
-        //// GET: Booking/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    if (!IsCustomer())
-        //    {
-        //        TempData["ErrorMessage"] = "You are not authorized to view this page.";
-        //        return RedirectToAction("CustomerLogin", "Account");
-        //    }
-
-        //    var customerId = HttpContext.Session.GetInt32("UserID").Value;
-
-        //    var booking = await _context.Bookings
-        //        .Include(b => b.Car)
-        //        .Include(b => b.Customer)
-        //        .FirstOrDefaultAsync(b => b.BookingID == id && b.CustomerID == customerId);
-
-        //    if (booking == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewBag.Username = HttpContext.Session.GetString("Username");
-
-
-        //    return View(booking);
-        //}
-        //public async Task<IActionResult> ViewAllBookings()
-        //{
-        //    // Role-based access check
-        //    if (HttpContext.Session.GetString("Role") != "Admin")
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    // Fetch all bookings from the database
-        //    // Use Include() to load related Customer and Car data to avoid extra queries
-        //    var allBookings = await _context.Bookings
-        //        .Include(b => b.Customer)
-        //        .Include(b => b.Car)
-        //        .OrderByDescending(b => b.BookingID) // Show the latest bookings first
-        //        .ToListAsync();
-
-        //    return View(allBookings);
-        //}
-
-        // In Controllers/BookingController.cs
 
         // GET: Booking/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -245,20 +196,6 @@ namespace CarRentalManagementSystem.Controllers
             {
                 return NotFound();
             }
-
-            ViewBag.Username = HttpContext.Session.GetString("Username");
-
-
-            return View(booking);
-        }
-        public async Task<IActionResult> ViewAllBookings()
-        {
-            // Role-based access check
-            if (HttpContext.Session.GetString("Role") != "Admin")
-            {
-                return RedirectToAction("AdminLogin", "Account");
-            }
-
 
             // --- NEW: Fetches all payments (including refunds) for this booking ---
             var payments = await _context.Payments
@@ -314,7 +251,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(booking);
         }
 
-     
+
 
         // POST: Booking/Cancel/5
         [HttpPost, ActionName("Cancel")]
@@ -453,7 +390,7 @@ namespace CarRentalManagementSystem.Controllers
             // Role-based access check
             if (!IsAdmin())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("AdminLogin", "Account");
             }
 
             // Fetch all bookings from the database

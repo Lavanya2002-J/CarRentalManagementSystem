@@ -3,9 +3,17 @@
 @{
     ViewData["Title"] = "Pending Bookings";
 }
+<div>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+<link rel="stylesheet" href="~/css/PendingBookings.css" asp-append-version="true" />
+
 
 <h2>Pending Bookings & In-Person Payments</h2>
 <p>The following bookings were made online and are awaiting payment and pickup.</p>
+
 
 <table class="table table-hover">
     <thead>

@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Add New Customer";
 }
+<div>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+<link rel="stylesheet" href="~/css/AddCustomer.css" asp-append-version="true" />
 
 <div class="container mt-4">
     <h3>Add New Customer</h3>
@@ -71,8 +77,32 @@
     </div>
 </div>
 
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        function previewImage(event, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                preview.style.backgroundImage = `url(${reader.result})`;
+                if (preview.querySelector('span')) {
+                     preview.querySelector('span').style.display = 'none'; // Hide the text
+                }
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.backgroundImage = 'none';
+                if (preview.querySelector('span')) {
+                    preview.querySelector('span').style.display = 'block'; // Show the text
+                }
+            }
+        }
+    </script>
 }
