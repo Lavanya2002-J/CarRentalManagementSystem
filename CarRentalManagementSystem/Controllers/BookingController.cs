@@ -300,64 +300,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(booking);
         }
 
-        //// POST: Booking/Cancel/5
-        //[HttpPost, ActionName("Cancel")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> CancelConfirmed(int id)
-        //{
-        //    // Ensure the user is a logged-in customer
-        //    if (!IsCustomer())
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    var customerId = HttpContext.Session.GetInt32("UserID").Value;
-
-        //    var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.BookingID == id && b.CustomerID == customerId);
-
-        //    if (booking == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    // --- START: Added Refund Logic ---
-
-        //    // Check if the booking's status was "Paid" to process a refund.
-        //    if (booking.Status == "Paid")
-        //    {
-        //        // Create a new payment transaction for the refund with a negative amount.
-        //        // This ensures the revenue reports are automatically correct.
-        //        var refundPayment = new Payment
-        //        {
-        //            BookingID = booking.BookingID,
-        //            Amount = -booking.TotalCost, // The amount is negative.
-        //            PaymentDate = DateTime.Now,
-        //            PaymentMethod = "System Refund",
-        //            PaymentStatus = "Completed", // Status is 'Completed' so SUM queries process it correctly.
-        //            TransactionID = $"REF-{DateTime.UtcNow.Ticks}" // Generate a unique refund transaction ID.
-        //        };
-        //        _context.Payments.Add(refundPayment);
-        //    }
-        //    // --- END: Added Refund Logic ---
-
-        //    var car = await _context.Cars.FindAsync(booking.CarID);
-        //    if (car == null)
-        //    {
-        //        TempData["ErrorMessage"] = "Could not find the associated car.";
-        //        return RedirectToAction(nameof(History));
-        //    }
-
-        //    // Update original statuses
-        //    booking.Status = "Cancelled";
-        //    car.IsAvailable = true;
-
-        //    // Save all changes: the booking, the car, and the new refund payment (if any)
-        //    await _context.SaveChangesAsync();
-
-        //    // Update the success message to reflect the refund.
-        //    TempData["SuccessMessage"] = "Your booking has been successfully cancelled and refunded.";
-        //    return RedirectToAction(nameof(History));
-        //}
+     
 
         // POST: Booking/Cancel/5
         [HttpPost, ActionName("Cancel")]
