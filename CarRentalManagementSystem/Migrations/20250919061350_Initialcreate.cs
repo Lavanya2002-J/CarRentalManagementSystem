@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initialcreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace CarRentalManagementSystem.Migrations
                 {
                     AdminID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -59,17 +59,52 @@ namespace CarRentalManagementSystem.Migrations
                     CustomerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     NIC = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LicenseNo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LicenseNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    VerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VerificationTokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PasswordResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordResetTokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.CustomerID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
+                    CarID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Ratings = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feedbacks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GmailSettings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppPassword = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GmailSettings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,7 +118,9 @@ namespace CarRentalManagementSystem.Migrations
                     PickupDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ReturnEmailSent = table.Column<bool>(type: "bit", nullable: false),
+                    PickupEmailSent = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,8 +165,8 @@ namespace CarRentalManagementSystem.Migrations
 
             migrationBuilder.InsertData(
                 table: "Admins",
-                columns: new[] { "AdminID", "Email", "Name", "Password", "Username" },
-                values: new object[] { new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"), "admin@carental.com", "Administrator", "Admin@123", "Admin" });
+                columns: new[] { "AdminID", "Name", "Password", "Username", "mail" },
+                values: new object[] { new Guid("e82b713c-997c-4e9a-b71c-289a4281ae80"), "Administrator", "Admin@123", "Admin", "admin@carental.com" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CarID",
@@ -152,6 +189,12 @@ namespace CarRentalManagementSystem.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "Feedbacks");
+
+            migrationBuilder.DropTable(
+                name: "GmailSettings");
 
             migrationBuilder.DropTable(
                 name: "Payments");

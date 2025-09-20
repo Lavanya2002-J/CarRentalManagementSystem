@@ -1,0 +1,34 @@
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
+
+<h2>Rentals</h2>
+
+<p><a asp-action="SendReminders" class="btn btn-warning">Send Today's Reminders</a></p>
+<p><a asp-action="SendPickup" class="btn btn-warning">Ethu Car Book panaika </a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Return Date</th>
+            <th>Pickup Date</th>
+            <th>Email Return</th>
+            <th>Email Pickup</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Customer.CustomerName</td>   <!-- from Customer model -->
+                <td>@r.Customer.mail</td> <!-- from Customer model -->
+                <td>@r.ReturnDate.ToString("yyyy-MM-dd")</td>
+                <td>@r.PickupDate.ToString("yyyy-MM-dd")</td>
+                <td>@(r.ReturnEmailSent ? "Yes" : "No")</td>
+                <td>@(r.PickupEmailSent ? "Yes" : "No") </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
