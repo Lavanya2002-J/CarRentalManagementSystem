@@ -1,7 +1,18 @@
-﻿@model CarRentalManagementSystem.Models.Booking
+﻿@model CarRentalManagementSystem.ViewModels.BookingDetailsViewModel
 
 @{
     ViewData["Title"] = "Booking Details";
+    // Helper to determine the badge class based on booking status
+    Func<string, string> getStatusBadgeClass = (status) =>
+    {
+        return status switch
+        {
+            "Paid" => "bg-success-subtle text-success-emphasis border-success-subtle",
+            "Cancelled" => "bg-danger-subtle text-danger-emphasis border-danger-subtle",
+            "Pending" => "bg-warning-subtle text-warning-emphasis border-warning-subtle",
+            _ => "bg-secondary-subtle text-secondary-emphasis border-secondary-subtle"
+        };
+    };
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -10,45 +21,91 @@
 <div class="container my-5">
     <div class="page-header mb-4">
         <h2 class="fw-bold"><i class="bi bi-receipt me-2" style="color: #00d9ff;"></i>Booking Details</h2>
-        <p>A summary of your booking. It is now 5:07 AM on Friday in Sri Lanka.</p>
+        <p>A summary of your booking. It is now 9:16 PM on Friday in Sri Lanka.</p>
     </div>
 
     <div class="card glass-panel rounded-3 overflow-hidden">
         <div class="panel-header p-3">
-            <h4 class="mb-0">Booking ID: @Model.BookingID</h4>
+            <h4 class="mb-0">Booking ID: @Model.Booking.BookingID</h4>
         </div>
         <div class="card-body p-4 p-md-5">
-            <div class="row">
-                <div class="col-md-6 details-section">
-                    <h5><i class="bi bi-car-front-fill me-2"></i>Car Information</h5>
-                    <dl class="row details-list">
-                        <dt class="col-sm-5"><i class="bi bi-card-heading"></i>Car Name</dt>
-                        <dd class="col-sm-7">@Model.Car.CarName</dd>
-
-                        <dt class="col-sm-5"><i class="bi bi-tag"></i>Model</dt>
-                        <dd class="col-sm-7">@Model.Car.Model</dd>
-                    </dl>
+            <div class="row g-5">
+                <div class="col-lg-5 d-flex align-items-center justify-content-center">
+                    <img src="~/uploads/@Model.Booking.Car.CarImageFileName"
+                         alt="Image of @Model.Booking.Car.CarName"
+                         class="img-fluid rounded-3 shadow-lg"
+                         style="max-height: 300px; object-fit: cover;" />
                 </div>
-                <div class="col-md-6 details-section mt-4 mt-md-0">
-                    <h5><i class="bi bi-journal-text me-2"></i>Booking Information</h5>
-                    <dl class="row details-list">
-                        <dt class="col-sm-5"><i class="bi bi-person-circle"></i>Customer</dt>
-                        <dd class="col-sm-7">@Model.Customer.CustomerName</dd>
+                <div class="col-lg-7">
+                    <div class="row">
+                        <div class="col-12 details-section">
+                            <h5><i class="bi bi-car-front-fill me-2"></i>Car Information</h5>
+                            <dl class="row details-list">
+                                <dt class="col-sm-5"><i class="bi bi-card-heading"></i>Car Name</dt>
+                                <dd class="col-sm-7">@Model.Booking.Car.CarName</dd>
 
-                        <dt class="col-sm-5"><i class="bi bi-calendar-arrow-right"></i>Pickup Date</dt>
-                        <dd class="col-sm-7">@Model.PickupDate.ToString("yyyy-MM-dd")</dd>
+                                <dt class="col-sm-5"><i class="bi bi-tag"></i>Model</dt>
+                                <dd class="col-sm-7">@Model.Booking.Car.Model</dd>
+                            </dl>
+                        </div>
+                        <div class="col-12 details-section mt-4">
+                            <h5><i class="bi bi-journal-text me-2"></i>Booking Information</h5>
+                            <dl class="row details-list">
+                                <dt class="col-sm-5"><i class="bi bi-person-circle"></i>Customer</dt>
+                                <dd class="col-sm-7">@Model.Booking.Customer.CustomerName</dd>
 
-                        <dt class="col-sm-5"><i class="bi bi-calendar-arrow-left"></i>Return Date</dt>
-                        <dd class="col-sm-7">@Model.ReturnDate.ToString("yyyy-MM-dd")</dd>
+                                <dt class="col-sm-5"><i class="bi bi-calendar-arrow-right"></i>Pickup Date</dt>
+                                <dd class="col-sm-7">@Model.Booking.PickupDate.ToString("yyyy-MM-dd")</dd>
 
-                        <dt class="col-sm-5"><i class="bi bi-wallet2"></i>Total Cost</dt>
-                        <dd class="col-sm-7 text-success">LKR @Model.TotalCost.ToString("N2")</dd>
+                                <dt class="col-sm-5"><i class="bi bi-calendar-arrow-left"></i>Return Date</dt>
+                                <dd class="col-sm-7">@Model.Booking.ReturnDate.ToString("yyyy-MM-dd")</dd>
 
-                        <dt class="col-sm-5"><i class="bi bi-check2-circle"></i>Status</dt>
-                        <dd class="col-sm-7">
-                            <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">@Model.Status</span>
-                        </dd>
-                    </dl>
+                                <dt class="col-sm-5"><i class="bi bi-wallet2"></i>Total Cost</dt>
+                                <dd class="col-sm-7 text-primary fw-bold">LKR @Model.Booking.TotalCost.ToString("N2")</dd>
+
+                                <dt class="col-sm-5"><i class="bi bi-check2-circle"></i>Status</dt>
+                                <dd class="col-sm-7">
+                                    <span class="badge @getStatusBadgeClass(Model.Booking.Status)">@Model.Booking.Status</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="transaction-section">
+                <h5><i class="bi bi-credit-card-2-front me-2"></i>Transaction History</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover mt-3">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var payment in Model.Payments)
+                            {
+                                <tr>
+                                    <td>@payment.PaymentDate.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@payment.PaymentMethod</td>
+                                    <td class="text-end">
+                                        @if (payment.Amount < 0)
+                                        {
+                                            <span class="text-danger fw-bold">LKR @payment.Amount.ToString("N2")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">LKR @payment.Amount.ToString("N2")</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
