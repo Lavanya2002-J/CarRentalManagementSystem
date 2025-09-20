@@ -271,6 +271,70 @@ namespace CarRentalManagementSystem.Controllers
             TempData["SuccessMessage"] = $"Refund for Booking ID {booking.BookingID} has been approved and processed.";
             return RedirectToAction(nameof(ManageRefunds));
         }
+
+        // In Controllers/AdminController.cs
+
+        // GET: /Admin/PendingBookings
+        public async Task<IActionResult> PendingBookings()
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            // Fetch all bookings with a "Pending" status
+            var pendingBookings = await _context.Bookings
+                .Where(b => b.Status == "Pending")
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .OrderBy(b => b.PickupDate)
+                .ToListAsync();
+
+            return View(pendingBookings);
+        }
+
+        // In Controllers/AdminController.cs
+
+        // POST: /Admin/ConfirmInPersonPayment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmInPersonPayment(int bookingId)
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            var booking = await _context.Bookings.FindAsync(bookingId);
+            if (booking == null || booking.Status != "Pending")
+            {
+                TempData["ErrorMessage"] = "Booking not found or is no longer pending.";
+                return RedirectToAction(nameof(PendingBookings));
+            }
+
+            // 1. Create a new payment record for the cash payment
+            var cashPayment = new Payment
+            {
+                BookingID = booking.BookingID,
+                Amount = booking.TotalCost,
+                PaymentDate = DateTime.Now,
+                PaymentMethod = "Cash at Desk", // Or "In-Person Payment"
+                PaymentStatus = "Completed",
+                TransactionID = $"CSH-{DateTime.UtcNow.Ticks}"
+            };
+            _context.Payments.Add(cashPayment);
+
+            // 2. Update the booking status to "Paid"
+            booking.Status = "Paid";
+
+            // Note: The car is already marked as unavailable when a booking
+            // is pending, so we don't need to change its status here.
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Payment for Booking ID {booking.BookingID} has been confirmed.";
+            return RedirectToAction(nameof(PendingBookings));
+        }
     }
    }
 
