@@ -28,6 +28,7 @@ namespace CarRentalManagementSystem.Controllers
         }
 
         // GET: Payment/Create
+        // GET: Payment/Create
         [HttpGet]
         public async Task<IActionResult> Create(int bookingId, decimal amount)
         {
@@ -36,10 +37,7 @@ namespace CarRentalManagementSystem.Controllers
                                         .Include(b => b.Car)
                                         .FirstOrDefaultAsync(b => b.BookingID == bookingId);
 
-            if (booking == null)
-            {
-                return NotFound("Booking not found.");
-            }
+            if (booking == null) return NotFound("Booking not found.");
 
             var viewModel = new PaymentViewModel
             {
@@ -69,6 +67,20 @@ namespace CarRentalManagementSystem.Controllers
                 var booking = await _context.Bookings.FindAsync(viewModel.BookingID);
                 if (booking == null) return NotFound();
 
+                // Payment method-ai poruthu logic-ah pirikkavum
+                if (viewModel.PaymentMethod == "Credit Card")
+                {
+                    // Dummy validation: Oru test card number-ah mattum fail aakkalam
+                    if (viewModel.CardNumber.EndsWith("0000"))
+                    {
+                        ModelState.AddModelError("", "Your card was declined. Please try a different card.");
+                        // Error iruppathal, view-ku thirumba pogum mun display properties-ah load pannunga
+                        return await PrepareViewModelForError(viewModel);
+                    }
+                    // Vetrigaramaaga "process" aanathaaga karuthikkollavum
+                }
+
+                // --- Common Logic for both Cash and successful Card payment ---
                 var car = await _context.Cars.FindAsync(booking.CarID);
                 if (car == null) return NotFound();
 
@@ -83,7 +95,6 @@ namespace CarRentalManagementSystem.Controllers
                 };
 
                 _context.Payments.Add(newPayment);
-
                 booking.Status = "Paid";
 
 
@@ -92,6 +103,13 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("Success", new { bookingId = booking.BookingID });
             }
 
+            // ModelState valid illai-naa, view-ku thirumba pogum mun display properties-ah load pannunga
+            return await PrepareViewModelForError(viewModel);
+        }
+
+        // Oru chinna helper method, code-ah repeat seiyaamal irukka
+        private async Task<IActionResult> PrepareViewModelForError(PaymentViewModel viewModel)
+        {
             var bookingForDisplay = await _context.Bookings.Include(b => b.Car).FirstOrDefaultAsync(b => b.BookingID == viewModel.BookingID);
             viewModel.CarName = bookingForDisplay.Car.CarName;
             viewModel.CarModel = bookingForDisplay.Car.Model;

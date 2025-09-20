@@ -34,19 +34,19 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("CustomerLogin", "Account");
             }
 
+            // Fetch the car
             var car = await _context.Cars.FindAsync(carId);
             if (car == null)
-            {
                 return NotFound();
-            }
 
-            if (car.IsAvailable != true)
+            // Global availability check (maintenance or removed car)
+            if (!car.IsAvailable)
             {
                 TempData["ErrorMessage"] = "This car is no longer available for booking.";
                 return RedirectToAction("Index", "Home");
             }
 
-            // Create and populate the ViewModel instead of using ViewBag
+            // Prepare ViewModel
             var viewModel = new BookingViewModel
             {
                 CarID = car.CarID,
@@ -74,40 +74,48 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("CustomerLogin", "Account");
             }
 
-            // --- BUG FIX STARTS HERE ---
-
-            // 1. Find the car first. This is a prerequisite for any further action.
+            // Fetch the car
             var car = await _context.Cars.FindAsync(viewModel.CarID);
             if (car == null)
-            {
-                // If the car doesn't exist, we cannot proceed.
-                // Returning NotFound() is a standard and secure practice.
                 return NotFound();
-            }
 
-            // Now that we have the car, we can check its availability.
-            if (car.IsAvailable != true)
-            {
-                TempData["ErrorMessage"] = "Sorry, this car was booked by another user while you were deciding. Please choose another car.";
-                return RedirectToAction("Index", "Home");
-            }
-
-            // --- Additional Server-side Validation ---
+            // Server-side validation
             if (viewModel.PickupDate < DateTime.Today)
-            {
                 ModelState.AddModelError("PickupDate", "Pickup date cannot be in the past.");
-            }
 
             if (viewModel.ReturnDate <= viewModel.PickupDate)
-            {
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
+
+            // Check for overlapping bookings
+            bool hasOverlap = await _context.Bookings.AnyAsync(b =>
+                b.CarID == viewModel.CarID &&
+                (b.Status == "Paid" || b.Status == "Pending") &&
+                b.PickupDate < viewModel.ReturnDate &&
+                b.ReturnDate > viewModel.PickupDate);
+
+            if (hasOverlap)
+            {
+                ModelState.AddModelError("", "Sorry, this car is already booked for the selected dates.");
+
+                // Re-populate car details in ViewModel
+                viewModel.CarName = car.CarName;
+                viewModel.CarModel = car.Model;
+                viewModel.DailyRate = car.DailyRate;
+                viewModel.CarImageFileName = car.CarImageFileName;
+                viewModel.Seats = car.Seats;
+                viewModel.FuelType = car.FuelType;
+                viewModel.Transmission = car.Transmission;
+
+                return View(viewModel); // Stay on Booking page
             }
 
             if (ModelState.IsValid)
             {
+                // Calculate rental days
                 var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
                 if (rentalDays <= 0) rentalDays = 1;
 
+                // Create new booking
                 var newBooking = new Booking
                 {
                     CarID = viewModel.CarID,
@@ -124,8 +132,7 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("Create", "Payment", new { bookingId = newBooking.BookingID });
             }
 
-            // If the model is NOT valid, re-populate the view model's display properties.
-            // Because we fetched 'car' at the very beginning, it is always available here.
+            // Re-populate ViewModel to show in view in case of errors
             viewModel.CarName = car.CarName;
             viewModel.CarModel = car.Model;
             viewModel.DailyRate = car.DailyRate;
@@ -134,7 +141,7 @@ namespace CarRentalManagementSystem.Controllers
             viewModel.FuelType = car.FuelType;
             viewModel.Transmission = car.Transmission;
 
-            return View(viewModel); // Return the view with car details and validation errors
+            return View(viewModel);
         }
 
 
