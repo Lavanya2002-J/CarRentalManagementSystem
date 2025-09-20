@@ -16,28 +16,91 @@ body, html {
     }
 }
 
-/* --- Utility Classes & Components --- */
-.text-gradient {
-    background: linear-gradient(90deg, #0d6efd, #0dcaf0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-.btn-gradient-primary {
-    background: linear-gradient(45deg, #0d6efd, #0dcaf0);
-    border: none;
-    color: white;
-    font-weight: 600;
+html {
+    position: relative;
+    min-height: 100%;
 }
 
-    .btn-gradient-primary:hover {
-        background: linear-gradient(45deg, #0056b3, #00aaff);
-        color: #fff;
+
+
+body, html {
+    height: 100%;
+    margin-bottom: 60px;
+}
+
+
+.main-content {
+    min-height: calc(100vh - 100px); /* 100px = footer height */
+    padding-bottom: 20px; /* Optional extra space */
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.car-card {
+    transition: all 0.3s ease;
+}
+
+    .car-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
+
+.car-img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.car-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+table.compact-table td,
+table.compact-table th {
+    padding: 6px 10px !important;
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+.compact-table .btn-sm {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+}
+
+.compact-table img {
+    max-height: 40px;
+    max-width: 60px;
+}
+
+
+
 
 .badge {
     font-size: 0.75rem;
@@ -51,70 +114,48 @@ body, html {
     border-radius: 4px;
 }
 
-.wow {
-    visibility: hidden;
+
+
+
+.btn-gradient-primary:hover {
+    background: linear-gradient(45deg, #0056b3, #00aaff) !important;
+    color: #fff;
 }
 
-/* --- Layout --- */
-.main-content {
-    min-height: calc(100vh - 100px); /* 100px = header + footer height */
-    padding-bottom: 20px;
+.table img {
+    width: 100px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-/* --- Hero Section --- */
+/* Hero Section with Background Image */
 .hero-section {
     position: relative;
-    padding: 100px 0;
-    color: white;
+    padding: 120px 0;
     text-align: center;
-    overflow: hidden;
+    color: white;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1533106478329-188b0a19545d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1740');
-        background-size: cover;
-        background-position: center;
-        z-index: -1;
-        animation: zoomAndPan 25s infinite alternate;
+    .hero-section h1 {
+        font-weight: 700;
+        font-size: 3.5rem;
     }
 
-@keyframes zoomAndPan {
-    from {
-        transform: scale(1.0);
+    .hero-section p {
+        font-size: 1.25rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    to {
-        transform: scale(1.15);
-    }
-}
-
-.hero-section h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-}
-
-.hero-section p {
-    font-size: 1.25rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* --- Search Card --- */
+/* Style adjustments for the search card */
 .search-card {
-    margin-top: -50px;
+    margin-top: -50px; /* Pulls the card up slightly over the hero image */
     z-index: 10;
     position: relative;
     border: none;
@@ -123,10 +164,10 @@ footer {
     background-color: rgba(255, 255, 255, 0.85);
 }
 
-/* --- Why Choose Us Section --- */
+/* --- NEW: Why Choose Us Section --- */
 .why-choose-us {
     padding: 80px 0;
-    background-color: #f8f9fa;
+    background-color: #f8f9fa; /* A slightly different background to separate it */
 }
 
 .section-title {
@@ -152,22 +193,25 @@ footer {
 
 .feature-icon {
     font-size: 3rem;
-    color: #0d6efd;
+    color: #0d6efd; /* Bootstrap primary color */
     margin-bottom: 20px;
     display: inline-block;
 }
+/* --- End of NEW CSS --- */
 
-/* --- Car Cards --- */
+
+/* Car Card enhancements */
 .car-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
-    border-radius: 1rem;
-    overflow: hidden;
-}
+    border-radius: 1rem; /* Softer corners */
 
-    .car-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+.car-card:hover {
+
+        transform: translateY(-10px); /* Lifts the card on hover */
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+
     }
 
 .car-img {
@@ -188,23 +232,66 @@ footer {
     object-fit: contain;
 }
 
-/* --- Table Styles --- */
-table.compact-table td, table.compact-table th {
-    padding: 6px 10px !important;
-    font-size: 0.85rem;
-    vertical-align: middle;
+
+/* Animation utility: hide elements until they are ready to be animated */
+.wow {
+    visibility: hidden;
 }
 
-.compact-table .btn-sm {
-    padding: 3px 8px;
-    font-size: 0.75rem;
+.text-gradient {
+    background: -webkit-linear-gradient(45deg, #0d6efd, #0dcaf0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+/* --- Style for the Hero Section --- */
+.hero-section {
+    position: relative; /* Needed to position the pseudo-element correctly */
+    overflow: hidden; /* Hides the parts of the image that zoom outside the box */
+    padding: 100px 0;
+    color: white;
+    text-align: center;
 }
 
-.compact-table img, .table img {
-    max-height: 40px;
-    max-width: 60px;
-    width: auto; /* Fixes the conflict */
-    height: auto;
-    object-fit: cover;
-    border-radius: 5px;
+    /* We create a pseudo-element to hold and animate the background */
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1740');
+        background-size: cover;
+        background-position: center;
+        z-index: -1; /* Puts the image layer behind your text content */
+        /* Apply the animation here */
+        animation: zoomAndPan 25s infinite alternate;
+    }
+
+/* This defines the animation steps */
+@keyframes zoomAndPan {
+
+
+{
+    transform: scale(1.0); /* Start at normal size */
+}
+
+100% {
+    transform: scale(1.15); /* End 15% zoomed in */
+}
+
+}
+
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Makes text stand out */
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto; /* Centers the paragraph */
+
 }

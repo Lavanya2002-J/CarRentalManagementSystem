@@ -76,3 +76,23 @@ body {
         transform: translateY(0);
     }
 }
+/* --- Optional: Styles for the new transaction table --- */
+.transaction-section .table {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: #e0e0e0;
+}
+
+.transaction-section thead.table-light {
+    background-color: rgba(0, 217, 255, 0.1) !important; /* Matches panel-header */
+    color: #fff;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+}
+
+.transaction-section tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    .transaction-section tbody tr:last-child {
+        border-bottom: none;
+    }
