@@ -9,62 +9,23 @@
 
 
 <div class="container py-4">
-    
-    <h1 class="h2 mb-4">Sign In to Your Account</h1>
-
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
 
             <div class="glass-effect p-4 p-md-5 rounded-3">
                 <div class="glass-effect p-4 p-md-5 rounded-3">
+
                     <h1 class="company-logo text-center">
                         UnicomTIC Travels
                     </h1>
                 </div>
+               
                 <div class="login-header text-center">
-                    <h3>Welcome </h3>
+                    <h2 class="h2 mb-4">Login In to Your Account</h2>
                 </div>
-
-               @*  <div class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
-                    Good Morning! It's a great day to plan a trip in Sri Lanka.
-                </div> *@
                 <div id="live-datetime" class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
                 </div>
 
-                <script>
-                    // This function gets the current time and formats it
-                    function updateLiveTime() {
-                        const dateTimeElement = document.getElementById('live-datetime');
-
-                        // Make sure the element exists before trying to update it
-                        if (dateTimeElement) {
-                            const now = new Date();
-
-                            // Options to format the date and time for Sri Lanka
-                            const options = {
-                                weekday: 'long',    // e.g., "Wednesday"
-                                hour: 'numeric',      // e.g., "1"
-                                minute: 'numeric',    // e.g., "50"
-                                second: 'numeric',    // e.g., "30"
-                                hour12: true,       // Use 12-hour format (AM/PM)
-                                timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
-                                timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
-                            };
-
-                            // Create the formatted string
-                            const formattedDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
-
-                            // Update the HTML content
-                            dateTimeElement.innerHTML = `Good day! It's currently ${formattedDateTime} in Sri Lanka.`;
-                        }
-                    }
-
-                    // Run the function once immediately on page load
-                    updateLiveTime();
-
-                    // Set the function to run every second (1000 milliseconds)
-                    setInterval(updateLiveTime, 1000);
-                </script>
 
                 <form asp-action="CustomerLogin" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -105,6 +66,40 @@
     </div>
 </div>
 
+<script>
+    // This function gets the current time and formats it
+    function updateLiveTime() {
+        const dateTimeElement = document.getElementById('live-datetime');
+
+        // Make sure the element exists before trying to update it
+        if (dateTimeElement) {
+            const now = new Date();
+
+            // Options to format the date and time for Sri Lanka
+            const options = {
+                weekday: 'long',    // e.g., "Wednesday"
+                hour: 'numeric',      // e.g., "1"
+                minute: 'numeric',    // e.g., "50"
+                second: 'numeric',    // e.g., "30"
+                hour12: true,       // Use 12-hour format (AM/PM)
+                timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
+                timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
+            };
+
+            // Create the formatted string
+            const formattedDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
+
+            // Update the HTML content
+            dateTimeElement.innerHTML = `Good day! It's currently ${formattedDateTime} in Sri Lanka.`;
+        }
+    }
+
+    // Run the function once immediately on page load
+    updateLiveTime();
+
+    // Set the function to run every second (1000 milliseconds)
+    setInterval(updateLiveTime, 1000);
+</script>
 @section Scripts {
     @{
         // This section now only includes scripts relevant to this page's form validation.
