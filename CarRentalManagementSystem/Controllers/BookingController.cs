@@ -287,23 +287,24 @@ namespace CarRentalManagementSystem.Controllers
         }
 
 
-
         // GET: Booking/CreateByAdmin
         public async Task<IActionResult> CreateByAdmin()
         {
             if (!IsAdmin())
             {
-                return RedirectToAction("AdminLogin", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
             var viewModel = new AdminBookingViewModel
             {
                 Customers = await _context.Customers
+                    .OrderBy(c => c.CustomerName)
                     .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.mail + ")" })
                     .ToListAsync(),
 
+                // --- CHANGE: The .Where() clause is removed to show all cars ---
                 Cars = await _context.Cars
-                    .Where(car => car.IsAvailable == true)
+                    .OrderBy(c => c.CarName)
                     .Select(car => new SelectListItem { Value = car.CarID.ToString(), Text = car.CarName + " - " + car.Model })
                     .ToListAsync()
             };
@@ -318,25 +319,45 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (!IsAdmin())
             {
-                return RedirectToAction("AdminLogin", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
+            // Server-side validation for dates
             if (viewModel.ReturnDate <= viewModel.PickupDate)
             {
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
             }
 
+            if (viewModel.PickupDate < DateTime.Today)
+            {
+                ModelState.AddModelError("PickupDate", "Pickup date cannot be in the past.");
+            }
+
+            // --- NEW: Dynamic check for overlapping bookings ---
+            bool hasOverlap = await _context.Bookings.AnyAsync(b =>
+                b.CarID == viewModel.CarID &&
+                (b.Status == "Paid" || b.Status == "Pending") && // Check against active bookings
+                b.PickupDate < viewModel.ReturnDate &&
+                b.ReturnDate > viewModel.PickupDate);
+
+            if (hasOverlap)
+            {
+                ModelState.AddModelError("", "This car is already booked for the selected dates. Please choose different dates or another car.");
+            }
+            // --- End of new check ---
+
             if (ModelState.IsValid)
             {
                 var car = await _context.Cars.FindAsync(viewModel.CarID);
-                if (car == null || car.IsAvailable != true)
+                if (car == null)
                 {
-                    TempData["ErrorMessage"] = "The selected car is no longer available.";
+                    // This case should ideally not happen if the form is working correctly
+                    TempData["ErrorMessage"] = "The selected car could not be found.";
                     return RedirectToAction(nameof(CreateByAdmin));
                 }
 
                 var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
-                if (rentalDays <= 0) rentalDays = 1;
+                if (rentalDays <= 0) rentalDays = 1; // Ensure at least one day is charged
 
                 // 1. Create the new booking
                 var newBooking = new Booking
@@ -346,45 +367,46 @@ namespace CarRentalManagementSystem.Controllers
                     PickupDate = viewModel.PickupDate,
                     ReturnDate = viewModel.ReturnDate,
                     TotalCost = (decimal)rentalDays * car.DailyRate,
-                    Status = "Paid"
+                    Status = "Paid" // Admin bookings are considered paid immediately
                 };
                 _context.Bookings.Add(newBooking);
 
-                // 2. Mark the car as unavailable
-                car.IsAvailable = false;
+                // --- REMOVED: The line "car.IsAvailable = false;" is no longer here ---
 
-                // --- NEW SECTION: Create the corresponding payment record ---
+                // 2. Create the corresponding payment record
                 var newPayment = new Payment
                 {
-                    Booking = newBooking, // Link the payment to the booking object
+                    Booking = newBooking,
                     Amount = newBooking.TotalCost,
                     PaymentDate = DateTime.Now,
-                    PaymentMethod = "Admin Entry", // A clear indicator of how it was paid
+                    PaymentMethod = "Admin Entry",
                     PaymentStatus = "Completed",
                     TransactionID = $"ADM-TXN-{DateTime.UtcNow.Ticks}"
                 };
                 _context.Payments.Add(newPayment);
-                // --- END OF NEW SECTION ---
 
-                // 3. Save both the booking and payment changes to the database
+                // 3. Save both changes to the database
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Booking and Payment created successfully!";
                 return RedirectToAction(nameof(ViewAllBookings));
             }
 
-            // If the form is invalid, re-populate the dropdown lists before showing the page again
+            // If the model is invalid, re-populate the dropdown lists before showing the page again
             viewModel.Customers = await _context.Customers
+                .OrderBy(c => c.CustomerName)
                 .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.mail + ")" })
                 .ToListAsync();
             viewModel.Cars = await _context.Cars
-                .Where(c => c.IsAvailable == true)
+                .OrderBy(c => c.CarName)
                 .Select(car => new SelectListItem { Value = car.CarID.ToString(), Text = car.CarName + " - " + car.Model })
                 .ToListAsync();
 
             return View(viewModel);
         }
-        // GET: Booking/ViewAllBookings
+
+
+        //// GET: Booking/ViewAllBookings
         public async Task<IActionResult> ViewAllBookings()
         {
             // Role-based access check

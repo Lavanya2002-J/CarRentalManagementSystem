@@ -1,0 +1,62 @@
+﻿@model CarRentalManagementSystem.ViewModels.FeedbackViewModel
+
+@{
+    ViewData["Title"] = "Leave Feedback";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/LeaveFeedback.css" asp-append-version="true" />
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="page-header text-center mb-4">
+                <h2>@ViewData["Title"]</h2>
+                <h4>You are leaving feedback for: <strong>@Model.CarName (@Model.CarModel)</strong></h4>
+                <p class="text-white-50 small">It's Sunday, 5:47 AM in Sri Lanka.</p>
+            </div>
+
+            <div class="glass-panel p-4 p-md-5">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="BookingID" />
+                    <input type="hidden" asp-for="CarID" />
+                    <input type="hidden" asp-for="CustomerID" />
+
+                    <div class="form-group mb-4 text-center">
+                        <label asp-for="Ratings" class="control-label mb-2 fs-5"></label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" asp-for="Ratings" value="5 Stars - Excellent" /><label for="star5" title="Excellent">★</label>
+                            <input type="radio" id="star4" asp-for="Ratings" value="4 Stars - Good" /><label for="star4" title="Good">★</label>
+                            <input type="radio" id="star3" asp-for="Ratings" value="3 Stars - Average" /><label for="star3" title="Average">★</label>
+                            <input type="radio" id="star2" asp-for="Ratings" value="2 Stars - Poor" /><label for="star2" title="Poor">★</label>
+                            <input type="radio" id="star1" asp-for="Ratings" value="1 Star - Very Poor" /><label for="star1" title="Very Poor">★</label>
+                        </div>
+                        <span asp-validation-for="Ratings" class="text-danger d-block mt-2"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="FeedBack" class="control-label mb-2">Your Feedback</label>
+                        <textarea asp-for="FeedBack" class="form-control" rows="5" placeholder="Tell us about your experience..."></textarea>
+                        <span asp-validation-for="FeedBack" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <input type="submit" value="Submit Feedback" class="btn btn-primary" />
+                        <a asp-controller="Booking" asp-action="History" class="btn btn-secondary ms-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
