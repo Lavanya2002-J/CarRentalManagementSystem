@@ -46,102 +46,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(model);
         }
 
-        public IActionResult CustomerLogin() => View();
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult CustomerLogin(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.mail == model.UsernameOrEmail) && c.Password == model.Password);
-                if (customer != null)
-                {
-                    HttpContext.Session.SetString("Username", customer.Username);
-                    HttpContext.Session.SetString("Role", "Customer");
-                    HttpContext.Session.SetInt32("UserID", customer.CustomerID);
-                    return RedirectToAction("Dashboard", "Customer");
-                }
-
-                ModelState.AddModelError("", "Invalid customer username/Email or password.");
-
-
-            }
-            return View(model);
-        }
-
-        //// --- UPDATED CUSTOMER REGISTRATION ---
-
-        //// GET: /Account/Register
-        //public IActionResult Register()
-        //{
-        //    // Pass a new instance of the ViewModel to the view
-        //    return View(new RegisterViewModel());
-        //}
-
-        //// POST: /Account/Register
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Register(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Check if username already exists in Admins or Customers tables
-        //        bool userExists = _context.Admins.Any(a => a.Username == model.Username) || _context.Customers.Any(c => c.Username == model.Username);
-        //        if (userExists)
-        //        {
-        //            ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
-        //            return View(model);
-        //        }
-
-        //        bool Emailvalid = _context.Admins.Any(a => a.mail == model.Email) || _context.Customers.Any(c => c.mail == model.Email);
-
-
-        //        if (Emailvalid)
-        //        {
-        //            ModelState.AddModelError("Email", "This email already exists.");
-        //            return View(model);
-        //        }
-        //        bool NICvalid = _context.Customers.Any(a => a.NIC == model.NIC);
-        //        if (NICvalid)
-        //        {
-        //            ModelState.AddModelError("NIC", "This NIC already exists.");
-        //            return View(model);
-        //        }
-
-        //        bool Licvalid = _context.Customers.Any(a => a.LicenseNo == model.LicenseNo);
-        //        if (Licvalid)
-        //        {
-        //            ModelState.AddModelError("LicenseNo", "This License Number already exists.");
-        //            return View(model);
-        //        }
-
-
-
-        //        // Map data from ViewModel to the Customer model
-        //        var customer = new Customer
-        //        {
-        //            Username = model.Username,
-        //            Password = model.Password, // IMPORTANT: In a real app, you must hash the password here!
-        //            CustomerName = model.CustomerName,
-        //            mail = model.Email,
-        //            PhoneNumber = model.PhoneNumber,
-        //            Address = model.Address,
-        //            NIC = model.NIC,
-        //            LicenseNo = model.LicenseNo
-        //        };
-
-        //        // Add the new customer to the database
-        //        _context.Customers.Add(customer);
-        //        _context.SaveChanges();
-
-        //        TempData["SuccessMessage"] = "Registration completed successfully! You can now log in.";
-        //        return RedirectToAction("CustomerLogin");
-        //    }
-
-        //    // If model state is not valid, return to the view with the entered data
-        //    return View(model);
-        //}
+        
         // ================= REGISTER =================
         [HttpGet]
         public IActionResult Register() => View();
@@ -203,13 +108,14 @@ namespace CarRentalManagementSystem.Controllers
             await _context.SaveChangesAsync();
 
             // Send verification email
-            var verifyLink = Url.Action("VerifyEmail", "Customer",
+            var verifyLink = Url.Action("VerifyEmail", "Account",
                 new { token = customer.VerificationToken }, Request.Scheme);
 
             var html = $"Hi {customer.CustomerName},<br/>Click <a href='{verifyLink}'>here</a> to verify your email. Link expires in 24 hours.";
             await SendEmailAsync(customer.mail, "Verify your email", html);
 
-            return RedirectToAction("VerifySent");
+            TempData["ShowPopup"] = "Check your email to verify your account!";
+            return RedirectToAction("CustomerLogin");
         }
 
         [HttpGet]
@@ -236,8 +142,9 @@ namespace CarRentalManagementSystem.Controllers
             return RedirectToAction("CustomerLogin");
 
         }
+       
 
-        // ================= FORGOT PASSWORD =================
+ 
         [HttpGet]
         public IActionResult ForgotPassword() => View();
 
@@ -251,18 +158,13 @@ namespace CarRentalManagementSystem.Controllers
 
             if (customer != null)
             {
-                //if (!customer.IsVerified)
-                //{
-                //    ModelState.AddModelError("", "Please verify your email first.");
-                //    return View();
-                //}
-
+               
                 customer.PasswordResetToken = GenerateToken();
                 customer.PasswordResetTokenExpires = DateTime.UtcNow.AddHours(1);
                 _context.Update(customer);
                 await _context.SaveChangesAsync();
 
-                var link = Url.Action("ResetPassword", "Customer", new { token = customer.PasswordResetToken }, Request.Scheme);
+                var link = Url.Action("ResetPassword", "Account", new { token = customer.PasswordResetToken }, Request.Scheme);
                 var html = $"Hi {customer.CustomerName},<br/>Click <a href='{link}'>here</a> to reset your password. Link expires in 1 hour.";
                 await SendEmailAsync(customer.mail, "Password Reset", html);
             }
@@ -272,8 +174,7 @@ namespace CarRentalManagementSystem.Controllers
 
         [HttpGet]
         public IActionResult ForgotPasswordConfirmation() => View();
-
-        // ================= RESET PASSWORD =================
+ 
         [HttpGet]
         public IActionResult ResetPassword(string token)
         {
@@ -338,6 +239,30 @@ namespace CarRentalManagementSystem.Controllers
             msg.To.Add(toEmail);
 
             await smtp.SendMailAsync(msg);
+        }
+        public IActionResult CustomerLogin() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CustomerLogin(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.mail == model.UsernameOrEmail) && c.Password == model.Password && c.IsVerified==true);
+                
+                if (customer != null)
+                {
+                    HttpContext.Session.SetString("Username", customer.Username);
+                    HttpContext.Session.SetString("Role", "Customer");
+                    HttpContext.Session.SetInt32("UserID", customer.CustomerID);
+                    return RedirectToAction("Dashboard", "Customer");
+                }
+
+                ModelState.AddModelError("", "Invalid customer username/Email or password.");
+
+
+            }
+            return View(model);
         }
 
 

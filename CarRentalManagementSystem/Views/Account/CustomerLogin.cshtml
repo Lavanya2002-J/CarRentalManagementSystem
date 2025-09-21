@@ -3,6 +3,12 @@
     ViewData["Title"] = "Customer Sign In";
     // This view now integrates with your main _Layout.cshtml, just like the dashboard.
 }
+@if (TempData["ShowPopup"] != null)
+{
+    <script>
+        alert("@TempData["ShowPopup"]");
+    </script>
+}
 
 <link rel="stylesheet" href="~/css/CDB.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/C.Login.css" asp-append-version="true" />
