@@ -24,12 +24,12 @@ h1, h2, h5, p, .stat-label {
 }
 
 .dashboard-header h1 {
-    color: #ffffff;
+    color:whte;
     font-weight: 600;
 }
 
 .dashboard-header .text-muted {
-    color: #e9ecef !important;
+    color: black !important;
 }
 
 .stat-box .stat-number {
