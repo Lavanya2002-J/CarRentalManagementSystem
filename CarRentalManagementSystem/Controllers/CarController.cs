@@ -39,28 +39,56 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(new CarViewModel());
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public IActionResult Create(CarViewModel viewModel)
         {
             if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
-            var RegistrationNumber = (_context.Cars.Any(a => a.RegistrationNumber == viewModel.RegistrationNumber));
-            if (RegistrationNumber)
+
+            // --- Existing Duplicate Checks (Good) ---
+            var registrationNumberExists = _context.Cars.Any(a => a.RegistrationNumber == viewModel.RegistrationNumber);
+            if (registrationNumberExists)
             {
                 ModelState.AddModelError("RegistrationNumber", "This Registration Number already exists.");
-                return View(viewModel);
             }
-            var InsurancePolicyNo = (_context.Cars.Any(a => a.InsurancePolicyNo == viewModel.InsurancePolicyNo));
-            if (InsurancePolicyNo)
+
+            var insurancePolicyExists = _context.Cars.Any(a => a.InsurancePolicyNo == viewModel.InsurancePolicyNo);
+            if (insurancePolicyExists)
             {
                 ModelState.AddModelError("InsurancePolicyNo", "This Insurance Policy Number already exists.");
+            }
+
+            // --- NEW: Business Logic Validation ---
+            if (viewModel.Seats <= 0)
+            {
+                ModelState.AddModelError("Seats", "Number of seats must be greater than zero.");
+            }
+
+            if (viewModel.DailyRate <= 0)
+            {
+                ModelState.AddModelError("DailyRate", "Daily Rate must be a positive number.");
+            }
+
+            if (viewModel.FuelCapacity <= 0)
+            {
+                ModelState.AddModelError("FuelCapacity", "Fuel Capacity must be greater than zero.");
+            }
+
+            if (viewModel.InsuranceExpiryDate.HasValue && viewModel.InsuranceExpiryDate.Value < DateTime.Today)
+            {
+                ModelState.AddModelError("InsuranceExpiryDate", "Insurance Expiry Date cannot be in the past.");
+            }
+
+            // If any of the above custom validations failed, return the view immediately.
+            if (!ModelState.IsValid)
+            {
                 return View(viewModel);
             }
 
+            // --- The rest of your code remains the same ---
             try
             {
+                // The check is done above, but we keep it here as a final catch-all for data annotations.
                 if (ModelState.IsValid)
                 {
                     string logoFileName = null;
@@ -120,6 +148,8 @@ namespace CarRentalManagementSystem.Controllers
                 return View(viewModel);
             }
         }
+
+        
 
         // GET: Car/Edit/{id}
         public IActionResult Edit(Guid id)

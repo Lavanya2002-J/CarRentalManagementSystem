@@ -1,0 +1,144 @@
+﻿/* --- Pro Confirmation Page Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    color: #e0e0e0;
+}
+
+/* --- Main Confirmation Panel --- */
+.confirmation-container {
+    max-width: 800px;
+    margin: 3rem auto;
+    background: rgba(10, 25, 47, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+    overflow: hidden; /* Keeps child elements within the rounded corners */
+}
+
+/* --- Header & Success Icon --- */
+.card-header-custom {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(145deg, rgba(28, 200, 138, 0.2), rgba(28, 200, 138, 0.05));
+    border-bottom: 1px solid rgba(28, 200, 138, 0.3);
+}
+
+    .card-header-custom .icon {
+        font-size: 4rem;
+        color: #1cc88a;
+        text-shadow: 0 0 20px rgba(28, 200, 138, 0.5);
+    }
+
+    .card-header-custom h2 {
+        color: #fff;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    .card-header-custom p {
+        color: #ccc;
+        margin-bottom: 0;
+    }
+
+/* --- Body & Details Layout --- */
+.card-body-custom {
+    padding: 2rem;
+}
+
+.section-title {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.details-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.detail-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+    .detail-item strong {
+        display: block;
+        color: #a0a0a0;
+        font-weight: 400;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .detail-item span {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+.amount-paid {
+    color: #1cc88a !important; /* Vibrant green for amount */
+}
+
+.status-badge {
+    background-color: rgba(28, 200, 138, 0.2);
+    color: #9be6a8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.separator {
+    border-color: rgba(255, 255, 255, 0.15);
+    margin: 2rem 0;
+}
+
+/* --- Footer & Back Button --- */
+.card-footer-custom {
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-back {
+    background-color: transparent;
+    border: 1px solid #6c757d;
+    color: #ccc;
+    padding: 10px 25px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .btn-back:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+/* --- Animation --- */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
