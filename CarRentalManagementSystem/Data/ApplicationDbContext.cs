@@ -14,6 +14,8 @@ namespace CarRentalManagementSystem.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<GmailSettings> GmailSettings { get; set; }
 
 
 
@@ -27,7 +29,7 @@ namespace CarRentalManagementSystem.Data
                     Username = "Admin",
                     Password = "Admin@123",
                     Name = "Administrator",
-                    Email = "admin@carental.com"
+                    mail = "admin@gmail.com"
                 }
             );
         }

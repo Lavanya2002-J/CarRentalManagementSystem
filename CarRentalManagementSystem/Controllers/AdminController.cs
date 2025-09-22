@@ -91,19 +91,43 @@ namespace CarRentalManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                bool userExists = _context.Customers.Any(c => c.Username == model.Username || c.Email == model.Email);
+                bool userExists = _context.Admins.Any(a => a.Username == model.Username) || _context.Customers.Any(c => c.Username == model.Username);
                 if (userExists)
                 {
-                    ModelState.AddModelError("", "A customer with this username or email already exists.");
+                    ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
                     return View(model);
                 }
+
+                bool Emailvalid = _context.Admins.Any(a => a.mail == model.Email) || _context.Customers.Any(c => c.mail == model.Email);
+
+
+                if (Emailvalid)
+                {
+                    ModelState.AddModelError("Email", "This email already exists.");
+                    return View(model);
+                }
+                bool NICvalid = _context.Customers.Any(a => a.NIC == model.NIC);
+                if (NICvalid)
+                {
+                    ModelState.AddModelError("NIC", "This NIC already exists.");
+                    return View(model);
+                }
+
+                bool Licvalid = _context.Customers.Any(a => a.LicenseNo == model.LicenseNo);
+                if (Licvalid)
+                {
+                    ModelState.AddModelError("LicenseNo", "This License Number already exists.");
+                    return View(model);
+                }
+
+
 
                 var customer = new Customer
                 {
                     Username = model.Username,
                     Password = model.Password,
                     CustomerName = model.CustomerName,
-                    Email = model.Email,
+                    mail = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
                     NIC = model.NIC,
@@ -203,15 +227,138 @@ namespace CarRentalManagementSystem.Controllers
             }
             return RedirectToAction(nameof(ManageCustomers));
         }
+        // In Controllers/AdminController.cs
+
+        // GET: /Admin/ManageRefunds
+        public async Task<IActionResult> ManageRefunds()
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            // Fetch all bookings that are awaiting a refund approval
+            var refundRequests = await _context.Bookings
+                .Where(b => b.Status == "Cancellation Requested")
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .OrderBy(b => b.PickupDate)
+                .ToListAsync();
+
+            return View(refundRequests);
+        }
+
+
+        // In Controllers/AdminController.cs
+
+        // POST: /Admin/ApproveRefund
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveRefund(int bookingId)
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            var booking = await _context.Bookings.FindAsync(bookingId);
+            if (booking == null || booking.Status != "Cancellation Requested")
+            {
+                TempData["ErrorMessage"] = "Booking not found or not awaiting refund.";
+                return RedirectToAction(nameof(ManageRefunds));
+            }
+
+            // 1. Create the negative payment record for the refund
+            var refundPayment = new Payment
+            {
+                BookingID = booking.BookingID,
+                Amount = -booking.TotalCost,
+                PaymentDate = DateTime.Now,
+                PaymentMethod = "Admin Approved Refund",
+                PaymentStatus = "Completed",
+                TransactionID = $"REF-ADM-{DateTime.UtcNow.Ticks}"
+            };
+            _context.Payments.Add(refundPayment);
+
+            // 2. Make the associated car available again
+            var car = await _context.Cars.FindAsync(booking.CarID);
+            if (car != null)
+            {
+                car.IsAvailable = true;
+            }
+
+            // 3. Update the booking status to officially "Cancelled"
+            booking.Status = "Cancelled";
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Refund for Booking ID {booking.BookingID} has been approved and processed.";
+            return RedirectToAction(nameof(ManageRefunds));
+        }
+
+        // In Controllers/AdminController.cs
+
+        // GET: /Admin/PendingBookings
+        public async Task<IActionResult> PendingBookings()
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            // Fetch all bookings with a "Pending" status
+            var pendingBookings = await _context.Bookings
+                .Where(b => b.Status == "Pending")
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .OrderBy(b => b.PickupDate)
+                .ToListAsync();
+
+            return View(pendingBookings);
+        }
+
+        // In Controllers/AdminController.cs
+
+        // POST: /Admin/ConfirmInPersonPayment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmInPersonPayment(int bookingId)
+        {
+            if (HttpContext.Session.GetString("Role") != "Admin")
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            var booking = await _context.Bookings.FindAsync(bookingId);
+            if (booking == null || booking.Status != "Pending")
+            {
+                TempData["ErrorMessage"] = "Booking not found or is no longer pending.";
+                return RedirectToAction(nameof(PendingBookings));
+            }
+
+            // 1. Create a new payment record for the cash payment
+            var cashPayment = new Payment
+            {
+                BookingID = booking.BookingID,
+                Amount = booking.TotalCost,
+                PaymentDate = DateTime.Now,
+                PaymentMethod = "Cash at Desk", // Or "In-Person Payment"
+                PaymentStatus = "Completed",
+                TransactionID = $"CSH-{DateTime.UtcNow.Ticks}"
+            };
+            _context.Payments.Add(cashPayment);
+
+            // 2. Update the booking status to "Paid"
+            booking.Status = "Paid";
+
+            // Note: The car is already marked as unavailable when a booking
+            // is pending, so we don't need to change its status here.
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Payment for Booking ID {booking.BookingID} has been confirmed.";
+            return RedirectToAction(nameof(PendingBookings));
+        }
     }
-
-
-
-
-
-
-
-
-
-}
+   }
 

@@ -1,0 +1,90 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Page Header --- */
+.page-header h1 {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.page-header .text-muted {
+    color: #ccc !important;
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(10, 15, 25, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    animation: fadeIn 0.6s ease-out forwards;
+    color: #e0e0e0;
+}
+
+.panel-header {
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+    .panel-header .font-weight-bold {
+        color: #fff;
+        font-weight: 600 !important;
+    }
+
+/* --- Custom Glass Table --- */
+.table-glass {
+    color: #e0e0e0;
+}
+
+    .table-glass thead th {
+        color: #fff;
+        border-bottom: 2px solid rgba(0, 217, 255, 0.5);
+    }
+
+    .table-glass tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+        .table-glass tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+    .table-glass td, .table-glass th {
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .table-glass tfoot {
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-weight: bold;
+    }
+
+/* --- Custom Progress Bar --- */
+.progress {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #007bff, #00aaff);
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
+
+@{
+    ViewData["Title"] = "Pending Bookings";
+}
+<div>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+<link rel="stylesheet" href="~/css/PendingBookings.css" asp-append-version="true" />
+
+
+<h2>Pending Bookings & In-Person Payments</h2>
+<p>The following bookings were made online and are awaiting payment and pickup.</p>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Customer</th>
+            <th>Car</th>
+            <th>Pickup Date</th>
+            <th>Total Cost</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BookingID</td>
+                <td>@item.Customer.CustomerName</td>
+                <td>@item.Car.CarName</td>
+                <td>@item.PickupDate.ToShortDateString()</td>
+                <td>@item.TotalCost.ToString("C")</td>
+                <td>
+                    <form asp-action="ConfirmInPersonPayment" asp-controller="Admin" method="post">
+                        <input type="hidden" name="bookingId" value="@item.BookingID" />
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Confirm Payment
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p>There are no pending bookings.</p>
+}

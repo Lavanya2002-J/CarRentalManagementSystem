@@ -15,58 +15,88 @@
                     <p class="mb-0 text-white-50">Final step to confirm your booking for the @Model.CarName</p>
                 </div>
                 <div class="card-body p-4 p-md-5">
-                    <div class="row">
-                        <div class="col-md-6 border-end border-secondary border-opacity-25 pe-md-5">
-                            <h4 class="mb-3">Booking Summary</h4>
-                            <ul class="list-group list-group-flush summary-list">
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <strong><i class="bi bi-car-front-fill me-2"></i>Car:</strong>
-                                    <span>@Model.CarName (@Model.CarModel)</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <strong><i class="bi bi-calendar-arrow-right me-2"></i>Pickup:</strong>
-                                    <span>@Model.PickupDate.ToString("MMM dd, yyyy")</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <strong><i class="bi bi-calendar-arrow-left me-2"></i>Return:</strong>
-                                    <span>@Model.ReturnDate.ToString("MMM dd, yyyy")</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between total-amount-item">
-                                    <strong class="text-success"><i class="bi bi-wallet2 me-2"></i>Total Amount:</strong>
-                                    <span class="fw-bold text-success fs-5">LKR @Model.Amount.ToString("N2")</span>
-                                </li>
-                            </ul>
-                        </div>
+                    <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                        <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
-                            <h4 class="mb-3">Select Payment Method</h4>
-                            <form asp-action="Create" method="post">
-                                @Html.AntiForgeryToken()
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="BookingID" />
+                        <input type="hidden" asp-for="Amount" />
+                        <input type="hidden" asp-for="CarID" />
+                        <input type="hidden" asp-for="PickupDate" />
+                        <input type="hidden" asp-for="ReturnDate" />
 
-                                <input type="hidden" asp-for="BookingID" />
-                                <input type="hidden" asp-for="Amount" />
+                        <div class="row">
+                            <div class="col-md-6 border-end border-secondary border-opacity-25 pe-md-5">
+                                <h4 class="mb-3">Booking Summary</h4>
+                                <ul class="list-group list-group-flush summary-list">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <strong><i class="bi bi-car-front-fill me-2"></i>Car:</strong>
+                                        <span>@Model.CarName (@Model.CarModel)</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <strong><i class="bi bi-calendar-arrow-right me-2"></i>Pickup:</strong>
+                                        <span>@Model.PickupDate.ToString("MMM dd, yyyy")</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <strong><i class="bi bi-calendar-arrow-left me-2"></i>Return:</strong>
+                                        <span>@Model.ReturnDate.ToString("MMM dd, yyyy")</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between total-amount-item">
+                                        <strong class="text-success"><i class="bi bi-wallet2 me-2"></i>Total Amount:</strong>
+                                        <span class="fw-bold text-success fs-5">LKR @Model.Amount.ToString("N2")</span>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                <div class="form-group mb-4">
+                            <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
+                                <h4 class="mb-3">Select Payment Method</h4>
+                                <div class="form-group mb-3">
                                     <label asp-for="PaymentMethod" class="form-label fw-bold"></label>
-                                    <select asp-for="PaymentMethod" asp-items="@Model.PaymentMethods" class="form-select form-select-lg">
+                                    <select asp-for="PaymentMethod" asp-items="@Model.PaymentMethods" id="paymentMethodSelector" class="form-select form-select-lg">
                                         <option value="">-- Select a method --</option>
                                     </select>
                                     <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                                 </div>
 
-                                <div class="alert alert-glass">
-                                    <p><i class="bi bi-info-circle-fill me-2"></i> For 'Cash on Pickup', payment is due at our counter. Your booking will be confirmed now.</p>
+                                <div id="cardPaymentDetails" style="display: none;">
+                                    <hr />
+                                    <h5 class="mb-3">Enter Card Details</h5>
+                                    <div class="form-group mb-2">
+                                        <label asp-for="CardHolderName" class="form-label"></label>
+                                        <input asp-for="CardHolderName" class="form-control" />
+                                        <span asp-validation-for="CardHolderName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label asp-for="CardNumber" class="form-label"></label>
+                                        <input asp-for="CardNumber" class="form-control" placeholder="xxxx xxxx xxxx xxxx" />
+                                        <span asp-validation-for="CardNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <div class="form-group mb-2">
+                                                <label asp-for="ExpiryDate" class="form-label"></label>
+                                                <input asp-for="ExpiryDate" class="form-control" placeholder="MM/YY" />
+                                                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-5">
+                                            <div class="form-group mb-2">
+                                                <label asp-for="Cvc" class="form-label"></label>
+                                                <input asp-for="Cvc" class="form-control" placeholder="CVC" />
+                                                <span asp-validation-for="Cvc" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="d-grid mt-4">
-                                    <button type="submit" class="btn btn-success btn-lg">
-                                        <i class="bi bi-check-circle-fill me-2"></i> Confirm & Pay LKR @Model.Amount.ToString("N2")
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="d-grid mt-4 p-3 border-top border-secondary border-opacity-25">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle-fill me-2"></i> Confirm & Proceed
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -77,4 +107,28 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // Wait for the page to be fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Get the payment method dropdown and the card details section
+            const paymentMethodSelector = document.getElementById('paymentMethodSelector');
+            const cardDetailsDiv = document.getElementById('cardPaymentDetails');
+
+            // Listen for any change in the dropdown selection
+            paymentMethodSelector.addEventListener('change', function () {
+                // If the selected value is 'Credit Card', show the card details form
+                if (this.value === 'Credit Card') {
+                    cardDetailsDiv.style.display = 'block';
+                } else {
+                    // Otherwise, hide it
+                    cardDetailsDiv.style.display = 'none';
+                }
+            });
+
+            // Optional: Trigger the change event on page load in case a value is already selected (e.g., after a validation error)
+            paymentMethodSelector.dispatchEvent(new Event('change'));
+        });
+    </script>
 }

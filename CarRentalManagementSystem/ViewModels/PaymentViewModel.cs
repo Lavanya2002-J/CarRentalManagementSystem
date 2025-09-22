@@ -7,6 +7,7 @@ namespace CarRentalManagementSystem.ViewModels
     {
         // Data for creating the Payment record
         public int BookingID { get; set; }
+        public Guid CarID { get; set; }
         public decimal Amount { get; set; }
 
         [Required(ErrorMessage = "Please select a payment method.")]
@@ -21,5 +22,23 @@ namespace CarRentalManagementSystem.ViewModels
 
         // For the dropdown list in the view
         public IEnumerable<SelectListItem> PaymentMethods { get; set; }
+
+        // -- Card Payment-kaana Puthu Properties --
+        [Display(Name = "Cardholder Name")]
+        public string CardHolderName { get; set; }
+
+        [Display(Name = "Card Number")]
+        [CreditCard(ErrorMessage = "Please enter a valid card number.")]
+        public string CardNumber { get; set; }
+
+        [Display(Name = "Expiry Date (MM/YY)")]
+        [RegularExpression(@"^(0[1-9]|1[0-2])\/?([0-9]{2})$", ErrorMessage = "Invalid format. Use MM/YY.")]
+        public string ExpiryDate { get; set; }
+
+        [Display(Name = "CVC")]
+        [RegularExpression(@"^[0-9]{3,4}$", ErrorMessage = "Invalid CVC.")]
+        public string Cvc { get; set; }
+
+
     }
 }

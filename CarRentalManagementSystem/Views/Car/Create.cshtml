@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Add New Car";
 }
-
+<div>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="~/css/CarCreate.css" asp-append-version="true" />
 
@@ -19,7 +23,10 @@
                 <div class="card-body p-4 p-md-5">
 
                     <form asp-action="Create" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        @* --- UPDATE THIS LINE ---
+                           "All" creates a prominent summary of every error at the top. *@
+                        
 
                         <details open>
                             <summary class="form-section-toggle">

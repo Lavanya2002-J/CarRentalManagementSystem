@@ -1,0 +1,144 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Full Width Header --- */
+.app-header {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+}
+
+/* --- Main Content Area --- */
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem; /* Add padding for smaller screens */
+    width: 100%;
+}
+
+/* --- Registration Panel (Wider than login) --- */
+.register-panel {
+    max-width: 800px; /* Wider for more fields */
+    width: 100%;
+    padding: 2rem;
+    color: #fff;
+    background: rgba(10, 10, 10, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+@media (min-width: 768px) {
+    .register-panel {
+        padding: 3rem;
+    }
+}
+
+
+/* --- Form Section Styling (NEW) --- */
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section-header {
+    font-weight: 400;
+    color: #00d9ff; /* Highlight color */
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+    letter-spacing: 0.5px;
+}
+
+/* --- Form Input Styling (Same as before) --- */
+.form-floating > .form-control {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+    .form-floating > .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.4);
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+    }
+
+.form-floating > label {
+    color: #adb5bd;
+}
+
+/* --- Password Toggle Icon Styling (NEW) --- */
+.password-wrapper {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: transparent;
+    border: none;
+    color: #adb5bd;
+    padding: 0.5rem;
+    line-height: 1;
+}
+
+    .password-toggle-btn:focus,
+    .password-toggle-btn:active {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+.password-wrapper .form-control {
+    padding-right: 3.5rem;
+}
+
+/* --- Links and Buttons --- */
+.btn-success {
+    padding: 0.8rem;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    background-color: #17a673;
+    border-color: #17a673;
+}
+
+a.forgot-password {
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+    a.forgot-password:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+.text-danger {
+    color: #ff8a8a !important;
+    font-size: 0.8rem;
+    text-align: left;
+}

@@ -18,7 +18,7 @@ namespace CarRentalManagementSystem.Attributes
             if (email.Contains(" "))
                 return new ValidationResult("Email cannot contain spaces.");
 
-            var pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            var pattern = @"^[a-zA-Z0-9._%+-]+@gmail\.com$";
 
             if (!Regex.IsMatch(email, pattern))
                 return new ValidationResult("Invalid email format. Example: name@example.com");

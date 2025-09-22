@@ -1,0 +1,118 @@
+﻿/* --- Pro Admin Form Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* --- Page Header --- */
+.page-header h2, .page-header h4 {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.page-header strong {
+    color: #00d9ff;
+}
+
+/* --- Glass Panel Container --- */
+.glass-panel {
+    background: rgba(10, 25, 47, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+    color: #e0e0e0;
+}
+
+/* --- Form Styling --- */
+.form-label {
+    color: #c7c7c7;
+    font-weight: 600 !important;
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .form-control::placeholder {
+        color: #a0a0a0;
+    }
+
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: #00aaff;
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+    }
+
+/* --- Interactive Star Rating --- */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse; /* This is the key trick */
+    justify-content: center;
+    gap: 5px;
+}
+    /* Hide the actual radio buttons */
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+    /* Style the star labels */
+    .star-rating label {
+        font-size: 2.5rem;
+        color: #444; /* Unselected star color */
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+    /* On hover, color the star and all stars to its "right" (which are previous siblings due to flex-direction: row-reverse) */
+    .star-rating:hover label {
+        color: #ffc107;
+    }
+
+    .star-rating label:hover ~ label {
+        color: #444;
+    }
+    /* When a radio is checked, permanently color it and its previous siblings */
+    .star-rating input[type="radio"]:checked ~ label {
+        color: #ffc107;
+    }
+
+
+/* --- Buttons --- */
+.btn-primary {
+    background: linear-gradient(90deg, #007bff, #00aaff);
+    border: none;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid #6c757d;
+    padding: 10px 25px;
+    font-weight: 600;
+}
+
+/* --- Animation --- */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

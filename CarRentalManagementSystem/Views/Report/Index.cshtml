@@ -5,168 +5,163 @@
     ViewData["Title"] = "Advanced Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<style>
-    .chart-area {
-        position: relative;
-        height: 20rem; /* Give the chart a fixed height */
-        width: 100%;
-    }
-
-    .progress {
-        background-color: #e9ecef;
-    }
-</style>
-
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Advanced Reporting</h1>
-    <span class="text-muted">Generated on: @DateTime.Now.ToString("dd MMM yyyy, hh:mm tt")</span>
+<div>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
 </div>
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">
-            <i class="bi bi-graph-up-arrow me-2"></i>Monthly Revenue Overview
-        </h6>
-        <div class="btn-group btn-group-sm" role="group" aria-label="View toggle">
-            <button type="button" class="btn btn-primary active" id="showRevenueChartBtn" title="Show Graph View"><i class="bi bi-bar-chart-line-fill"></i></button>
-            <button type="button" class="btn btn-outline-primary" id="showRevenueTableBtn" title="Show List View"><i class="bi bi-table"></i></button>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="~/css/AdvancedReports.css" asp-append-version="true" />
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4 page-header">
+        <h1 class="mb-0 fw-bold">Advanced Reporting</h1>
+        <span class="text-muted">Generated on: @DateTime.Now.ToString("dd MMM yyyy, hh:mm tt")</span>
+    </div>
+
+    <div class="card glass-panel mb-4">
+        <div class="card-header panel-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold">
+                <i class="bi bi-graph-up-arrow me-2" style="color: #00d9ff;"></i>Monthly Revenue Overview
+            </h6>
+            <div class="btn-group btn-group-sm" role="group" aria-label="View toggle">
+                <button type="button" class="btn btn-primary active" id="showRevenueChartBtn" title="Show Graph View"><i class="bi bi-bar-chart-line-fill"></i></button>
+                <button type="button" class="btn btn-outline-primary" id="showRevenueTableBtn" title="Show List View"><i class="bi bi-table"></i></button>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        @if (Model.MonthlyRevenue != null && Model.MonthlyRevenue.Any())
-        {
-            <div id="revenueChartView">
-                <div class="chart-area">
-                    <canvas id="monthlyRevenueChart"></canvas>
+        <div class="card-body">
+            @if (Model.MonthlyRevenue != null && Model.MonthlyRevenue.Any())
+            {
+                <div id="revenueChartView">
+                    <div class="chart-area" style="height: 20rem; width: 100%;">
+                        <canvas id="monthlyRevenueChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <div id="revenueTableView" style="display: none;">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th class="text-end">Total Revenue</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.MonthlyRevenue)
-                            {
-                                <tr>
-                                    <td>@item.MonthYear</td>
-                                    <td class="text-end">@item.TotalRevenue.ToString("C", new System.Globalization.CultureInfo("si-LK"))</td>
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr class="fw-bold">
-                                <td>Total</td>
-                                <td class="text-end">@Model.MonthlyRevenue.Sum(r => r.TotalRevenue).ToString("C", new System.Globalization.CultureInfo("si-LK"))</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="text-center p-4">
-                <p class="text-muted mb-0">No revenue data available to display.</p>
-            </div>
-        }
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-6">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><i class="bi bi-trophy-fill me-2"></i>Top 10 Most Popular Cars</h6>
-            </div>
-            <div class="card-body">
-                @if (Model.PopularCars != null && Model.PopularCars.Any())
-                {
-                    var maxBookings = Model.PopularCars.Max(c => c.BookingCount);
+                <div id="revenueTableView" style="display: none;">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="popularCarsTable">
+                        <table class="table table-glass">
                             <thead>
                                 <tr>
-                                    <th>Car</th>
-                                    <th class="text-center">Bookings</th>
-                                    <th style="width: 35%;">Popularity</th>
+                                    <th>Month</th>
+                                    <th class="text-end">Total Revenue</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var car in Model.PopularCars)
+                                @foreach (var item in Model.MonthlyRevenue)
                                 {
-                                    var popularityPercentage = (double)car.BookingCount / maxBookings * 100;
                                     <tr>
-                                        <td>@car.CarName <small class="d-block text-muted">@car.CarModel</small></td>
-                                        <td class="text-center fw-bold">@car.BookingCount</td>
-                                        <td>
-                                            <div class="progress" title="@car.BookingCount Bookings">
-                                                <div class="progress-bar" role="progressbar" style="width: @popularityPercentage%;" aria-valuenow="@car.BookingCount" aria-valuemin="0" aria-valuemax="@maxBookings"></div>
-                                            </div>
-                                        </td>
+                                        <td>@item.MonthYear</td>
+                                        <td class="text-end">LKR @item.TotalRevenue.ToString("N2")</td>
                                     </tr>
                                 }
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Total</td>
+                                    <td class="text-end">LKR @Model.MonthlyRevenue.Sum(r => r.TotalRevenue).ToString("N2")</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
-                }
-                else
-                {
-                    <div class="text-center p-4"><p class="text-muted mb-0">No car booking data available.</p></div>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-4"><p class="text-muted mb-0">No revenue data available to display.</p></div>
+            }
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><i class="bi bi-people-fill me-2"></i>Top 10 Customers</h6>
-            </div>
-            <div class="card-body">
-                @if (Model.TopCustomers != null && Model.TopCustomers.Any())
-                {
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="topCustomersTable">
-                            <thead>
-                                <tr>
-                                    <th>Customer Name</th>
-                                    <th class="text-center">Bookings</th>
-                                    <th>Total Spent</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var customer in Model.TopCustomers)
-                                {
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card glass-panel mb-4">
+                <div class="card-header panel-header py-3">
+                    <h6 class="m-0 font-weight-bold"><i class="bi bi-trophy-fill me-2" style="color: #ffc107;"></i>Top 10 Most Popular Cars</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.PopularCars != null && Model.PopularCars.Any())
+                    {
+                        var maxBookings = Model.PopularCars.Max(c => c.BookingCount);
+                        <div class="table-responsive">
+                            <table class="table table-glass">
+                                <thead>
                                     <tr>
-                                        <td>@customer.CustomerName</td>
-                                        <td class="text-center">@customer.TotalBookings</td>
-                                        <td>@customer.TotalSpent.ToString("C", new System.Globalization.CultureInfo("si-LK"))</td>
+                                        <th>Car</th>
+                                        <th class="text-center">Bookings</th>
+                                        <th style="width: 35%;">Popularity</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <div class="text-center p-4"><p class="text-muted mb-0">No customer data available.</p></div>
-                }
+                                </thead>
+                                <tbody>
+                                    @foreach (var car in Model.PopularCars)
+                                    {
+                                        var popularityPercentage = (double)car.BookingCount / maxBookings * 100;
+                                        <tr>
+                                            <td>@car.CarName <small class="d-block text-muted">@car.CarModel</small></td>
+                                            <td class="text-center fw-bold">@car.BookingCount</td>
+                                            <td>
+                                                <div class="progress" title="@car.BookingCount Bookings">
+                                                    <div class="progress-bar" role="progressbar" style="width: @popularityPercentage%;" aria-valuenow="@car.BookingCount" aria-valuemin="0" aria-valuemax="@maxBookings"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center p-4"><p class="text-muted mb-0">No car booking data available.</p></div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card glass-panel mb-4">
+                <div class="card-header panel-header py-3">
+                    <h6 class="m-0 font-weight-bold"><i class="bi bi-people-fill me-2" style="color: #1cc88a;"></i>Top 10 Customers</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.TopCustomers != null && Model.TopCustomers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-glass">
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th class="text-center">Bookings</th>
+                                        <th>Total Spent</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var customer in Model.TopCustomers)
+                                    {
+                                        <tr>
+                                            <td>@customer.CustomerName</td>
+                                            <td class="text-center">@customer.TotalBookings</td>
+                                            <td>LKR @customer.TotalSpent.ToString("N2")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center p-4"><p class="text-muted mb-0">No customer data available.</p></div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-
             // --- View Toggler for Monthly Revenue ---
             const showChartBtn = document.getElementById('showRevenueChartBtn');
             const showTableBtn = document.getElementById('showRevenueTableBtn');
@@ -183,7 +178,6 @@
                     showTableBtn.classList.add('btn-outline-primary');
                 });
             }
-
             if (showTableBtn) {
                 showTableBtn.addEventListener('click', () => {
                     chartView.style.display = 'none';
@@ -194,39 +188,20 @@
                     showChartBtn.classList.add('btn-outline-primary');
                 });
             }
-
-            // --- Initialize DataTables ---
-            $('#popularCarsTable').DataTable({
-                lengthChange: false,
-                searching: false,
-                pageLength: 5
-            });
-            $('#topCustomersTable').DataTable({
-                lengthChange: false,
-                searching: false,
-                pageLength: 5
-            });
-
-            // --- Chart.js Configuration ---
-            @if (Model.MonthlyRevenue != null && Model.MonthlyRevenue.Any())
-            {
-                    var revenueLabels = System.Text.Json.JsonSerializer.Serialize(Model.MonthlyRevenue.Select(r => r.MonthYear));
-                    var revenueData = System.Text.Json.JsonSerializer.Serialize(Model.MonthlyRevenue.Select(r => r.TotalRevenue));
-            }
         });
     </script>
 
     @if (Model.MonthlyRevenue != null && Model.MonthlyRevenue.Any())
     {
         <script>
+            // --- UPDATED Chart.js Configuration for Dark Theme ---
             const revenueLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyRevenue.Select(r => r.MonthYear)));
             const revenueData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyRevenue.Select(r => r.TotalRevenue)));
-
             const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
 
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(78, 115, 223, 0.75)');
-            gradient.addColorStop(1, 'rgba(78, 115, 223, 0.1)');
+            gradient.addColorStop(0, 'rgba(0, 217, 255, 0.6)');
+            gradient.addColorStop(1, 'rgba(0, 217, 255, 0.1)');
 
             new Chart(ctx, {
                 type: 'bar',
@@ -236,9 +211,9 @@
                         label: 'Revenue (LKR)',
                         data: revenueData,
                         backgroundColor: gradient,
-                        borderColor: 'rgba(78, 115, 223, 1)',
+                        borderColor: 'rgba(0, 217, 255, 1)',
                         borderWidth: 1,
-                        hoverBackgroundColor: 'rgba(78, 115, 223, 0.9)'
+                        hoverBackgroundColor: 'rgba(0, 217, 255, 0.9)'
                     }]
                 },
                 options: {
@@ -247,23 +222,35 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: function (value) {
-                                    return 'LKR ' + value.toLocaleString();
-                                }
+                                color: '#ccc', // Y-axis label color
+                                callback: (value) => 'LKR ' + value.toLocaleString()
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Y-axis grid line color
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ccc' // X-axis label color
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)' // X-axis grid line color
                             }
                         }
                     },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#ccc',
                             callbacks: {
                                 label: function (context) {
                                     let label = context.dataset.label || '';
                                     if (label) { label += ': '; }
                                     if (context.parsed.y !== null) {
                                         label += new Intl.NumberFormat('si-LK', {
-                                            style: 'currency',
-                                            currency: 'LKR'
+                                            style: 'currency', currency: 'LKR'
                                         }).format(context.parsed.y);
                                     }
                                     return label;
@@ -276,5 +263,3 @@
         </script>
     }
 }
-
-

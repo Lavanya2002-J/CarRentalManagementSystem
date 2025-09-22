@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Customer Dashboard";
     ViewBag.Username = "Customer";
-    ViewBag.ActiveBookingsCount = 3;
+  ;
 }
 
 <link rel="stylesheet" href="~/css/CDB.css" asp-append-version="true" />
@@ -16,21 +16,9 @@
                 <h1 class="mb-1">Hello, @ViewBag.Username!</h1>
                 <p class="text-muted">Welcome back. Here you can manage your bookings and personal information.</p>
             </div>
-            <div class="col-lg-4 d-flex justify-content-lg-end">
-                <div class="stat-box w-100 text-center">
-                    <div class="stat-number">@ViewBag.ActiveBookingsCount</div>
-                    <div class="stat-label">Active Rentals</div>
-                </div>
-            </div>
+           
         </div>
     </div>
-
-    <div class="alert alert-info alert-dismissible fade show glass-effect" role="alert">
-        <i class="fas fa-info-circle me-2"></i>
-        <strong>Quick Tip:</strong> Planning a long trip around Sri Lanka? Check out our weekly rental plans for extra savings!
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
 
         <div class="col">
@@ -121,7 +109,7 @@
                     return;
                 }
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(e) {                                
                     previewContainer.style.backgroundImage = `url(${e.target.result})`;
                     if (previewText) {
                         previewText.style.display = 'none';

@@ -3,16 +3,24 @@ using CarRentalManagementSystem.Models;
 using CarRentalManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Net;
+using System.Net.Mail;
+using System.Security.Cryptography;
 
 namespace CarRentalManagementSystem.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly GmailSettings _gmailSettings;
 
-        public AccountController(ApplicationDbContext context)
+        public AccountController(ApplicationDbContext context, IOptions<GmailSettings> gmailOptions)
         {
             _context = context;
+            _gmailSettings = gmailOptions.Value; 
         }
 
         public IActionResult AdminLogin() => View();
@@ -23,7 +31,7 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var admin = _context.Admins.FirstOrDefault(a => (a.Username == model.UsernameOrEmail || a.Email == model.UsernameOrEmail) && a.Password == model.Password);
+                var admin = _context.Admins.FirstOrDefault(a => (a.Username == model.UsernameOrEmail || a.mail == model.UsernameOrEmail) && a.Password == model.Password);
                 if (admin != null)
                 {
                     HttpContext.Session.SetString("Username", admin.Username);
@@ -38,6 +46,206 @@ namespace CarRentalManagementSystem.Controllers
             return View(model);
         }
 
+        
+        // ================= REGISTER =================
+        [HttpGet]
+        public IActionResult Register() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel vm)
+        {
+            
+            bool userExists = _context.Admins.Any(a => a.Username == vm.Username) || _context.Customers.Any(c => c.Username == vm.Username);
+            if (userExists)
+            {
+                ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
+                
+            }
+
+            bool Emailvalid = _context.Admins.Any(a => a.mail == vm.Email) || _context.Customers.Any(c => c.mail == vm.Email);
+
+
+            if (Emailvalid)
+            {
+                ModelState.AddModelError("Email", "This email already exists.");
+               
+            }
+            bool NICvalid = _context.Customers.Any(a => a.NIC == vm.NIC);
+            if (NICvalid)
+            {
+                ModelState.AddModelError("NIC", "This NIC already exists.");
+               
+            }
+
+            bool Licvalid = _context.Customers.Any(a => a.LicenseNo == vm.LicenseNo);
+            if (Licvalid)
+            {
+                ModelState.AddModelError("LicenseNo", "This License Number already exists.");
+            
+            }
+            if (!ModelState.IsValid) return View(vm);
+
+
+
+            var customer = new Customer
+            {
+                Username = vm.Username,
+                Password = vm.Password, // IMPORTANT: In a real app, you must hash the password here!
+                CustomerName = vm.CustomerName,
+                mail = vm.Email,
+                PhoneNumber = vm.PhoneNumber,
+                Address = vm.Address,
+                NIC = vm.NIC,
+                LicenseNo = vm.LicenseNo,
+                IsVerified = false,
+                VerificationToken = GenerateToken(),
+                VerificationTokenExpires = DateTime.UtcNow.AddHours(24)
+
+
+            };
+
+          
+
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+
+           
+            var verifyLink = Url.Action("VerifyEmail", "Account",
+                new { token = customer.VerificationToken }, Request.Scheme);
+
+            var html = $"Hi {customer.CustomerName},<br/>Click <a href='{verifyLink}'>here</a> to verify your email. Link expires in 24 hours.";
+            await SendEmailAsync(customer.mail, "Verify your email", html);
+
+            TempData["ShowPopup"] = "Check your email to verify your account!";
+            return RedirectToAction("CustomerLogin");
+        }
+
+        [HttpGet]
+        public IActionResult VerifySent() => View();
+
+        [HttpGet]
+        public async Task<IActionResult> VerifyEmail(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return Content("Invalid token.");
+
+            var customer = await _context.Customers.FirstOrDefaultAsync(c =>
+                c.VerificationToken == token &&
+                c.VerificationTokenExpires > DateTime.UtcNow);
+
+            if (customer == null) return Content("Token invalid or expired.");
+
+            customer.IsVerified = true;
+            customer.VerificationToken = null;
+            customer.VerificationTokenExpires = null;
+
+            _context.Update(customer);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("CustomerLogin");
+
+
+        
+
+        }
+
+
+
+        [HttpGet]
+        public IActionResult ForgotPassword() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return View();
+
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.mail == email);
+
+            if (customer != null)
+            {
+               
+                customer.PasswordResetToken = GenerateToken();
+                customer.PasswordResetTokenExpires = DateTime.UtcNow.AddHours(1);
+                _context.Update(customer);
+                await _context.SaveChangesAsync();
+
+                var link = Url.Action("ResetPassword", "Account", new { token = customer.PasswordResetToken }, Request.Scheme);
+                var html = $"Hi {customer.CustomerName},<br/>Click <a href='{link}'>here</a> to reset your password. Link expires in 1 hour.";
+                await SendEmailAsync(customer.mail, "Password Reset", html);
+            }
+
+            return RedirectToAction("ForgotPasswordConfirmation");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordConfirmation() => View();
+ 
+        [HttpGet]
+        public IActionResult ResetPassword(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return Content("Invalid token.");
+            var vm = new ResetPasswordViewModel { Token = token };
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid) return View(vm);
+
+            var customer = await _context.Customers.FirstOrDefaultAsync(c =>
+                c.PasswordResetToken == vm.Token &&
+                c.PasswordResetTokenExpires > DateTime.UtcNow);
+
+            if (customer == null)
+            {
+                ModelState.AddModelError("", "Token invalid or expired.");
+                return View(vm);
+            }
+
+            customer.Password = vm.NewPassword;
+            customer.PasswordResetToken = null;
+            customer.PasswordResetTokenExpires = null;
+
+            _context.Update(customer);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("CustomerLogin");
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirmation() => View();
+
+        // ================= HELPERS =================
+        private static string GenerateToken(int bytesLength = 32)
+        {
+            var bytes = new byte[bytesLength];
+            RandomNumberGenerator.Fill(bytes);
+            return WebEncoders.Base64UrlEncode(bytes);
+        }
+
+        private async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
+        {
+            using var smtp = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(_gmailSettings.Email, _gmailSettings.AppPassword),
+                EnableSsl = true
+            };
+
+            var msg = new MailMessage
+            {
+                From = new MailAddress(_gmailSettings.Email, "Car Rental System"),
+                Subject = subject,
+                Body = htmlBody,
+                IsBodyHtml = true
+            };
+            msg.To.Add(toEmail);
+
+            await smtp.SendMailAsync(msg);
+        }
         public IActionResult CustomerLogin() => View();
 
         [HttpPost]
@@ -46,7 +254,8 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.Email == model.UsernameOrEmail) && c.Password == model.Password);
+                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.mail == model.UsernameOrEmail) && (c.Password == model.Password) && (c.IsVerified==true || c.IsVerified==false && c.VerificationTokenExpires > DateTime.Now));
+                
                 if (customer != null)
                 {
                     HttpContext.Session.SetString("Username", customer.Username);
@@ -57,83 +266,14 @@ namespace CarRentalManagementSystem.Controllers
 
                 ModelState.AddModelError("", "Invalid customer username/Email or password.");
 
-                
+
             }
-            return View(model);
+            
+                return View(model);
         }
 
-        // --- UPDATED CUSTOMER REGISTRATION ---
-
-        // GET: /Account/Register
-        public IActionResult Register()
-        {
-            // Pass a new instance of the ViewModel to the view
-            return View(new RegisterViewModel());
-        }
-
-        // POST: /Account/Register
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Check if username already exists in Admins or Customers tables
-                bool userExists = _context.Admins.Any(a => a.Username == model.Username) || _context.Customers.Any(c => c.Username == model.Username);
-                if (userExists)
-                {
-                    ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
-                    return View(model);
-                }
-
-                bool Emailvalid = _context.Admins.Any(a => a.Email == model.Email) || _context.Customers.Any(c => c.Email == model.Email);
 
 
-                if (Emailvalid)
-                {
-                    ModelState.AddModelError("Email", "This email already exists.");
-                    return View(model);
-                }
-                bool NICvalid = _context.Customers.Any(a => a.NIC == model.NIC);
-                if (NICvalid)
-                {
-                    ModelState.AddModelError("NIC", "This NIC already exists.");
-                    return View(model);
-                }
-
-                bool Licvalid = _context.Customers.Any(a => a.LicenseNo == model.LicenseNo);
-                if (Licvalid)
-                {
-                    ModelState.AddModelError("LicenseNo", "This License Number already exists.");
-                    return View(model);
-                }
-
-
-                
-                // Map data from ViewModel to the Customer model
-                var customer = new Customer
-                {
-                    Username = model.Username,
-                    Password = model.Password, // IMPORTANT: In a real app, you must hash the password here!
-                    CustomerName = model.CustomerName,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    Address = model.Address,
-                    NIC = model.NIC,
-                    LicenseNo = model.LicenseNo
-                };
-
-                // Add the new customer to the database
-                _context.Customers.Add(customer);
-                _context.SaveChanges();
-
-                TempData["SuccessMessage"] = "Registration completed successfully! You can now log in.";
-                return RedirectToAction("CustomerLogin");
-            }
-
-            // If model state is not valid, return to the view with the entered data
-            return View(model);
-        }
 
         public IActionResult Logout()
         {
@@ -167,7 +307,7 @@ namespace CarRentalManagementSystem.Controllers
             {
                 Username = customer.Username,
                 CustomerName = customer.CustomerName,
-                Email = customer.Email,
+                Email = customer.mail,
                 PhoneNumber = customer.PhoneNumber,
                 Address = customer.Address,
                 NIC = customer.NIC,
@@ -229,7 +369,7 @@ namespace CarRentalManagementSystem.Controllers
 
             // 5. Update the rest of the customer's information
             customerToUpdate.CustomerName = model.CustomerName;
-            customerToUpdate.Email = model.Email;
+            customerToUpdate.mail = model.Email;
             customerToUpdate.PhoneNumber = model.PhoneNumber;
             customerToUpdate.Address = model.Address;
             customerToUpdate.NIC = model.NIC;
@@ -245,3 +385,4 @@ namespace CarRentalManagementSystem.Controllers
 
     }
 }
+//HUHU

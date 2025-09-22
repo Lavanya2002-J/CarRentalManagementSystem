@@ -1,6 +1,6 @@
 ﻿using CarRentalManagementSystem.Data;
 using CarRentalManagementSystem.Models;
-using CarRentalManagementSystem.ViewModels; 
+using CarRentalManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +61,7 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
+        // In Controllers/BookingController.cs
 
         // POST: Booking/Create
         [HttpPost]
@@ -73,19 +74,18 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("CustomerLogin", "Account");
             }
 
-            // Fetch the car
             var car = await _context.Cars.FindAsync(viewModel.CarID);
             if (car == null)
                 return NotFound();
 
-            // Server-side validation
+            // Server-side validation (remains the same)
             if (viewModel.PickupDate < DateTime.Today)
                 ModelState.AddModelError("PickupDate", "Pickup date cannot be in the past.");
 
             if (viewModel.ReturnDate <= viewModel.PickupDate)
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
 
-            // Check for overlapping bookings
+            // Check for overlapping bookings (remains the same)
             bool hasOverlap = await _context.Bookings.AnyAsync(b =>
                 b.CarID == viewModel.CarID &&
                 (b.Status == "Paid" || b.Status == "Pending") &&
@@ -95,8 +95,7 @@ namespace CarRentalManagementSystem.Controllers
             if (hasOverlap)
             {
                 ModelState.AddModelError("", "Sorry, this car is already booked for the selected dates.");
-
-                // Re-populate car details in ViewModel
+                // Re-populate car details (remains the same)
                 viewModel.CarName = car.CarName;
                 viewModel.CarModel = car.Model;
                 viewModel.DailyRate = car.DailyRate;
@@ -104,34 +103,23 @@ namespace CarRentalManagementSystem.Controllers
                 viewModel.Seats = car.Seats;
                 viewModel.FuelType = car.FuelType;
                 viewModel.Transmission = car.Transmission;
-
-                return View(viewModel); // Stay on Booking page
+                return View(viewModel);
             }
 
+            
             if (ModelState.IsValid)
             {
-                // Calculate rental days
-                var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
-                if (rentalDays <= 0) rentalDays = 1;
-
-                // Create new booking
-                var newBooking = new Booking
+                // Instead, we now redirect to the Payment controller, passing the necessary
+                // details to build the payment page. The booking will be created there.
+                return RedirectToAction("Create", "Payment", new
                 {
-                    CarID = viewModel.CarID,
-                    PickupDate = viewModel.PickupDate,
-                    ReturnDate = viewModel.ReturnDate,
-                    TotalCost = (decimal)rentalDays * car.DailyRate,
-                    CustomerID = HttpContext.Session.GetInt32("UserID").Value,
-                    Status = "Pending"
-                };
-
-                _context.Bookings.Add(newBooking);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Create", "Payment", new { bookingId = newBooking.BookingID });
+                    carId = viewModel.CarID,
+                    pickupDate = viewModel.PickupDate,
+                    returnDate = viewModel.ReturnDate
+                });
             }
 
-            // Re-populate ViewModel to show in view in case of errors
+            //  to handle cases where validation fails
             viewModel.CarName = car.CarName;
             viewModel.CarModel = car.Model;
             viewModel.DailyRate = car.DailyRate;
@@ -142,8 +130,6 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
-
-
 
         // GET: Booking/History
         public async Task<IActionResult> History()
@@ -168,6 +154,8 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(customerBookings);
         }
+
+
 
         // GET: Booking/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -194,30 +182,26 @@ namespace CarRentalManagementSystem.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Username = HttpContext.Session.GetString("Username");
-           
 
-            return View(booking);
-        }
-        public async Task<IActionResult> ViewAllBookings()
-        {
-            // Role-based access check
-            if (HttpContext.Session.GetString("Role") != "Admin")
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Fetch all bookings from the database
-            // Use Include() to load related Customer and Car data to avoid extra queries
-            var allBookings = await _context.Bookings
-                .Include(b => b.Customer)
-                .Include(b => b.Car)
-                .OrderByDescending(b => b.BookingID) // Show the latest bookings first
+            // --- NEW: Fetches all payments (including refunds) for this booking ---
+            var payments = await _context.Payments
+                .Where(p => p.BookingID == id)
+                .OrderBy(p => p.PaymentDate)
                 .ToListAsync();
 
-            return View(allBookings);
+            // --- NEW: Creates and populates the ViewModel ---
+            var viewModel = new BookingDetailsViewModel
+            {
+                Booking = booking,
+                Payments = payments
+            };
+
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            return View(viewModel); // Pass the new ViewModel to the view
         }
-        // GET: Booking/Cancel/5
+
+
+        //// GET: Booking/Cancel/5
         public async Task<IActionResult> Cancel(int? id)
         {
             if (id == null)
@@ -228,7 +212,7 @@ namespace CarRentalManagementSystem.Controllers
             // Ensure the user is a logged-in customer
             if (!IsCustomer())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerId = HttpContext.Session.GetInt32("UserID").Value;
@@ -253,6 +237,8 @@ namespace CarRentalManagementSystem.Controllers
             return View(booking);
         }
 
+
+
         // POST: Booking/Cancel/5
         [HttpPost, ActionName("Cancel")]
         [ValidateAntiForgeryToken]
@@ -261,7 +247,7 @@ namespace CarRentalManagementSystem.Controllers
             // Ensure the user is a logged-in customer
             if (!IsCustomer())
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("CustomerLogin", "Account");
             }
 
             var customerId = HttpContext.Session.GetInt32("UserID").Value;
@@ -273,23 +259,19 @@ namespace CarRentalManagementSystem.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(booking.CarID);
-            if (car == null)
-            {
-                // This case is unlikely but good to handle
-                TempData["ErrorMessage"] = "Could not find the associated car.";
-                return RedirectToAction(nameof(History));
-            }
-
-            // Update statuses
-            booking.Status = "Cancelled";
-            car.IsAvailable = true;
+            // --- START: Updated Logic for Admin Approval ---
+            // This method no longer creates a refund payment or makes the car available.
+            // It simply updates the status to flag the booking for admin review.
+            booking.Status = "Cancellation Requested";
 
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Your booking has been successfully cancelled.";
+            // The success message now informs the user about the new approval process.
+            TempData["SuccessMessage"] = "Your cancellation request has been submitted for admin approval.";
             return RedirectToAction(nameof(History));
+            // --- END: Updated Logic for Admin Approval ---
         }
+
 
         // GET: Booking/CreateByAdmin
         public async Task<IActionResult> CreateByAdmin()
@@ -302,11 +284,13 @@ namespace CarRentalManagementSystem.Controllers
             var viewModel = new AdminBookingViewModel
             {
                 Customers = await _context.Customers
-                    .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
+                    .OrderBy(c => c.CustomerName)
+                    .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.mail + ")" })
                     .ToListAsync(),
 
+                // --- CHANGE: The .Where() clause is removed to show all cars ---
                 Cars = await _context.Cars
-                    .Where(car => car.IsAvailable == true)
+                    .OrderBy(c => c.CarName)
                     .Select(car => new SelectListItem { Value = car.CarID.ToString(), Text = car.CarName + " - " + car.Model })
                     .ToListAsync()
             };
@@ -324,22 +308,42 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            // Server-side validation for dates
             if (viewModel.ReturnDate <= viewModel.PickupDate)
             {
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
             }
 
+            if (viewModel.PickupDate < DateTime.Today)
+            {
+                ModelState.AddModelError("PickupDate", "Pickup date cannot be in the past.");
+            }
+
+            // --- NEW: Dynamic check for overlapping bookings ---
+            bool hasOverlap = await _context.Bookings.AnyAsync(b =>
+                b.CarID == viewModel.CarID &&
+                (b.Status == "Paid" || b.Status == "Pending") && // Check against active bookings
+                b.PickupDate < viewModel.ReturnDate &&
+                b.ReturnDate > viewModel.PickupDate);
+
+            if (hasOverlap)
+            {
+                ModelState.AddModelError("", "This car is already booked for the selected dates. Please choose different dates or another car.");
+            }
+            // --- End of new check ---
+
             if (ModelState.IsValid)
             {
                 var car = await _context.Cars.FindAsync(viewModel.CarID);
-                if (car == null || car.IsAvailable != true)
+                if (car == null)
                 {
-                    TempData["ErrorMessage"] = "The selected car is no longer available.";
+                    // This case should ideally not happen if the form is working correctly
+                    TempData["ErrorMessage"] = "The selected car could not be found.";
                     return RedirectToAction(nameof(CreateByAdmin));
                 }
 
                 var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
-                if (rentalDays <= 0) rentalDays = 1;
+                if (rentalDays <= 0) rentalDays = 1; // Ensure at least one day is charged
 
                 // 1. Create the new booking
                 var newBooking = new Booking
@@ -349,43 +353,62 @@ namespace CarRentalManagementSystem.Controllers
                     PickupDate = viewModel.PickupDate,
                     ReturnDate = viewModel.ReturnDate,
                     TotalCost = (decimal)rentalDays * car.DailyRate,
-                    Status = "Paid"
+                    Status = "Paid" // Admin bookings are considered paid immediately
                 };
                 _context.Bookings.Add(newBooking);
 
-                // 2. Mark the car as unavailable
-                car.IsAvailable = false;
+                
 
-                // --- NEW SECTION: Create the corresponding payment record ---
+                // 2. Create the corresponding payment record
                 var newPayment = new Payment
                 {
-                    Booking = newBooking, // Link the payment to the booking object
+                    Booking = newBooking,
                     Amount = newBooking.TotalCost,
                     PaymentDate = DateTime.Now,
-                    PaymentMethod = "Admin Entry", // A clear indicator of how it was paid
+                    PaymentMethod = "Admin Entry",
                     PaymentStatus = "Completed",
                     TransactionID = $"ADM-TXN-{DateTime.UtcNow.Ticks}"
                 };
                 _context.Payments.Add(newPayment);
-                // --- END OF NEW SECTION ---
 
-                // 3. Save both the booking and payment changes to the database
+                // 3. Save both changes to the database
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Booking and Payment created successfully!";
                 return RedirectToAction(nameof(ViewAllBookings));
             }
 
-            // If the form is invalid, re-populate the dropdown lists before showing the page again
+            // If the model is invalid, re-populate the dropdown lists before showing the page again
             viewModel.Customers = await _context.Customers
-                .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.Email + ")" })
+                .OrderBy(c => c.CustomerName)
+                .Select(c => new SelectListItem { Value = c.CustomerID.ToString(), Text = c.CustomerName + " (" + c.mail + ")" })
                 .ToListAsync();
             viewModel.Cars = await _context.Cars
-                .Where(c => c.IsAvailable == true)
+                .OrderBy(c => c.CarName)
                 .Select(car => new SelectListItem { Value = car.CarID.ToString(), Text = car.CarName + " - " + car.Model })
                 .ToListAsync();
 
             return View(viewModel);
+        }
+
+
+        //// GET: Booking/ViewAllBookings
+        public async Task<IActionResult> ViewAllBookings()
+        {
+            // Role-based access check
+            if (!IsAdmin())
+            {
+                return RedirectToAction("AdminLogin", "Account");
+            }
+
+            // Fetch all bookings from the database
+            var allBookings = await _context.Bookings
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .OrderByDescending(b => b.BookingID)
+                .ToListAsync();
+
+            return View(allBookings);
         }
     }
 }

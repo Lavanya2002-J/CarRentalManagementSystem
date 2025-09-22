@@ -1,4 +1,5 @@
 using CarRentalManagementSystem.Data;
+using CarRentalManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalManagementSystem
@@ -12,6 +13,11 @@ namespace CarRentalManagementSystem
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalContext")));
+
+            builder.Services.Configure<GmailSettings>(
+          builder.Configuration.GetSection("Gmail"));
+
+
 
 
             // Add Session support

@@ -3,83 +3,103 @@
     ViewData["Title"] = "Home";
 }
 
+@* External Fonts and Icons (No change) *@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link href="~/css/site.css" rel="stylesheet" />
 
-<div class="hero-section">
-    <div class="container">
-        <h1 class="animate__animated animate__fadeInDown">Wellcome To UnicomTIC Travels </h1>
-        <h2 class="animate__animated animate__fadeInDown">Discover Your Perfect Drive</h2>
-        <p class="lead animate__animated animate__fadeInUp animate__delay-1s">
-            Handpicked cars tailored for comfort, style, and unforgettable journeys across Sri Lanka.
-        </p>
-    </div>
-</div>
+<link href="~/css/HomeIndex.css" rel="stylesheet" />
 
-<div class="container mb-5">
-    <div class="card p-3 my-4 search-card wow">
-        <form asp-controller="Home" asp-action="Index" method="get">
-            <div class="row align-items-end g-3">
-                <div class="col-lg-3 col-md-6">
-                    <label for="searchString" class="form-label fw-bold">Car Name or Model</label>
-                    <input type="text" name="searchString" class="form-control" placeholder="e.g., Toyota Aqua" value="@ViewData["CurrentSearch"]" />
-                </div>
-                <div class="col-lg-1 col-md-6">
-                    <label for="seats" class="form-label fw-bold">Seats</label>
-                    <input type="number" name="seats" class="form-control" placeholder="e.g., 5" min="1" value="@ViewData["CurrentSeats"]" />
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="pickupDate" class="form-label fw-bold">Pickup Date</label>
-                    <input type="date" name="pickupDate" class="form-control" value="@ViewData["CurrentPickupDate"]" />
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="returnDate" class="form-label fw-bold">Return Date</label>
-                    <input type="date" name="returnDate" class="form-control" value="@ViewData["CurrentReturnDate"]" />
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <label for="maxRate" class="form-label fw-bold">Max Rate /day</label>
-                    <input type="number" name="maxRate" class="form-control" placeholder="e.g., 15000" min="0" value="@ViewData["CurrentMaxRate"]" />
+<div class="hero-overlay-content">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="hero-text-content text-center text-lg-start animate__animated animate__fadeInLeft">
+                        <h5 class="hero-subheading">PREMIUM CAR RENTALS IN SRI LANKA</h5>
+                        <h1 class="my-3 display-4 fw-bold">
+                            Discover the Island with <span class="highlight">UnicomTIC Rentals</span>
+                        </h1>
+                        <p class="lead mb-4">
+                            From pristine beaches to misty mountains, your unforgettable Sri Lankan journey starts with the perfect vehicle.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="col-lg-2 col-md-12 d-grid gap-2 d-md-flex">
-                    <button type="submit" class="btn btn-primary fw-bold flex-grow-1">Find Car</button>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                <div class="col-lg-6">
+                    <div class="card hero-search-card animate__animated animate__fadeInRight">
+                        <div class="card-body p-4">
+                            <h4 class="mb-4 text-center fw-bold">Find Your Perfect Ride</h4>
+                            <form asp-controller="Home" asp-action="Index" method="get">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="searchString" class="form-label">Car Name or Model</label>
+                                        <input type="text" name="searchString" class="form-control" placeholder="e.g., Toyota Aqua" value="@ViewData["CurrentSearch"]" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="seats" class="form-label">Seats</label>
+                                        <input type="number" name="seats" class="form-control" placeholder="Any" min="1" value="@ViewData["CurrentSeats"]" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="maxRate" class="form-label">Max Rate /day</label>
+                                        <input type="number" name="maxRate" class="form-control" placeholder="e.g., 15000" min="0" value="@ViewData["CurrentMaxRate"]" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pickupDate" class="form-label">Pickup Date</label>
+                                        <input type="date" name="pickupDate" id="pickupDate" class="form-control" value="@ViewData["CurrentPickupDate"]" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="returnDate" class="form-label">Return Date</label>
+                                        <input type="date" name="returnDate" id="returnDate" class="form-control" value="@ViewData["CurrentReturnDate"]" />
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-grid d-lg-flex gap-2 mt-3">
+                                            <button type="submit" class="btn btn-glow flex-grow-1">
+                                                <i class="bi bi-search me-2"></i>Find Car
+                                            </button>
+                                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light">Clear</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div class="container my-5">
+@* *** AVAILABLE FLEET SECTION (No major changes) *** *@
+<div id="fleet-section" class="container my-5 py-5">
     <h2 class="section-title wow">Our Available Fleet</h2>
     <div class="row g-4 mt-4">
         @if (Model.Any())
         {
             @foreach (var car in Model)
             {
-                <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.1s">
-                    <div class="card car-card shadow-sm h-100">
-                        <div class="position-relative">
+                <div class="col-lg-4 col-md-6 wow" data-wow-delay="@((Model.ToList().IndexOf(car) * 0.1))s">
+                    <div class="card glow-card h-100">
+                        <div class="car-card-content d-flex flex-column">
                             @if (!string.IsNullOrEmpty(car.CarImageFileName))
                             {
-                                <img src="~/uploads/@car.CarImageFileName" class="card-img-top car-img" alt="Car Image" />
+                                <img src="~/uploads/@car.CarImageFileName" class="car-img" alt="Car Image" />
                             }
-                            @if (!string.IsNullOrEmpty(car.LogoFileName))
-                            {
-                                <img src="~/uploads/@car.LogoFileName" class="car-logo" alt="Logo" />
-                            }
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="fw-bold text-dark">@car.CarName <span class="text-muted fw-normal">(@car.Model)</span></h5>
-                            <div class="mb-3">
-                                <span class="badge bg-light text-dark me-1 p-2"><i class="bi bi-fuel-pump"></i> @car.FuelType</span>
-                                <span class="badge bg-light text-dark me-1 p-2"><i class="bi bi-gear"></i> @car.Transmission</span>
-                                <span class="badge bg-light text-dark me-1 p-2"><i class="bi bi-people"></i> @car.Seats Seats</span>
+                            <div>
+                                <h5 class="car-title">@car.CarName <span class="car-model">@car.Model</span></h5>
+                                <div class="my-3">
+                                    <span class="badge me-1"><i class="bi bi-fuel-pump me-1"></i> @car.FuelType</span>
+                                    <span class="badge me-1"><i class="bi bi-gear me-1"></i> @car.Transmission</span>
+                                    <span class="badge"><i class="bi bi-people me-1"></i> @car.Seats Seats</span>
+                                </div>
                             </div>
-                            <div class="mt-auto">
-                                <h5 class="fw-bold text-success mb-3">Rs. @car.DailyRate.ToString("N2") <small class="text-muted fw-normal">/ day</small></h5>
-                                <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarID" class="btn btn-primary w-100 fw-bold shadow-sm">Book Now</a>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="daily-rate mb-0">Rs. @car.DailyRate.ToString("N0")</h5>
+                                    <small class="text-muted">/ day</small>
+                                </div>
+                                <a asp-action="Create" asp-controller="Booking" asp-route-carId="@car.CarID" class="btn btn-glow shadow-sm">Book Now</a>
                             </div>
                         </div>
                     </div>
@@ -89,7 +109,7 @@
         else if ((bool?)ViewData["SearchAttempted"] == true)
         {
             <div class="col-12 text-center wow">
-                <div class="alert alert-info mt-4">
+                <div class="alert alert-info glass-container mt-4">
                     <h4>No Cars Found</h4>
                     <p>We couldn't find any cars that match your search criteria. Please try different filters.</p>
                 </div>
@@ -98,71 +118,131 @@
     </div>
 </div>
 
-<section class="why-choose-us py-5">
+@* *** WHY CHOOSE US SECTION (No changes)       *** *@
+<section id="why-us-section" class="why-choose-us bg-dark-section">
     <div class="container">
-        <h3 class="section-title wow">Why Our Service is the Best</h3>
+        <h3 class="section-title wow">Why Choose UnicomTIC Rentals</h3>
         <div class="row g-4 mt-3">
             <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.1s">
-                <div class="card shadow-sm h-100 text-center border-0">
-                    <div class="card-body p-4">
-                        <div class="feature-icon-dark mx-auto mb-3">
-                            <i class="bi bi-collection-fill"></i>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-2">Wide Vehicle Selection</h5>
-                        <p class="text-muted mb-0">From compact cars to spacious SUVs for your Sri Lankan adventures.</p>
+                <div class="feature-card h-100">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-car-front-fill"></i>
                     </div>
+                    <h5 class="mb-2">Wide Vehicle Selection</h5>
+                    <p class="mb-0">From compact cars to spacious SUVs for your Sri Lankan adventures.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.2s">
-                <div class="card shadow-sm h-100 text-center border-0">
-                    <div class="card-body p-4">
-                        <div class="feature-icon-dark mx-auto mb-3">
-                            <i class="bi bi-tags-fill"></i>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-2">Transparent Pricing</h5>
-                        <p class="text-muted mb-0">Enjoy competitive rates with no hidden fees. The price you see is what you pay.</p>
+                <div class="feature-card h-100">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-tags-fill"></i>
                     </div>
+                    <h5 class="mb-2">Transparent Pricing</h5>
+                    <p class="mb-0">Enjoy competitive rates with no hidden fees. The price you see is what you pay.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 wow" data-wow-delay="0.3s">
-                <div class="card shadow-sm h-100 text-center border-0">
-                    <div class="card-body p-4">
-                        <div class="feature-icon-dark mx-auto mb-3">
-                            <i class="bi bi-headset"></i>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-2">24/7 Customer Support</h5>
-                        <p class="text-muted mb-0">Our dedicated local team is always here to assist, ensuring a smooth experience.</p>
+                <div class="feature-card h-100">
+                    <div class="feature-icon mx-auto">
+                        <i class="bi bi-headset"></i>
                     </div>
+                    <h5 class="mb-2">24/7 Customer Support</h5>
+                    <p class="mb-0">Our dedicated local team is always here to assist, ensuring a smooth experience.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<style>
-    .feature-icon-dark {
-        width: 4rem;
-        height: 4rem;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #e9ecef; /* A light grey */
-        color: #0d6efd; /* Bootstrap primary blue */
-        font-size: 2rem;
-    }
-</style>
+@* *** NEW FAQ SECTION ADDED             *** *@
+
+<section id="faq-section" class="bg-dark-section faq-section">
+    <div class="container">
+        <h3 class="section-title wow">Frequently Asked Questions</h3>
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+
+                    <div class="accordion-item wow" data-wow-delay="0.1s" data-wow-animation="fadeInUp">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                What documents do I need to rent a car?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                You will need a valid driving license (your national license and an International Driving Permit if your license is not in English), your passport or national ID, and a valid credit card for the security deposit.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item wow" data-wow-delay="0.2s" data-wow-animation="fadeInUp">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Is insurance included in the rental price?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes, all our rentals come with standard comprehensive insurance. This includes coverage for collision damage, theft, and third-party liability. Please ask our representatives about the deductible (excess) amount for your chosen vehicle.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item wow" data-wow-delay="0.3s" data-wow-animation="fadeInUp">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                What is your fuel policy?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We operate on a "full-to-full" policy. You will receive the car with a full tank of fuel, and you should return it with a full tank. If the car is returned with less fuel, refueling charges will apply.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item wow" data-wow-delay="0.4s" data-wow-animation="fadeInUp">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                What should I do in case of a breakdown or accident?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Your safety is our priority. In case of any incident, please ensure you are in a safe location and contact our 24/7 support hotline immediately. We will provide immediate assistance and guide you through the necessary steps.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+
+
+
+</section>
+
+
+
+
+@* ****************************************************** *@
+@* *** SCRIPTS SECTION (Updated)           *** *@
+@* ****************************************************** *@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // WOW.js-like animation trigger on scroll
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const delay = entry.target.dataset.wowDelay || '0s';
                         entry.target.style.animationDelay = delay;
                         entry.target.style.visibility = 'visible';
+                        // Use a custom animation name from data attribute, or default to 'fadeInUp'
                         const animation = entry.target.dataset.wowAnimation || 'fadeInUp';
                         entry.target.classList.add('animate__animated', `animate__${animation}`);
                         observer.unobserve(entry.target);
@@ -173,7 +253,32 @@
             });
 
             const animatedElements = document.querySelectorAll('.wow');
-            animatedElements.forEach(el => observer.observe(el));
+            animatedElements.forEach(el => {
+                el.style.visibility = 'hidden'; // Hide elements until they are animated
+                observer.observe(el);
+            });
+
+            // Set minimum pickup date to today
+            const today = new Date().toISOString().split('T')[0];
+            const pickupDateEl = document.getElementById("pickupDate");
+            if (pickupDateEl) {
+                pickupDateEl.setAttribute('min', today);
+            }
+
+            // Logic to ensure return date is not before pickup date
+            const returnDateEl = document.getElementById("returnDate");
+
+            if (pickupDateEl && returnDateEl) {
+                pickupDateEl.addEventListener('change', function () {
+                    if (pickupDateEl.value) {
+                        returnDateEl.setAttribute('min', pickupDateEl.value);
+                        // If return date is already set and is now invalid, clear it or set it to pickup date
+                        if (returnDateEl.value && returnDateEl.value < pickupDateEl.value) {
+                            returnDateEl.value = pickupDateEl.value;
+                        }
+                    }
+                });
+            }
         });
     </script>
 }

@@ -39,16 +39,64 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(new CarViewModel());
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public IActionResult Create(CarViewModel viewModel) 
+        public IActionResult Create(CarViewModel viewModel)
         {
             if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
+            // --- Existing Duplicate Checks (Good) ---
+            var registrationNumberExists = _context.Cars.Any(a => a.RegistrationNumber == viewModel.RegistrationNumber);
+            if (registrationNumberExists)
+            {
+                ModelState.AddModelError("RegistrationNumber", "This Registration Number already exists.");
+            }
+
+            var insurancePolicyExists = _context.Cars.Any(a => a.InsurancePolicyNo == viewModel.InsurancePolicyNo);
+            if (insurancePolicyExists)
+            {
+                ModelState.AddModelError("InsurancePolicyNo", "This Insurance Policy Number already exists.");
+            }
+
+            // --- NEW: Business Logic Validation ---
+            if (viewModel.Seats <= 0)
+            {
+                ModelState.AddModelError("Seats", "Number of seats must be greater than zero.");
+            }
+
+            if (viewModel.DailyRate <= 0)
+            {
+                ModelState.AddModelError("DailyRate", "Daily Rate must be a positive number.");
+            }
+
+            if (viewModel.FuelCapacity <= 0)
+            {
+                ModelState.AddModelError("FuelCapacity", "Fuel Capacity must be greater than zero.");
+            }
+
+            if (viewModel.InsuranceExpiryDate.HasValue && viewModel.InsuranceExpiryDate.Value < DateTime.Today)
+            {
+                ModelState.AddModelError("InsuranceExpiryDate", "Insurance Expiry Date cannot be in the past.");
+            }
+            if (viewModel.LogoFile == null || viewModel.LogoFile.Length == 0)
+            {
+                ModelState.AddModelError("LogoFile", "Logo file is required.");
+            }
+            if (viewModel.CarImageFile == null || viewModel.CarImageFile.Length == 0)
+            {
+                ModelState.AddModelError("CarImageFile", "Car image file is required.");
+            }
+
+            // If any of the above custom validations failed, return the view immediately.
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            // --- The rest of your code remains the same ---
             try
             {
+                // The check is done above, but we keep it here as a final catch-all for data annotations.
                 if (ModelState.IsValid)
                 {
                     string logoFileName = null;
@@ -60,14 +108,14 @@ namespace CarRentalManagementSystem.Controllers
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    if (viewModel.LogoFile != null) 
+                    if (viewModel.LogoFile != null)
                     {
                         logoFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.LogoFile.FileName);
                         string logoPath = Path.Combine(uploadsFolder, logoFileName);
                         using (var fs = new FileStream(logoPath, FileMode.Create)) { viewModel.LogoFile.CopyTo(fs); }
                     }
 
-                    if (viewModel.CarImageFile != null) 
+                    if (viewModel.CarImageFile != null)
                     {
                         imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.CarImageFile.FileName);
                         string imagePath = Path.Combine(uploadsFolder, imageFileName);
@@ -105,9 +153,11 @@ namespace CarRentalManagementSystem.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "An error occurred: " + ex.Message);
-                return View(viewModel); 
+                return View(viewModel);
             }
         }
+
+        
 
         // GET: Car/Edit/{id}
         public IActionResult Edit(Guid id)
@@ -141,17 +191,17 @@ namespace CarRentalManagementSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public IActionResult Edit(CarViewModel viewModel) 
+
+        public IActionResult Edit(CarViewModel viewModel)
         {
             if (!IsAdmin()) return RedirectToAction("AdminLogin", "Account");
 
             if (ModelState.IsValid)
             {
-                var car = _context.Cars.FirstOrDefault(c => c.CarID == viewModel.CarID); 
+                var car = _context.Cars.FirstOrDefault(c => c.CarID == viewModel.CarID);
                 if (car == null) return NotFound();
 
-                car.CarName = viewModel.CarName; 
+                car.CarName = viewModel.CarName;
                 car.Model = viewModel.Model;
                 car.FuelType = viewModel.FuelType;
                 car.Transmission = viewModel.Transmission;
@@ -165,13 +215,13 @@ namespace CarRentalManagementSystem.Controllers
                 car.InsurancePolicyNo = viewModel.InsurancePolicyNo;
                 car.InsuranceExpiryDate = viewModel.InsuranceExpiryDate;
 
-                
+
 
 
 
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
 
-                if (viewModel.LogoFile != null) 
+                if (viewModel.LogoFile != null)
                 {
                     if (!string.IsNullOrEmpty(car.LogoFileName))
                     {
@@ -183,7 +233,7 @@ namespace CarRentalManagementSystem.Controllers
                     using (var fs = new FileStream(logoPath, FileMode.Create)) { viewModel.LogoFile.CopyTo(fs); }
                 }
 
-                if (viewModel.CarImageFile != null) 
+                if (viewModel.CarImageFile != null)
                 {
                     if (!string.IsNullOrEmpty(car.CarImageFileName))
                     {
@@ -201,7 +251,7 @@ namespace CarRentalManagementSystem.Controllers
                 TempData["Success"] = "Car updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(viewModel); 
+            return View(viewModel);
         }
 
         // GET: Car/Delete/{id}
