@@ -11,9 +11,13 @@ body {
 }
 
 /* --- Page Header --- */
-.page-header h2 {
+.page-header h2, .page-header h4 {
     color: #fff;
     text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.page-header strong {
+    color: #00d9ff;
 }
 
 /* --- Glass Panel Container --- */
@@ -25,16 +29,16 @@ body {
     border-radius: 15px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     animation: fadeInSlideUp 0.8s ease-out forwards;
-    color: #e0ee0;
+    color: #e0e0e0;
 }
 
-    .glass-panel h5 {
-        color: #fff;
-        font-weight: 600;
-    }
+/* --- Form Styling --- */
+.form-label {
+    color: #c7c7c7;
+    font-weight: 600 !important;
+}
 
-/* Form Styling with Floating Labels */
-.form-floating > .form-control {
+.form-control {
     background-color: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff;
@@ -42,44 +46,65 @@ body {
     transition: all 0.3s ease;
 }
 
-    .form-floating > .form-control:focus {
+    .form-control::placeholder {
+        color: #a0a0a0;
+    }
+
+    .form-control:focus {
         background-color: rgba(255, 255, 255, 0.1);
         color: #fff;
         border-color: #00aaff;
         box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
     }
-/* Style for the floating label itself */
-.form-floating > label {
-    color: #a0a0a0;
-}
 
-/* Buttons */
+/* --- Interactive Star Rating --- */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse; /* This is the key trick */
+    justify-content: center;
+    gap: 5px;
+}
+    /* Hide the actual radio buttons */
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+    /* Style the star labels */
+    .star-rating label {
+        font-size: 2.5rem;
+        color: #444; /* Unselected star color */
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+    /* On hover, color the star and all stars to its "right" (which are previous siblings due to flex-direction: row-reverse) */
+    .star-rating:hover label {
+        color: #ffc107;
+    }
+
+    .star-rating label:hover ~ label {
+        color: #444;
+    }
+    /* When a radio is checked, permanently color it and its previous siblings */
+    .star-rating input[type="radio"]:checked ~ label {
+        color: #ffc107;
+    }
+
+
+/* --- Buttons --- */
 .btn-primary {
     background: linear-gradient(90deg, #007bff, #00aaff);
     border: none;
-    padding: 12px 0;
+    padding: 10px 25px;
     font-weight: 600;
-    letter-spacing: 0.5px;
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
-    .btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 170, 255, 0.3);
-    }
-
-/* Custom Alerts */
-.alert-glass-success {
-    background: rgba(28, 200, 138, 0.2);
-    border: 1px solid rgba(28, 200, 138, 0.5);
-    color: #9be6a8;
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid #6c757d;
+    padding: 10px 25px;
+    font-weight: 600;
 }
 
-hr {
-    border-color: rgba(255, 255, 255, 0.15);
-}
-
-/* Animation */
+/* --- Animation --- */
 @keyframes fadeInSlideUp {
     from {
         opacity: 0;

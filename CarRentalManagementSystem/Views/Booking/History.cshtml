@@ -1,17 +1,21 @@
-﻿
-@model IEnumerable<CarRentalManagementSystem.Models.Booking>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-glass-success">@TempData["SuccessMessage"]</div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-glass-danger">@TempData["ErrorMessage"]</div>
-    }
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
+@{
+    ViewData["Title"] = "My Booking History";
+}
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-glass-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-glass-danger">@TempData["ErrorMessage"]</div>
+}
 
 <link rel="stylesheet" href="~/css/BookingHistory.css" asp-append-version="true" />
 
+<div class="container-fluid py-4">
+    <h1 class="text-center mb-4 page-title">@ViewData["Title"]</h1>
 
     @if (!Model.Any())
     {
@@ -58,7 +62,7 @@
                             </ul>
 
                             <div class="mt-auto pt-3">
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center flex-wrap gap-2">
                                     @if (booking.Status == "Pending")
                                     {
                                         <a asp-controller="Payment" asp-action="Create"
@@ -81,6 +85,15 @@
                                             <i class="bi bi-x-circle me-1"></i> Cancel
                                         </a>
                                     }
+
+                                    @* --- THIS IS THE NEWLY ADDED CODE FOR FEEDBACK --- *@
+                                    @if (booking.Status == "Paid" && booking.ReturnDate < DateTime.Today)
+                                    {
+                                        <a asp-controller="Feedback" asp-action="Create" asp-route-bookingId="@booking.BookingID" class="btn btn-outline-info">
+                                            <i class="bi bi-star-fill me-1"></i> Leave Feedback
+                                        </a>
+                                    }
+                                    @* --- END OF ADDED CODE --- *@
                                 </div>
                             </div>
                         </div>
