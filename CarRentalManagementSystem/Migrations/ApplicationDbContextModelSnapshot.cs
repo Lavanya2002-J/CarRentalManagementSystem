@@ -56,7 +56,7 @@ namespace CarRentalManagementSystem.Migrations
                             Name = "Administrator",
                             Password = "Admin@123",
                             Username = "Admin",
-                            mail = "admin@carental.com"
+                            mail = "admin@gmail.com"
                         });
                 });
 
