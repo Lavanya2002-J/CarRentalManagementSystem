@@ -34,22 +34,23 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <!-- Left Links -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="bi bi-house-door"></i> Home
                             </a>
                         </li>
-
-                        
                     </ul>
 
-                    <!-- Right Links -->
                     <ul class="navbar-nav">
+                        <li class="nav-item me-3">
+                            <button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#socialOffcanvas" aria-controls="socialOffcanvas">
+                                <i class="bi bi-share-fill"></i> Contact Us
+                            </button>
+                        </li>
                         @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Username")))
                         {
-                           
+
                             <li class="nav-item">
                                 <span class="navbar-text me-3">
                                     <i class="bi bi-person-circle"></i>
@@ -59,14 +60,11 @@
 
                             @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")
                             {
-
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Dashboard">
                                         <i class="bi bi-speedometer2"></i> Admin Dashboard
                                     </a>
                                 </li>
-
-                                
                             }
                             else
                             {
@@ -78,14 +76,13 @@
                             }
 
                             <li class="nav-item">
-                                <a class="btn btn-outline-light btn-sm ms-3" asp-area="" asp-controller="Account" asp-action="Logout">
+                                <a class="btn btn-outline-light btn-sm" asp-area="" asp-controller="Account" asp-action="Logout">
                                     <i class="bi bi-box-arrow-right"></i> Logout
                                 </a>
                             </li>
                         }
                         else
                         {
-                            <!-- LOGGED IN -->
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Home" asp-action="Index" asp-fragment="fleet-section">
                                     <i class="bi bi-car-front"></i> Our Fleet
@@ -103,7 +100,6 @@
                                     <i class="bi bi-question-circle"></i> FAQ
                                 </a>
                             </li>
-                            <!-- GUEST -->
                             <li class="nav-item">
                                 <a class="btn btn-outline-light btn-sm me-2" asp-area="" asp-controller="Account" asp-action="CustomerLogin">
                                     <i class="bi bi-box-arrow-in-right"></i> Login
@@ -120,6 +116,29 @@
             </div>
         </nav>
     </header>
+
+    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="socialOffcanvas" aria-labelledby="offcanvasLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="offcanvasLabel">Contact Us </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="d-grid gap-3">
+                <a href="https://wa.me/94728011787" target="_blank" class="btn btn-success">
+                    <i class="bi bi-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://facebook.com/thenu.thena.2025" target="_blank" class="btn btn-primary">
+                    <i class="bi bi-facebook"></i> FaceBook
+                </a>
+                <a href="https://www.instagram.com/_thenushan_?igsh=aWN3N2lvcjZwYTFj&utm_source=qr" target="_blank" class="btn btn-danger">
+                    <i class="bi bi-instagram"></i> Instagram
+                </a>
+                <a href="https://www.tiktok.com/@@theanushan?_t=ZS-8zuuyFteCyA&_r=1" target="_blank" class="btn btn-light text-dark">
+                    <i class="bi bi-tiktok"></i> TikTok
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow-1">
