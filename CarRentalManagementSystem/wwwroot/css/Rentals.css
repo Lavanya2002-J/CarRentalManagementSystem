@@ -1,0 +1,74 @@
+﻿/* --- Body & Background --- */
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit-crop');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* --- Page Header --- */
+.page-header h2 {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    font-weight: 700;
+}
+
+/* --- Main Glass Panel --- */
+.glass-panel {
+    background: rgba(10, 15, 25, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    animation: fadeIn 0.6s ease-out forwards;
+    padding: 0;
+}
+
+/* --- Custom Glass Table --- */
+.table-glass {
+    color: #e0e0e0;
+}
+    .table-glass thead th {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid rgba(0, 217, 255, 0.5);
+    }
+    .table-glass tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+    .table-glass td, .table-glass th {
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    .table-glass td {
+        font-weight: 500;
+        color: black;
+    }
+
+/* --- Visual Status Indicators --- */
+.status-yes, .status-no {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+.status-yes {
+    color: #1cc88a; /* Success Green */
+}
+.status-no {
+    color: #e74a3b; /* Danger Red */
+}
+
+/* --- Buttons --- */
+.btn-warning {
+    font-weight: 600;
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -3,6 +3,12 @@
     ViewData["Title"] = "Customer Sign In";
     // This view now integrates with your main _Layout.cshtml, just like the dashboard.
 }
+@if (TempData["ShowPopup"] != null)
+{
+    <script>
+        alert("@TempData["ShowPopup"]");
+    </script>
+}
 
 <link rel="stylesheet" href="~/css/CDB.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/C.Login.css" asp-append-version="true" />
@@ -19,13 +25,23 @@
                         UnicomTIC Travels
                     </h1>
                 </div>
-               
+
                 <div class="login-header text-center">
                     <h2 class="h2 mb-4">Login In to Your Account</h2>
                 </div>
                 <div id="live-datetime" class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
                 </div>
 
+                @* --- THIS BLOCK IS THE ONLY ADDITION --- *@
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                }
+                @* --- END OF ADDITION --- *@
 
                 <form asp-action="CustomerLogin" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -40,6 +56,8 @@
                         <input asp-for="Password" class="form-control" placeholder="Password" />
                         <label asp-for="Password"></label>
                         <span asp-validation-for="Password" class="text-danger"></span>
+                        <i class="fas fa-eye password-toggle"></i>
+
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -49,7 +67,10 @@
                                 Remember me
                             </label>
                         </div>
-                        <a href="#" class="forgot-password">Forgot password?</a>
+                        <div class="forgot-password">
+                            <a asp-controller="Account" asp-action="ForgotPassword"> <strong> ForgotPassword </strong></a>
+                        </div>
+                        
                     </div>
 
                     <div class="d-grid">
@@ -60,9 +81,7 @@
                 <div class="login-footer text-center mt-4">
                     <a asp-controller="Account" asp-action="Register">Don't have an account? <strong> Register Your Account</strong></a>
                 </div>
-                <div class="login-footer text-center mt-4">
-                    <a asp-controller="Account" asp-action="ForgotPassword">Don't have an account? <strong> ForgotPassword </strong></a>
-                </div>
+                
             </div>
 
         </div>
@@ -84,7 +103,7 @@
                 hour: 'numeric',      // e.g., "1"
                 minute: 'numeric',    // e.g., "50"
                 second: 'numeric',    // e.g., "30"
-                hour12: true,       // Use 12-hour format (AM/PM)
+                hour12: true,         // Use 12-hour format (AM/PM)
                 timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
                 timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
             };

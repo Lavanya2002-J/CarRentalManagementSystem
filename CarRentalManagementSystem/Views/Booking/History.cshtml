@@ -1,21 +1,27 @@
-﻿
-@model IEnumerable<CarRentalManagementSystem.Models.Booking>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-glass-success">@TempData["SuccessMessage"]</div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-glass-danger">@TempData["ErrorMessage"]</div>
-    }
-
-
+﻿@model IEnumerable<CarRentalManagementSystem.Models.Booking>
+@{
+    ViewData["Title"] = "My Booking History";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="~/css/BookingHistory.css" asp-append-version="true" />
 
 
+@* These TempData messages will show success or error alerts *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="container py-4">
+    <h1 class="text-center mb-5">@ViewData["Title"]</h1>
+
     @if (!Model.Any())
     {
-        <div class="text-center mt-5 no-bookings-message">
+        <div class="text-center">
             <p class="lead">You have not made any bookings yet.</p>
             <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">
                 <i class="bi bi-car-front-fill me-2"></i>Browse Cars & Start a Journey
@@ -27,58 +33,64 @@
         <div class="row">
             @foreach (var booking in Model.OrderByDescending(b => b.BookingID))
             {
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card booking-card h-100">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
                         <img src="@Url.Content("~/uploads/" + booking.Car.CarImageFileName)" class="card-img-top" alt="@booking.Car.CarName" style="height: 200px; object-fit: cover;">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@booking.Car.CarName - @booking.Car.Model</h5>
-                            <ul class="list-group list-group-flush flex-grow-1">
-                                <li class="list-group-item"><strong>Pickup:</strong> @booking.PickupDate.ToString("yyyy-MM-dd")</li>
-                                <li class="list-group-item"><strong>Return:</strong> @booking.ReturnDate.ToString("yyyy-MM-dd")</li>
-                                <li class="list-group-item"><strong>Total Cost:</strong> LKR @booking.TotalCost.ToString("N2")</li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <h5 class="card-title fw-bold">@booking.Car.CarName</h5>
+                            <p class="card-subtitle mb-2 text-muted">@booking.Car.Model</p>
+
+                            <ul class="list-group list-group-flush flex-grow-1 my-3">
+                                <li class="list-group-item px-0"><strong>Pickup:</strong> @booking.PickupDate.ToString("dd MMM, yyyy")</li>
+                                <li class="list-group-item px-0"><strong>Return:</strong> @booking.ReturnDate.ToString("dd MMM, yyyy")</li>
+                                <li class="list-group-item px-0"><strong>Total Cost:</strong> LKR @booking.TotalCost.ToString("N2")</li>
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
                                     <strong>Status:</strong>
                                     @if (booking.Status == "Paid")
                                     {
-                                        <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Paid</span>
+                                        <span class="badge bg-success">Paid</span>
                                     }
                                     else if (booking.Status == "Pending")
                                     {
-                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Pending Payment</span>
+                                        <span class="badge bg-warning text-dark">Pending Payment</span>
                                     }
                                     else if (booking.Status == "Cancelled")
                                     {
-                                        <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle">Cancelled</span>
+                                        <span class="badge bg-danger">Cancelled</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">@booking.Status</span>
+                                        <span class="badge bg-secondary">@booking.Status</span>
                                     }
                                 </li>
                             </ul>
 
                             <div class="mt-auto pt-3">
-                                <div class="d-flex justify-content-center">
+                                <div class="d-grid gap-2">
+                                    @* --- THIS IS THE MAIN FIX --- *@
                                     @if (booking.Status == "Pending")
                                     {
-                                        <a asp-controller="Payment" asp-action="Create"
-                                           asp-route-bookingId="@booking.BookingID"
-                                           asp-route-amount="@booking.TotalCost"
-                                           class="btn btn-success">
+                                        <a asp-controller="Payment" asp-action="PayForBooking" asp-route-bookingId="@booking.BookingID" class="btn btn-success">
                                             <i class="bi bi-credit-card-fill me-1"></i> Pay Now
                                         </a>
                                     }
-                                    else
-                                    {
-                                        <a asp-controller="Booking" asp-action="Details" asp-route-id="@booking.BookingID" class="btn btn-primary">
-                                            <i class="bi bi-eye-fill me-1"></i> View Details
-                                        </a>
-                                    }
+
+                                    <a asp-controller="Booking" asp-action="Details" asp-route-id="@booking.BookingID" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye-fill me-1"></i> View Details
+                                    </a>
 
                                     @if ((booking.Status == "Pending" || booking.Status == "Paid") && booking.PickupDate >= DateTime.Today)
                                     {
                                         <a asp-controller="Booking" asp-action="Cancel" asp-route-id="@booking.BookingID" class="btn btn-outline-danger">
-                                            <i class="bi bi-x-circle me-1"></i> Cancel
+                                            <i class="bi bi-x-circle me-1"></i> Cancel Booking
+                                        </a>
+                                    }
+
+                                    @* --- BONUS FEATURE: LEAVE FEEDBACK --- *@
+                                    @if (booking.Status == "Paid" && booking.ReturnDate < DateTime.Today)
+                                    {
+                                        <a asp-controller="Feedback" asp-action="Create" asp-route-bookingId="@booking.BookingID" class="btn btn-outline-info">
+                                            <i class="bi bi-star-fill me-1"></i> Leave Feedback
                                         </a>
                                     }
                                 </div>
@@ -90,9 +102,3 @@
         </div>
     }
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

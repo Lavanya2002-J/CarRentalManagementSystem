@@ -16,12 +16,12 @@
                 <h1 class="mb-1">Hello, @ViewBag.Username!</h1>
                 <p class="text-muted">Welcome back. Here you can manage your bookings and personal information.</p>
             </div>
-            <div class="col-lg-4 d-flex justify-content-lg-end">
+           @*  <div class="col-lg-4 d-flex justify-content-lg-end">
                 <div class="stat-box w-100 text-center">
                     <div class="stat-number">@ViewBag.ActiveBookingsCount</div>
                     <div class="stat-label">Active Rentals</div>
                 </div>
-            </div>
+            </div> *@
         </div>
     </div>
 
@@ -121,7 +121,7 @@
                     return;
                 }
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(e) {                                
                     previewContainer.style.backgroundImage = `url(${e.target.result})`;
                     if (previewText) {
                         previewText.style.display = 'none';
