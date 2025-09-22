@@ -72,11 +72,11 @@ namespace CarRentalManagementSystem.ViewModels
         // --- File Uploads & Existing Paths ---
 
         [Display(Name = "Brand Logo")]
-        [Required(ErrorMessage = "Brand logo is required")]
+ +
         public IFormFile LogoFile { get; set; }
 
         [Display(Name = "Car Image")]
-        [Required(ErrorMessage = "Car image is required")]
+      
         public IFormFile CarImageFile { get; set; }
 
         public string ExistingLogoPath { get; set; }
