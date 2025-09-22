@@ -52,14 +52,14 @@
                                 {
                                     <tr>
                                         <td>@item.MonthYear</td>
-                                        <td class="text-end">@item.TotalRevenue.ToString("C", new System.Globalization.CultureInfo("si-LK"))</td>
+                                        <td class="text-end">LKR @item.TotalRevenue.ToString("N2")</td>
                                     </tr>
                                 }
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td>Total</td>
-                                    <td class="text-end">@Model.MonthlyRevenue.Sum(r => r.TotalRevenue).ToString("C", new System.Globalization.CultureInfo("si-LK"))</td>
+                                    <td class="text-end">LKR @Model.MonthlyRevenue.Sum(r => r.TotalRevenue).ToString("N2")</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -140,7 +140,7 @@
                                         <tr>
                                             <td>@customer.CustomerName</td>
                                             <td class="text-center">@customer.TotalBookings</td>
-                                            <td>@customer.TotalSpent.ToString("C", new System.Globalization.CultureInfo("si-LK"))</td>
+                                            <td>LKR @customer.TotalSpent.ToString("N2")</td>
                                         </tr>
                                     }
                                 </tbody>
