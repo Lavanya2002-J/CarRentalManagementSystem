@@ -357,7 +357,7 @@ namespace CarRentalManagementSystem.Controllers
                 };
                 _context.Bookings.Add(newBooking);
 
-                // --- REMOVED: The line "car.IsAvailable = false;" is no longer here ---
+                
 
                 // 2. Create the corresponding payment record
                 var newPayment = new Payment
