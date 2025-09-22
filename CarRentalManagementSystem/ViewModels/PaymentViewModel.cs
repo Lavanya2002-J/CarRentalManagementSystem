@@ -7,6 +7,7 @@ namespace CarRentalManagementSystem.ViewModels
     {
         // Data for creating the Payment record
         public int BookingID { get; set; }
+        public Guid CarID { get; set; }
         public decimal Amount { get; set; }
 
         [Required(ErrorMessage = "Please select a payment method.")]

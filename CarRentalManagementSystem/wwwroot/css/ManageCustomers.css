@@ -33,7 +33,7 @@ body {
 
     .table-glass thead th {
         background-color: rgba(0, 0, 0, 0.3);
-        color: #fff;
+        color: white;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -51,7 +51,7 @@ body {
     .table-glass td {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         font-weight: 500;
-        color: #fff; /* FIXED: Corrected from darkblue for visibility */
+        color: black; 
     }
 
     .table-glass .no-items-row td {

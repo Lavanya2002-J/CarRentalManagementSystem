@@ -65,7 +65,7 @@ namespace CarRentalManagementSystem.Controllers
                     SendEmail(
                         booking.Customer.mail,   // from Customer model
                         "Car Return Reminder",
-                        $"Hello {booking.Customer.CustomerName},\nYour car is due for return today ({today:yyyy-MM-dd}\n endaiku car tharadi vedu vilum mavan \n olunga vanthu thanthidu )."
+                        $"Hello {booking.Customer.CustomerName},\nYour car is due for return today ({today:yyyy-MM-dd}\n  )."
                     );
 
                     booking.ReturnEmailSent = true;
@@ -96,7 +96,7 @@ namespace CarRentalManagementSystem.Controllers
                     SendEmail(
                         booking.Customer.mail,   // from Customer model
                         "Ethu car book panaika ",
-                        $"Hello {booking.Customer.CustomerName},\nEndaiku   ({today:yyyy-MM-dd} book pana thu ku nanri  )."
+                        $"Hello {booking.Customer.CustomerName},\n Thankyou for booking ({today:yyyy-MM-dd}   )."
                     );
 
                     booking.PickupEmailSent = true;
