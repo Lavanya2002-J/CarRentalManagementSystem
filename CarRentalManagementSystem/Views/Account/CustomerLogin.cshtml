@@ -67,7 +67,10 @@
                                 Remember me
                             </label>
                         </div>
-                        <a href="#" class="forgot-password">Forgot password?</a>
+                        <div class="forgot-password">
+                            <a asp-controller="Account" asp-action="ForgotPassword"> <strong> ForgotPassword </strong></a>
+                        </div>
+                        
                     </div>
 
                     <div class="d-grid">
@@ -78,9 +81,7 @@
                 <div class="login-footer text-center mt-4">
                     <a asp-controller="Account" asp-action="Register">Don't have an account? <strong> Register Your Account</strong></a>
                 </div>
-                <div class="login-footer text-center mt-4">
-                    <a asp-controller="Account" asp-action="ForgotPassword"> <strong> ForgotPassword </strong></a>
-                </div>
+                
             </div>
 
         </div>
