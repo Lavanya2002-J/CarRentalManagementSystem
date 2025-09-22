@@ -55,12 +55,12 @@ namespace CarRentalManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel vm)
         {
-            if (!ModelState.IsValid) return View(vm);
+            
             bool userExists = _context.Admins.Any(a => a.Username == vm.Username) || _context.Customers.Any(c => c.Username == vm.Username);
             if (userExists)
             {
                 ModelState.AddModelError("Username", "This username is already taken. Please choose another.");
-                return View(vm);
+                
             }
 
             bool Emailvalid = _context.Admins.Any(a => a.mail == vm.Email) || _context.Customers.Any(c => c.mail == vm.Email);
@@ -69,21 +69,22 @@ namespace CarRentalManagementSystem.Controllers
             if (Emailvalid)
             {
                 ModelState.AddModelError("Email", "This email already exists.");
-                return View(vm);
+               
             }
             bool NICvalid = _context.Customers.Any(a => a.NIC == vm.NIC);
             if (NICvalid)
             {
                 ModelState.AddModelError("NIC", "This NIC already exists.");
-                return View(vm);
+               
             }
 
             bool Licvalid = _context.Customers.Any(a => a.LicenseNo == vm.LicenseNo);
             if (Licvalid)
             {
                 ModelState.AddModelError("LicenseNo", "This License Number already exists.");
-                return View(vm);
+            
             }
+            if (!ModelState.IsValid) return View(vm);
 
 
 
@@ -104,10 +105,12 @@ namespace CarRentalManagementSystem.Controllers
 
             };
 
+          
+
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
-            // Send verification email
+           
             var verifyLink = Url.Action("VerifyEmail", "Account",
                 new { token = customer.VerificationToken }, Request.Scheme);
 
@@ -141,10 +144,13 @@ namespace CarRentalManagementSystem.Controllers
 
             return RedirectToAction("CustomerLogin");
 
-        }
-       
 
- 
+        
+
+        }
+
+
+
         [HttpGet]
         public IActionResult ForgotPassword() => View();
 
@@ -248,7 +254,7 @@ namespace CarRentalManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.mail == model.UsernameOrEmail) && c.Password == model.Password && c.IsVerified==true);
+                var customer = _context.Customers.FirstOrDefault(c => (c.Username == model.UsernameOrEmail || c.mail == model.UsernameOrEmail) && (c.Password == model.Password) && (c.IsVerified==true || c.IsVerified==false && c.VerificationTokenExpires > DateTime.Now));
                 
                 if (customer != null)
                 {
@@ -262,7 +268,8 @@ namespace CarRentalManagementSystem.Controllers
 
 
             }
-            return View(model);
+            
+                return View(model);
         }
 
 

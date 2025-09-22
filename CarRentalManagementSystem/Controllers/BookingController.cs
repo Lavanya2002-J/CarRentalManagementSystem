@@ -61,6 +61,7 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
+        // In Controllers/BookingController.cs
 
         // POST: Booking/Create
         [HttpPost]
@@ -73,19 +74,18 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("CustomerLogin", "Account");
             }
 
-            // Fetch the car
             var car = await _context.Cars.FindAsync(viewModel.CarID);
             if (car == null)
                 return NotFound();
 
-            // Server-side validation
+            // Server-side validation (remains the same)
             if (viewModel.PickupDate < DateTime.Today)
                 ModelState.AddModelError("PickupDate", "Pickup date cannot be in the past.");
 
             if (viewModel.ReturnDate <= viewModel.PickupDate)
                 ModelState.AddModelError("ReturnDate", "Return date must be after the pickup date.");
 
-            // Check for overlapping bookings
+            // Check for overlapping bookings (remains the same)
             bool hasOverlap = await _context.Bookings.AnyAsync(b =>
                 b.CarID == viewModel.CarID &&
                 (b.Status == "Paid" || b.Status == "Pending") &&
@@ -95,8 +95,7 @@ namespace CarRentalManagementSystem.Controllers
             if (hasOverlap)
             {
                 ModelState.AddModelError("", "Sorry, this car is already booked for the selected dates.");
-
-                // Re-populate car details in ViewModel
+                // Re-populate car details (remains the same)
                 viewModel.CarName = car.CarName;
                 viewModel.CarModel = car.Model;
                 viewModel.DailyRate = car.DailyRate;
@@ -104,34 +103,23 @@ namespace CarRentalManagementSystem.Controllers
                 viewModel.Seats = car.Seats;
                 viewModel.FuelType = car.FuelType;
                 viewModel.Transmission = car.Transmission;
-
-                return View(viewModel); // Stay on Booking page
+                return View(viewModel);
             }
 
+            
             if (ModelState.IsValid)
             {
-                // Calculate rental days
-                var rentalDays = (viewModel.ReturnDate - viewModel.PickupDate).TotalDays;
-                if (rentalDays <= 0) rentalDays = 1;
-
-                // Create new booking
-                var newBooking = new Booking
+                // Instead, we now redirect to the Payment controller, passing the necessary
+                // details to build the payment page. The booking will be created there.
+                return RedirectToAction("Create", "Payment", new
                 {
-                    CarID = viewModel.CarID,
-                    PickupDate = viewModel.PickupDate,
-                    ReturnDate = viewModel.ReturnDate,
-                    TotalCost = (decimal)rentalDays * car.DailyRate,
-                    CustomerID = HttpContext.Session.GetInt32("UserID").Value,
-                    Status = "Pending"
-                };
-
-                _context.Bookings.Add(newBooking);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Create", "Payment", new { bookingId = newBooking.BookingID });
+                    carId = viewModel.CarID,
+                    pickupDate = viewModel.PickupDate,
+                    returnDate = viewModel.ReturnDate
+                });
             }
 
-            // Re-populate ViewModel to show in view in case of errors
+            //  to handle cases where validation fails
             viewModel.CarName = car.CarName;
             viewModel.CarModel = car.Model;
             viewModel.DailyRate = car.DailyRate;
@@ -142,8 +130,6 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
-
-
 
         // GET: Booking/History
         public async Task<IActionResult> History()
@@ -371,7 +357,7 @@ namespace CarRentalManagementSystem.Controllers
                 };
                 _context.Bookings.Add(newBooking);
 
-                // --- REMOVED: The line "car.IsAvailable = false;" is no longer here ---
+                
 
                 // 2. Create the corresponding payment record
                 var newPayment = new Payment

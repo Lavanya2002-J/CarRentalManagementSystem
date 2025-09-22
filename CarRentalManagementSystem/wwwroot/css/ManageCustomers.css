@@ -1,6 +1,6 @@
 ﻿/* --- Body & Background --- */
 body {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto-format&fit=crop');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -33,7 +33,7 @@ body {
 
     .table-glass thead th {
         background-color: rgba(0, 0, 0, 0.3);
-        color: #fff;
+        color: white;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -51,7 +51,7 @@ body {
     .table-glass td {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         font-weight: 500;
-        color: darkblue;
+        color: black; 
     }
 
     .table-glass .no-items-row td {

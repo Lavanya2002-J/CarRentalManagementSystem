@@ -1,297 +1,474 @@
-* --- Global & Base Styles --- */
-html {
-    font-size: 14px;
-    position: relative;
-    min-height: 100%;
-}
-
-body, html {
-    height: 100%;
-    margin-bottom: 60px; /* Space for the footer */
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-
-
-body, html {
-    height: 100%;
-    margin-bottom: 60px;
-}
-
-
-.main-content {
-    min-height: calc(100vh - 100px); /* 100px = footer height */
-    padding-bottom: 20px; /* Optional extra space */
-}
-
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-
-.car-card {
-    transition: all 0.3s ease;
-}
-
-    .car-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-.car-img {
-    height: 220px;
-    object-fit: cover;
-}
-
-.car-logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 5px;
-    border-radius: 8px;
-}
-
-.text-gradient {
-    background: linear-gradient(90deg, #007bff, #6610f2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.text-gradient {
-    background: linear-gradient(90deg, #007bff, #6610f2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-table.compact-table td,
-table.compact-table th {
-    padding: 6px 10px !important;
-    font-size: 0.85rem;
-    vertical-align: middle;
-}
-
-.compact-table .btn-sm {
-    padding: 3px 8px;
-    font-size: 0.75rem;
-}
-
-.compact-table img {
-    max-height: 40px;
-    max-width: 60px;
-}
-
-
-
-
-.badge {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-}
-
-.car-color-box {
-    width: 18px;
-    height: 14px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-}
-
-
-
-
-.btn-gradient-primary:hover {
-    background: linear-gradient(45deg, #0056b3, #00aaff) !important;
-    color: #fff;
-}
-
-.table img {
-    width: 100px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-/* Hero Section with Background Image */
-.hero-section {
-    position: relative;
-    padding: 120px 0;
-    text-align: center;
-    color: white;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1533106478329-188b0a19545d?q=80&w=2070&auto=format&fit=crop');
+/* --- GLOBAL STYLES --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    /* The last numbers are now lower (0.4, 0.5), making the overlay less dark */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-attachment: fixed;
+    color: #f0f0f0;
+}
+    /* Dark overlay for readability */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(10, 10, 20, 0.7);
+        z-index: -1;
+    }
+
+/* ----------------------------- */
+/* ---   GLASS CONTAINER     --- */
+/* ----------------------------- */
+.glass-container {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* ----------------------------- */
+/* ---      HERO & SEARCH    --- */
+/* ----------------------------- */
+/*.hero-section {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 0;
 }
 
     .hero-section h1 {
         font-weight: 700;
         font-size: 3.5rem;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
-    .hero-section p {
+    .hero-section .lead {
         font-size: 1.25rem;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
+        max-width: 600px;
+        margin: 1rem auto 2rem;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
 
-/* Style adjustments for the search card */
 .search-card {
-    margin-top: -50px; /* Pulls the card up slightly over the hero image */
-    z-index: 10;
+    padding: 2rem 2.5rem;
+    width: 100%;
+    max-width: 1100px;*/ /* Wider search card */
+/*}
+
+    .search-card .form-label {
+        color: #c0c0c0;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+    }
+
+    .search-card .form-control {
+        background-color: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-radius: 8px;
+    }
+
+        .search-card .form-control:focus {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-color: #03dac6;
+            box-shadow: 0 0 10px rgba(3, 218, 198, 0.5);
+            color: #fff;
+        }
+
+        .search-card .form-control::placeholder {
+            color: #888;
+        }*/
+
+/* ----------------------------- */
+/* ---      HERO & SEARCH    --- */
+/* ----------------------------- */
+/* ----------------------------- */
+/* ---      HEADER / NAVBAR    --- */
+/* ----------------------------- */
+/* --- New Hero Section with Image Slider --- */
+.hero-section-slider {
     position: relative;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.85);
+    height: 90vh;
+    min-height: 700px;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* --- NEW: Why Choose Us Section --- */
-.why-choose-us {
-    padding: 80px 0;
-    background-color:white; /* A slightly different background to separate it */
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 50px;
-    font-weight: 700;
-}
-
-.feature-box {
-    text-align: center;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%;
-}
-
-    .feature-box:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    }
-
-.feature-icon {
-    font-size: 3rem;
-    color: #0d6efd; /* Bootstrap primary color */
-    margin-bottom: 20px;
-    display: inline-block;
-}
-/* --- End of NEW CSS --- */
-
-
-/* Car Card enhancements */
-.car-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: none;
-    border-radius: 1rem; /* Softer corners */
-
-}
-.car-card:hover {
-
-        transform: translateY(-10px); /* Lifts the card on hover */
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
-
-    }
-
-.car-img {
-    height: 220px;
-    object-fit: cover;
-}
-
-.car-logo {
+.hero-carousel,
+.carousel-inner,
+.carousel-item {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    object-fit: contain;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
-
-/* Animation utility: hide elements until they are ready to be animated */
-.wow {
-    visibility: hidden;
-}
-
-.text-gradient {
-    background: -webkit-linear-gradient(45deg, #0d6efd, #0dcaf0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-/* --- Style for the Hero Section --- */
-.hero-section {
-    position: relative; /* Needed to position the pseudo-element correctly */
-    overflow: hidden; /* Hides the parts of the image that zoom outside the box */
-    padding: 100px 0;
-    color:dimgrey;
-    text-align: center;
-}
-
-    /* We create a pseudo-element to hold and animate the background */
-    .hero-section::before {
+    .carousel-item::after {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1740');
-        background-size: cover;
-        background-position: center;
-        z-index: -1; /* Puts the image layer behind your text content */
-        /* Apply the animation here */
-        animation: zoomAndPan 25s infinite alternate;
+        background: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
     }
 
-/* This defines the animation steps */
-@keyframes zoomAndPan {
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures image covers the area without distortion */
+    }
 
-
-{
-    transform: scale(1.0); /* Start at normal size */
+.hero-overlay-content {
+    position: relative;
+    z-index: 2; /* Sits on top of the carousel and its overlay */
+    width: 100%;
 }
 
-100% {
-    transform: scale(1.15); /* End 15% zoomed in */
+/* --- Enhanced Glowing Search Card --- */
+.hero-search-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
+    .hero-search-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 0 25px 5px rgba(0, 191, 255, 0.5); /* Glowing effect on hover */
+    }
+
+    .hero-search-card .form-label {
+        color: #f0f0f0;
+    }
+
+    .hero-search-card .form-control {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+        .hero-search-card .form-control:focus {
+            background-color: #fff;
+        }
+
+/* --- New FAQ Section Accordion Styling --- */
+.faq-section .accordion-item {
+    background-color: var(--bs-dark-section);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+}
+
+.faq-section .accordion-button {
+    background-color: transparent;
+    color: #fff;
+    font-weight: 600;
+}
+
+    .faq-section .accordion-button:not(.collapsed) {
+        background-color: rgba(0, 191, 255, 0.1);
+        color: var(--bs-primary);
+        box-shadow: none;
+    }
+
+    .faq-section .accordion-button:focus {
+        box-shadow: none;
+    }
+
+    .faq-section .accordion-button::after {
+        filter: invert(1) grayscale(100%) brightness(200%); /* Makes arrow white */
+    }
+
+.faq-section .accordion-body {
+    color: #adb5bd;
 }
 
 
-.hero-section h1 {
-    font-size: 3.5rem;
+/* ----------------------------- */
+/* ---      FAQ / ACCORDION    --- */
+/* ----------------------------- */
+.accordion-item {
+    background-color: transparent;
+    border: none;
+    margin-bottom: 1rem;
+}
+
+.accordion-button {
+    background: rgba(0, 0, 0, 0.35) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 16px !important;
+    box-shadow: none !important; /* Remove default focus shadow */
+}
+
+    /* Style the accordion icon color */
+    .accordion-button::after {
+        filter: brightness(0) invert(1);
+    }
+
+    .accordion-button:not(.collapsed) {
+        background: rgba(3, 218, 198, 0.1) !important; /* Subtle highlight when open */
+    }
+
+.accordion-collapse {
+    border-radius: 16px;
+    margin-top: -15px; /* Pull body under the button */
+    padding-top: 15px; /* Add padding to compensate */
+}
+
+.accordion-body {
+    background: rgba(0, 0, 0, 0.2);
+    color: #adb5bd;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+
+.hero-section {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+    .hero-section h1 {
+        font-weight: 700;
+        font-size: 3.5rem;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .hero-section .lead {
+        font-size: 1.25rem;
+        max-width: 600px;
+        margin: 1rem auto 2rem;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+.search-card {
+    padding: 2rem 2.5rem;
+    width: 100%;
+    max-width: 1100px; /* Wider search card */
+}
+
+
+    .search-card-title {
+        color: #03dac6; /* Bright teal accent color */
+
+}
+
+    .search-card .form-label {
+        color: floralwhite;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+    }
+
+    .search-card .form-control {
+        background-color: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: ghostwhite;
+        border-radius: 8px;
+    }
+
+        .search-card .form-control:focus {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-color: #03dac6;
+            box-shadow: 0 0 10px rgba(3, 218, 198, 0.5);
+            color: #fff;
+        }
+
+        .search-card .form-control::placeholder {
+            color: #888;
+        }
+
+/* ----------------------------- */
+/* ---      SHARED STYLES    --- */
+/* ----------------------------- */
+.section-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #03dac6, #018786);
+        border-radius: 2px;
+    }
+
+.btn-glow {
+    background: linear-gradient(90deg, #03dac6, #018786);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(3, 218, 198, 0.3);
+}
+
+    .btn-glow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(3, 218, 198, 0.5);
+        color: #fff;
+    }
+
+/* ----------------------------- */
+/* ---      GLOWING CARDS    --- */
+/* ----------------------------- */
+.glow-card {
+    position: relative;
+    background: #1a1a2e; /* Dark card background */
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    z-index: 1;
+}
+
+    /* The glowing border effect */
+    .glow-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 16px;
+        padding: 1px;
+        background: conic-gradient(from 180deg at 50% 50%, rgba(3, 218, 198, 0.8) 0%, rgba(1, 135, 134, 0.8) 50%, rgba(3, 218, 198, 0.8) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .glow-card:hover {
+        transform: translateY(-8px);
+
+    }
+
+        .glow-card:hover::before {
+            opacity: 1;
+        }
+
+/* FIX: This ensures the content is clickable by placing it on a higher layer than the glow effect */
+.car-card-content {
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+    .car-card-content .car-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease; /* Professional touch: Image zoom on hover */
+    }
+
+.glow-card:hover .car-img {
+    transform: scale(1.05); /* Professional touch: Image zoom on hover */
+}
+
+
+.car-card-content .badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #c0c0c0;
+    font-size: 0.8rem;
+    padding: 0.5em 0.75em;
+
+
+}
+
+.car-card-content .car-title {
+    color: #fff;
+    font-weight: 600;
+}
+
+.car-card-content .car-model {
+    color: #aaa;
+    font-weight: 300;
+}
+
+.car-card-content .daily-rate {
+    font-size: 1.75rem;
     font-weight: 700;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Makes text stand out */
+    color: #03dac6; /* Accent color for price */
 }
 
-.hero-section p {
-    font-size: 1.25rem;
-    max-width: 600px;
-    margin: 0 auto; /* Centers the paragraph */
+/* ----------------------------- */
+/* ---    WHY CHOOSE US      --- */
+/* ----------------------------- */
+.bg-dark-section {
+    background-color: rgba(10, 10, 20, 0.8);
+    padding: 5rem 0;
+    margin-top: 5rem;
+}
+
+.feature-card {
+    background-color: #1a1a2e;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+    }
+
+.feature-icon {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #03dac6, #018786);
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+
+.feature-card h5 {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* FIX: Changed color to a lighter, more readable gray */
+.feature-card p {
+    color: #adb5bd;
 
 }
