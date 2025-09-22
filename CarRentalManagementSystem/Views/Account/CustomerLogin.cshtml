@@ -1,7 +1,6 @@
 ﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Customer Sign In";
-    // This view now integrates with your main _Layout.cshtml, just like the dashboard.
 }
 @if (TempData["ShowPopup"] != null)
 {
@@ -9,6 +8,8 @@
         alert("@TempData["ShowPopup"]");
     </script>
 }
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
 <link rel="stylesheet" href="~/css/CDB.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/C.Login.css" asp-append-version="true" />
@@ -19,12 +20,10 @@
         <div class="col-lg-6 col-md-8">
 
             <div class="glass-effect p-4 p-md-5 rounded-3">
-                <div class="glass-effect p-4 p-md-5 rounded-3">
 
-                    <h1 class="company-logo text-center">
-                        UnicomTIC Travels
-                    </h1>
-                </div>
+                <h1 class="company-logo text-center">
+                    UnicomTIC Travels
+                </h1>
 
                 <div class="login-header text-center">
                     <h2 class="h2 mb-4">Login In to Your Account</h2>
@@ -32,7 +31,6 @@
                 <div id="live-datetime" class="alert alert-info bg-transparent border-info text-info small p-2 text-center mb-4">
                 </div>
 
-                @* --- THIS BLOCK IS THE ONLY ADDITION --- *@
                 @if (TempData["SuccessMessage"] != null)
                 {
                     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -41,7 +39,6 @@
                 {
                     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
                 }
-                @* --- END OF ADDITION --- *@
 
                 <form asp-action="CustomerLogin" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -52,12 +49,13 @@
                         <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
                     </div>
 
-                    <div class="form-floating mb-4">
-                        <input asp-for="Password" class="form-control" placeholder="Password" />
-                        <label asp-for="Password"></label>
+                    <div class="password-wrapper form-floating mb-4">
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" id="passwordInput" />
+                        <label asp-for="Password">Password</label>
+                        <button class="btn password-toggle-btn" type="button" id="togglePassword">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
                         <span asp-validation-for="Password" class="text-danger"></span>
-                        <i class="fas fa-eye password-toggle"></i>
-
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -70,7 +68,7 @@
                         <div class="forgot-password">
                             <a asp-controller="Account" asp-action="ForgotPassword"> <strong> ForgotPassword </strong></a>
                         </div>
-                        
+
                     </div>
 
                     <div class="d-grid">
@@ -81,50 +79,18 @@
                 <div class="login-footer text-center mt-4">
                     <a asp-controller="Account" asp-action="Register">Don't have an account? <strong> Register Your Account</strong></a>
                 </div>
-                
+
             </div>
 
         </div>
     </div>
 </div>
 
-<script>
-    // This function gets the current time and formats it
-    function updateLiveTime() {
-        const dateTimeElement = document.getElementById('live-datetime');
+<script src="~/js/CustomerLogin.js" asp-append-version="true"></script>
 
-        // Make sure the element exists before trying to update it
-        if (dateTimeElement) {
-            const now = new Date();
 
-            // Options to format the date and time for Sri Lanka
-            const options = {
-                weekday: 'long',    // e.g., "Wednesday"
-                hour: 'numeric',      // e.g., "1"
-                minute: 'numeric',    // e.g., "50"
-                second: 'numeric',    // e.g., "30"
-                hour12: true,         // Use 12-hour format (AM/PM)
-                timeZone: 'Asia/Colombo', // Set the timezone to Sri Lanka
-                timeZoneName: 'short' // Optional: e.g., "GMT+5:30"
-            };
-
-            // Create the formatted string
-            const formattedDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
-
-            // Update the HTML content
-            dateTimeElement.innerHTML = `Good day! It's currently ${formattedDateTime} in Sri Lanka.`;
-        }
-    }
-
-    // Run the function once immediately on page load
-    updateLiveTime();
-
-    // Set the function to run every second (1000 milliseconds)
-    setInterval(updateLiveTime, 1000);
-</script>
 @section Scripts {
     @{
-        // This section now only includes scripts relevant to this page's form validation.
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
