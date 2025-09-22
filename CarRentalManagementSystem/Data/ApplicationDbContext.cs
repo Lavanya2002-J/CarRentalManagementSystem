@@ -29,7 +29,7 @@ namespace CarRentalManagementSystem.Data
                     Username = "Admin",
                     Password = "Admin@123",
                     Name = "Administrator",
-                    mail = "admin@carental.com"
+                    mail = "admin@gmail.com"
                 }
             );
         }
