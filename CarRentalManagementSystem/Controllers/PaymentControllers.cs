@@ -27,40 +27,42 @@ namespace CarRentalManagementSystem.Controllers
             return View(payments);
         }
 
-        // GET: Payment/Create
-        [HttpGet]
-        public async Task<IActionResult> Create(int bookingId, decimal amount)
-        {
-            var booking = await _context.Bookings
-                                        .Include(b => b.Car)
-                                        .FirstOrDefaultAsync(b => b.BookingID == bookingId);
 
-            if (booking == null) return NotFound("Booking not found.");
-
-            var viewModel = new PaymentViewModel
+              // GET: Payment/Create
+            [HttpGet]
+            public async Task<IActionResult> Create(Guid carId, DateTime pickupDate, DateTime returnDate)
             {
-                BookingID = booking.BookingID,
-                Amount = booking.TotalCost,
-                CarName = booking.Car.CarName,
-                CarModel = booking.Car.Model,
-                PickupDate = booking.PickupDate,
-                ReturnDate = booking.ReturnDate,
-                PaymentMethods = new List<SelectListItem>
-                {
-                    // Dropdown-kaana options
-                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
-                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
-                }
-            };
-            return View(viewModel);
-        }
+                var car = await _context.Cars.FindAsync(carId);
+                if (car == null) return NotFound("Car not found.");
 
-        // POST: Payment/Create
+                // Calculate rental days and total cost on the server
+                var rentalDays = (returnDate - pickupDate).TotalDays;
+                if (rentalDays <= 0) rentalDays = 1;
+                var totalCost = (decimal)rentalDays * car.DailyRate;
+
+                // Build the ViewModel with details for the new booking
+                var viewModel = new PaymentViewModel
+                {
+                    CarID = carId, // Pass CarID to the view
+                    PickupDate = pickupDate,
+                    ReturnDate = returnDate,
+                    Amount = totalCost,
+                    CarName = car.CarName,
+                    CarModel = car.Model,
+                    PaymentMethods = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" },
+                    new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Pay at Desk)" }
+                }
+                };
+                return View(viewModel);
+            }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PaymentViewModel viewModel)
         {
-            // Payment method "Credit Card" aaga irunthu, card details thevai-naa, ModelState-ah check pannum mun validation rules-ah serkkanum
+            // --- Step 1: Credit card field validation (no changes here) ---
             if (viewModel.PaymentMethod == "Credit Card")
             {
                 if (string.IsNullOrWhiteSpace(viewModel.CardHolderName))
@@ -75,60 +77,104 @@ namespace CarRentalManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                var booking = await _context.Bookings.FindAsync(viewModel.BookingID);
-                if (booking == null) return NotFound();
+                var customerId = HttpContext.Session.GetInt32("UserID");
+                if (customerId == null) return RedirectToAction("CustomerLogin", "Account");
 
-                // Payment method-ai poruthu logic-ah pirikkavum
-                if (viewModel.PaymentMethod == "Credit Card")
+                // --- Step 2: Handle the two different booking scenarios ---
+                Booking bookingToUpdate;
+                int bookingIdForRedirect;
+
+                if (viewModel.BookingID > 0)
                 {
-                    // Dummy validation: Oru test card number-ah mattum fail aakkalam
-                    if (viewModel.CardNumber.EndsWith("0000"))
+                    // --- SCENARIO A: Paying for an EXISTING "Pending" booking ---
+
+                    // Find the booking the customer is trying to pay for
+                    bookingToUpdate = await _context.Bookings.FindAsync(viewModel.BookingID);
+                    if (bookingToUpdate == null || bookingToUpdate.CustomerID != customerId)
                     {
-                        ModelState.AddModelError("", "Your card was declined. Please try a different card.");
-                        // Error iruppathal, view-ku thirumba pogum mun display properties-ah load pannunga
-                        return await PrepareViewModelForError(viewModel);
+                        return Forbid(); // Prevent users from paying for bookings that aren't theirs
                     }
-                    // Vetrigaramaaga "process" aanathaaga karuthikkollavum
+
+                    // Update its status to "Paid"
+                    bookingToUpdate.Status = "Paid";
+                    bookingIdForRedirect = bookingToUpdate.BookingID;
+                }
+                else
+                {
+                    // --- SCENARIO B: Creating a NEW booking (Cash or Card) ---
+
+                    // Create a brand new booking object from the view model
+                    var newBooking = new Booking
+                    {
+                        CarID = viewModel.CarID,
+                        CustomerID = customerId.Value,
+                        PickupDate = viewModel.PickupDate,
+                        ReturnDate = viewModel.ReturnDate,
+                        TotalCost = viewModel.Amount
+                    };
+
+                    if (viewModel.PaymentMethod == "Cash on Pickup")
+                    {
+                        newBooking.Status = "Pending";
+                        _context.Bookings.Add(newBooking);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("PendingConfirmation", new { bookingId = newBooking.BookingID });
+                    }
+
+                    // If it's a card payment, set status to "Paid"
+                    newBooking.Status = "Paid";
+                    _context.Bookings.Add(newBooking);
+                    bookingToUpdate = newBooking; // Set it as the booking to attach payment to
+                    bookingIdForRedirect = 0; // Will get ID after saving
                 }
 
-                // --- Common Logic for both Cash and successful Card payment ---
-                var car = await _context.Cars.FindAsync(booking.CarID);
-                if (car == null) return NotFound();
-
-                var newPayment = new Payment
+                // --- Step 3: Create the Payment record for card transactions ---
+                if (viewModel.PaymentMethod == "Credit Card")
                 {
-                    BookingID = viewModel.BookingID,
-                    Amount = viewModel.Amount,
-                    PaymentMethod = viewModel.PaymentMethod,
-                    PaymentDate = System.DateTime.Now,
-                    PaymentStatus = "Completed",
-                    TransactionID = $"TXN-{System.DateTime.UtcNow.Ticks}"
-                };
+                    var newPayment = new Payment
+                    {
+                        Booking = bookingToUpdate, // Link to either the new or existing booking
+                        Amount = viewModel.Amount,
+                        PaymentMethod = viewModel.PaymentMethod,
+                        PaymentDate = DateTime.Now,
+                        PaymentStatus = "Completed",
+                        TransactionID = $"TXN-{DateTime.UtcNow.Ticks}"
+                    };
+                    _context.Payments.Add(newPayment);
+                }
 
-                _context.Payments.Add(newPayment);
-                booking.Status = "Paid";
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Success", new { bookingId = booking.BookingID });
+                // If it was a new booking, its ID is now generated
+                if (bookingIdForRedirect == 0)
+                {
+                    bookingIdForRedirect = bookingToUpdate.BookingID;
+                }
+
+                return RedirectToAction("Success", new { bookingId = bookingIdForRedirect });
             }
 
-            // ModelState valid illai-naa, view-ku thirumba pogum mun display properties-ah load pannunga
+            // If ModelState is invalid, prepare the view model and return to the view
             return await PrepareViewModelForError(viewModel);
         }
+        // In Controllers/PaymentController.cs
 
-        // Oru chinna helper method, code-ah repeat seiyaamal irukka
         private async Task<IActionResult> PrepareViewModelForError(PaymentViewModel viewModel)
         {
-            var bookingForDisplay = await _context.Bookings.Include(b => b.Car).FirstOrDefaultAsync(b => b.BookingID == viewModel.BookingID);
-            viewModel.CarName = bookingForDisplay.Car.CarName;
-            viewModel.CarModel = bookingForDisplay.Car.Model;
-            viewModel.PickupDate = bookingForDisplay.PickupDate;
-            viewModel.ReturnDate = bookingForDisplay.ReturnDate;
+            // 1. Find the car using the CarID from the view model to get its name and model for display.
+            var carForDisplay = await _context.Cars.FindAsync(viewModel.CarID);
+            viewModel.CarName = carForDisplay?.CarName;
+            viewModel.CarModel = carForDisplay?.Model;
+
+            // 2. Re-populate the dropdown list for payment methods.
             viewModel.PaymentMethods = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Manual)" },
-                new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
-            };
+    {
+        new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" },
+        new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Pay at Desk)" }
+    };
+
+            // 3. Return the user to the "Create" view, passing back the corrected view model.
+            //    This ensures they see their original selections and the validation error message.
             return View("Create", viewModel);
         }
 
@@ -173,5 +219,71 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(payment);
         }
+        
+
+        // GET: Payment/PendingConfirmation/5
+        public async Task<IActionResult> PendingConfirmation(int bookingId)
+        {
+            var booking = await _context.Bookings
+                                        .Include(b => b.Car)
+                                        .FirstOrDefaultAsync(b => b.BookingID == bookingId);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            // This ViewBag message will be displayed on the confirmation page
+            ViewBag.SuccessMessage = "Your car has been reserved! Please complete the payment at the counter on your pickup day.";
+            return View(booking);
+        }
+        // In Controllers/PaymentController.cs
+
+        // GET: /Payment/PayForBooking/5
+        public async Task<IActionResult> PayForBooking(int bookingId)
+        {
+            var customerId = HttpContext.Session.GetInt32("UserID");
+            if (customerId == null)
+            {
+                return RedirectToAction("CustomerLogin", "Account");
+            }
+
+            // Find the booking and include the car details
+            var booking = await _context.Bookings
+                .Include(b => b.Car)
+                .FirstOrDefaultAsync(b => b.BookingID == bookingId && b.CustomerID == customerId.Value);
+
+            if (booking == null)
+            {
+                return NotFound("Booking not found or you do not have permission to view it.");
+            }
+
+            // A user should only be able to pay for a pending booking
+            if (booking.Status != "Pending" && booking.Status != "Pending Payment")
+            {
+                TempData["ErrorMessage"] = "This booking is not awaiting payment.";
+                return RedirectToAction("History", "Booking");
+            }
+
+            // Create the ViewModel using the existing booking's data
+            var viewModel = new PaymentViewModel
+            {
+                BookingID = booking.BookingID, // IMPORTANT: Pass the existing BookingID
+                CarID = booking.CarID,
+                Amount = booking.TotalCost,
+                CarName = booking.Car.CarName,
+                CarModel = booking.Car.Model,
+                PickupDate = booking.PickupDate,
+                ReturnDate = booking.ReturnDate,
+                PaymentMethods = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" }
+            // Note: "Cash on Pickup" is removed as this is an online payment flow
+        }
+            };
+
+            // Return the standard "Create" view, but with the data from the existing booking
+            return View("Create", viewModel);
+        }
+
     }
 }
