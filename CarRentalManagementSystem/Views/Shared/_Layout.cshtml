@@ -42,10 +42,10 @@
                         @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Username")))
                         {
                             <li class="nav-item">
-                                <span class="navbar-text me-3">
+                                <a href="/Profile" class="nav-link user-profile-pill">
                                     <i class="bi bi-person-circle"></i>
-                                    Welcome, @HttpContextAccessor.HttpContext.Session.GetString("Username")
-                                </span>
+                                    <span>Welcome, @HttpContextAccessor.HttpContext.Session.GetString("Username")</span>
+                                </a>
                             </li>
 
                             @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")
@@ -65,9 +65,10 @@
                                 </li>
                             }
 
+                            
                             <li class="nav-item">
-                                <a class="btn btn-outline-light btn-sm" asp-area="" asp-controller="Account" asp-action="Logout">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                <a class="btn btn-hover-glow" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="bi bi-person-plus"></i> Logout
                                 </a>
                             </li>
                         }
