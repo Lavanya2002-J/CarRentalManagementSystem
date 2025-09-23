@@ -63,15 +63,7 @@ namespace CarRentalManagementSystem.Controllers
                 return RedirectToAction("History", "Booking");
             }
 
-            // Check if feedback already exists for this car from this customer.
-            bool feedbackExists = await _context.Feedbacks
-                .AnyAsync(f => f.CarID == booking.CarID && f.CustomerID == customerId.Value);
-
-            if (feedbackExists)
-            {
-                TempData["ErrorMessage"] = "You have already submitted feedback for this car rental.";
-                return RedirectToAction("History", "Booking");
-            }
+         
 
             var viewModel = new FeedbackViewModel
             {
