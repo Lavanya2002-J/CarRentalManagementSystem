@@ -1,5 +1,4 @@
-﻿
-/* --- Body & Background --- */
+﻿/* --- Body & Background --- */
 body {
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop');
     background-size: cover;
@@ -11,19 +10,38 @@ body {
     min-height: 100vh;
 }
 
+/* --- Full Width Header --- */
+.app-header {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+}
+
+/* --- Main Content Area --- */
 main {
-    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 2rem 1rem; /* Add padding for smaller screens */
     width: 100%;
 }
 
-.login-panel {
-    max-width: 480px;
+/* --- Registration Panel (Wider than login) --- */
+.register-panel {
+    max-width: 800px; /* Wider for more fields */
     width: 100%;
-    padding: 2rem 1.5rem;
+    padding: 2rem;
     color: #fff;
     background: rgba(10, 10, 10, 0.25);
     backdrop-filter: blur(15px);
@@ -31,35 +49,30 @@ main {
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    opacity: 0;
-    animation: fadeInUp 0.5s ease-out forwards;
 }
 
 @media (min-width: 768px) {
-    .login-panel {
+    .register-panel {
         padding: 3rem;
     }
 }
 
-@media (max-width: 400px) {
-    .login-panel {
-        padding: 1.5rem 1rem;
-    }
 
-    .login-header h3 {
-        margin-bottom: 1.5rem;
-        font-size: 1.5rem;
-    }
-}
-
-.login-header h3 {
-    font-weight: 300;
+/* --- Form Section Styling (NEW) --- */
+.form-section {
     margin-bottom: 2rem;
-    color: rgba(255, 255, 255, 0.8);
 }
 
+.form-section-header {
+    font-weight: 400;
+    color: #00d9ff; /* Highlight color */
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+    letter-spacing: 0.5px;
+}
 
-/* --- Form Styles --- */
+/* --- Form Input Styling (Same as before) --- */
 .form-floating > .form-control {
     background-color: rgba(0, 0, 0, 0.3);
     color: #fff;
@@ -68,7 +81,6 @@ main {
 
     .form-floating > .form-control:focus {
         background-color: rgba(0, 0, 0, 0.4);
-        color: #fff;
         border-color: #00d9ff;
         box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
     }
@@ -77,71 +89,56 @@ main {
     color: #adb5bd;
 }
 
-/* --- NEW: Styles for the Password Field Wrapper and Button --- */
-
-/* 1. Make the wrapper a positioning container */
+/* --- Password Toggle Icon Styling (NEW) --- */
 .password-wrapper {
     position: relative;
 }
 
-/* 2. Style the button and position it inside the wrapper */
 .password-toggle-btn {
     position: absolute;
     top: 50%;
-    right: 0.5rem; /* A little space from the edge */
+    right: 0.5rem;
     transform: translateY(-50%);
-    z-index: 10; /* Make sure it's on top */
-    /* Remove default button styling */
+    z-index: 10;
     background: transparent;
     border: none;
     color: #adb5bd;
     padding: 0.5rem;
-    line-height: 1; /* Helps with vertical alignment */
+    line-height: 1;
 }
 
-    /* 3. Remove the blue outline on click for a cleaner look */
     .password-toggle-btn:focus,
     .password-toggle-btn:active {
         outline: none !important;
         box-shadow: none !important;
-        border: none !important;
     }
 
-/* 4. Add padding to the right of the password input so text doesn't go under the button */
 .password-wrapper .form-control {
-    padding-right: 3.5rem; /* Space for the button */
+    padding-right: 3.5rem;
 }
 
-/* (Remaining styles are the same) */
-.form-check-label {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.btn-primary {
+/* --- Links and Buttons --- */
+.btn-success {
     padding: 0.8rem;
     font-weight: bold;
     font-size: 1rem;
     letter-spacing: 0.5px;
+    background-color: #17a673;
+    border-color: #17a673;
 }
+
+a.forgot-password {
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+    a.forgot-password:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
 
 .text-danger {
     color: #ff8a8a !important;
     font-size: 0.8rem;
     text-align: left;
-    display: block;
-    width: 100%;
-    margin-top: 0.25rem;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
