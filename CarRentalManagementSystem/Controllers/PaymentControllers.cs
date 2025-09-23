@@ -86,7 +86,7 @@ namespace CarRentalManagementSystem.Controllers
 
                 if (viewModel.BookingID > 0)
                 {
-                    // --- SCENARIO A: Paying for an EXISTING "Pending" booking ---
+                    //  Paying for an EXISTING "Pending" booking ---
 
                     // Find the booking the customer is trying to pay for
                     bookingToUpdate = await _context.Bookings.FindAsync(viewModel.BookingID);
@@ -101,7 +101,7 @@ namespace CarRentalManagementSystem.Controllers
                 }
                 else
                 {
-                    // --- SCENARIO B: Creating a NEW booking (Cash or Card) ---
+                    //  Creating a NEW booking (Cash or Card) ---
 
                     // Create a brand new booking object from the view model
                     var newBooking = new Booking
@@ -157,8 +157,7 @@ namespace CarRentalManagementSystem.Controllers
             // If ModelState is invalid, prepare the view model and return to the view
             return await PrepareViewModelForError(viewModel);
         }
-        // In Controllers/PaymentController.cs
-
+       
         private async Task<IActionResult> PrepareViewModelForError(PaymentViewModel viewModel)
         {
             // 1. Find the car using the CarID from the view model to get its name and model for display.
@@ -169,8 +168,8 @@ namespace CarRentalManagementSystem.Controllers
             // 2. Re-populate the dropdown list for payment methods.
             viewModel.PaymentMethods = new List<SelectListItem>
     {
-        new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" },
-        new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Pay at Desk)" }
+                new SelectListItem { Value = "Credit Card", Text = "Credit Card (Online)" },
+                new SelectListItem { Value = "Cash on Pickup", Text = "Cash on Pickup (Pay at Desk)" }
     };
 
             // 3. Return the user to the "Create" view, passing back the corrected view model.
@@ -236,7 +235,7 @@ namespace CarRentalManagementSystem.Controllers
             ViewBag.SuccessMessage = "Your car has been reserved! Please complete the payment at the counter on your pickup day.";
             return View(booking);
         }
-        // In Controllers/PaymentController.cs
+      
 
         // GET: /Payment/PayForBooking/5
         public async Task<IActionResult> PayForBooking(int bookingId)

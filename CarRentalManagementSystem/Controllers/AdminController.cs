@@ -227,7 +227,7 @@ namespace CarRentalManagementSystem.Controllers
             }
             return RedirectToAction(nameof(ManageCustomers));
         }
-        // In Controllers/AdminController.cs
+        
 
         // GET: /Admin/ManageRefunds
         public async Task<IActionResult> ManageRefunds()
@@ -249,7 +249,7 @@ namespace CarRentalManagementSystem.Controllers
         }
 
 
-        // In Controllers/AdminController.cs
+        
 
         // POST: /Admin/ApproveRefund
         [HttpPost]
@@ -296,7 +296,7 @@ namespace CarRentalManagementSystem.Controllers
             return RedirectToAction(nameof(ManageRefunds));
         }
 
-        // In Controllers/AdminController.cs
+       
 
         // GET: /Admin/PendingBookings
         public async Task<IActionResult> PendingBookings()
@@ -317,7 +317,7 @@ namespace CarRentalManagementSystem.Controllers
             return View(pendingBookings);
         }
 
-        // In Controllers/AdminController.cs
+       
 
         // POST: /Admin/ConfirmInPersonPayment
         [HttpPost]

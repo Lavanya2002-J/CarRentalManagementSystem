@@ -61,7 +61,7 @@ namespace CarRentalManagementSystem.Controllers
 
             return View(viewModel);
         }
-        // In Controllers/BookingController.cs
+        
 
         // POST: Booking/Create
         [HttpPost]
