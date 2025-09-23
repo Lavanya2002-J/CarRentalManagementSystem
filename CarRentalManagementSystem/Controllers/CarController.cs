@@ -78,6 +78,14 @@ namespace CarRentalManagementSystem.Controllers
             {
                 ModelState.AddModelError("InsuranceExpiryDate", "Insurance Expiry Date cannot be in the past.");
             }
+            if (viewModel.LogoFile == null || viewModel.LogoFile.Length == 0)
+            {
+                ModelState.AddModelError("LogoFile", "Logo file is required.");
+            }
+            if (viewModel.CarImageFile == null || viewModel.CarImageFile.Length == 0)
+            {
+                ModelState.AddModelError("CarImageFile", "Car image file is required.");
+            }
 
             // If any of the above custom validations failed, return the view immediately.
             if (!ModelState.IsValid)
